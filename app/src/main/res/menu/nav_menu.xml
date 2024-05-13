@@ -1,0 +1,15 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/home"
+        android:title="@string/المديرية_الجهوية"
+        />
+    <item
+        android:id="@+id/RNA"
+        android:title="السجل الوطني الفلاحي"
+        />
+    <item
+        android:id="@+id/FAQ"
+        android:title="أسئلة تطرح بكثرة"
+        />
+</menu>
