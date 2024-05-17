@@ -3,19 +3,13 @@
 
     <item
         android:id="@+id/home"
-        android:icon="@drawable/outline_home_24"
+        android:icon="@drawable/home"
         android:title="@string/القائمة"
         />
 
     <item
-        android:id="@+id/search"
-        android:icon="@drawable/search_alt_1_svgrepo_com"
-        android:title="@string/البحت"
-        />
-
-    <item
         android:id="@+id/save"
-        android:icon="@drawable/save_svgrepo_com"
+        android:icon="@drawable/save"
         android:title="@string/حفظ"
         />
 
@@ -23,7 +17,7 @@
 
     <item
         android:id="@+id/setting"
-        android:icon="@drawable/settings_svgrepo_com"
+        android:icon="@drawable/settings"
         android:title="@string/إعدادات"
         />
 

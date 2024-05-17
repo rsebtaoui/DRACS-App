@@ -3,19 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_main"
-    app:startDestination="@id/home">
+    app:startDestination="@id/R_center">
 
     <fragment
         android:id="@+id/home"
         android:name="com.example.DRACS.home"
         android:label="@string/المديرية_الجهوية"
         tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_home_to_RNA"
+            app:destination="@id/RNA" />
     </fragment>
     <fragment
         android:id="@+id/RNA"
         android:name="com.example.DRACS.RNA"
         android:label="السجل الوطني الفلاحي"
-        tools:layout="@layout/fragment_r_n_a" />
-
-
+        tools:layout="@layout/fragment_r_n_a" >
+        <action
+            android:id="@+id/action_RNA_to_home"
+            app:destination="@id/home" />
+        <action
+            android:id="@+id/action_RNA_to_R_centers"
+            app:destination="@id/R_center" />
+    </fragment>
+    <fragment
+        android:id="@+id/R_center"
+        android:name="com.example.DRACS.R_centres"
+        android:label="مراكز التسجيل"
+        tools:layout="@layout/fragment_r_centres" >
+        <action
+            android:id="@+id/action_R_center_to_RNA"
+            app:destination="@id/R_center" />
+    </fragment>
 </navigation>

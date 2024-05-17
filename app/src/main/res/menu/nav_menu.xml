@@ -6,10 +6,10 @@
         />
     <item
         android:id="@+id/RNA"
-        android:title="السجل الوطني الفلاحي"
-        />
+        android:title="السجل الوطني الفلاحي"/>
+
     <item
         android:id="@+id/FAQ"
-        android:title="أسئلة تطرح بكثرة"
+        android:title="أسئلة و أجوبة"
         />
 </menu>

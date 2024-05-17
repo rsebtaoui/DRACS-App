@@ -4,6 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
+    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Activity_main">
@@ -35,7 +36,7 @@
             android:layout_marginTop="13dp"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/menu_svgrepo_com" />
+            android:src="@drawable/ic_menu" />
         <ImageView
             android:id="@+id/FAQ_icon"
             android:layout_width="40dp"
@@ -46,7 +47,7 @@
             android:layout_marginTop="13dp"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/faq_svgrepo_com" />
+            android:src="@drawable/outline_info_24" />
 
         <TextView
             android:id="@+id/title"
