@@ -63,6 +63,6 @@
 
         //expand layout
         implementation("androidx.recyclerview:recyclerview:1.3.2")
-        implementation("net.cachapa.expandablelayout:expandablelayout:2.9.2")
+        implementation("com.github.cachapa:ExpandableLayout:2.9.2")
 
     }
