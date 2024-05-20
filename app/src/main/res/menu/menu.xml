@@ -7,13 +7,6 @@
         android:title="@string/القائمة"
         />
 
-    <item
-        android:id="@+id/save"
-        android:icon="@drawable/save"
-        android:title="@string/حفظ"
-        />
-
-
 
     <item
         android:id="@+id/setting"

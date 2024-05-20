@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".home">
 
     <ImageView
@@ -17,49 +17,92 @@
         app:layout_constraintTop_toTopOf="parent"
         android:alpha="0.85" />
 
-    <ImageView
-        android:id="@+id/RNA"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:src="@mipmap/ic_rna"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cart"
-        app:layout_goneMarginTop="60dp" />
-
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
-        android:layout_marginTop="16dp"
-        android:src="@mipmap/ic_rna"
-        app:layout_constraintEnd_toEndOf="@+id/imageView3"
-        app:layout_constraintHorizontal_bias="0.444"
-        app:layout_constraintStart_toEndOf="@+id/imageView4"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
-
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:layout_marginTop="16dp"
-        android:src="@mipmap/ic_rna"
-        app:layout_constraintStart_toStartOf="@+id/RNA"
-        app:layout_constraintTop_toBottomOf="@+id/RNA" />
-
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="25dp"
-        android:src="@mipmap/ic_rna"
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.7"
-        app:layout_constraintStart_toEndOf="@+id/RNA"
-        app:layout_constraintTop_toBottomOf="@+id/cart"
-        app:layout_goneMarginTop="60dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/cart">
+
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:columnCount="2"
+            android:gravity="center"
+            android:layout_gravity="center_horizontal"
+            android:padding="10dp">
+
+            <TextView
+                android:id="@+id/RNA"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:text="السجل الوطني الفلاحي"
+                android:textSize="23sp"
+                android:textStyle="bold"
+                android:background="@drawable/rounded_corners"
+                android:textColor="?attr/colorPrimary"
+                android:padding="30dp"
+                android:gravity="center"
+                android:layout_margin="5dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:text="الحماية الإجتماعية "
+                android:textSize="23sp"
+                android:textStyle="bold"
+                android:background="@drawable/rounded_corners"
+                android:textColor="?attr/colorPrimary"
+                android:padding="30dp"
+                android:gravity="center"
+                android:layout_margin="5dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:text="صندوق التنمية الزراعية"
+                android:textSize="23sp"
+                android:textStyle="bold"
+                android:background="@drawable/rounded_corners"
+                android:textColor="?attr/colorPrimary"
+                android:padding="30dp"
+                android:gravity="center"
+                android:layout_margin="5dp"/>
+            <TextView
+                android:id="@+id/R_enregistrement"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:text="رجل أعمال شاب"
+                android:textSize="23sp"
+                android:textStyle="bold"
+                android:background="@drawable/rounded_corners"
+                android:textColor="?attr/colorPrimary"
+                android:padding="30dp"
+                android:gravity="center"
+                android:layout_margin="5dp"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_columnWeight="1"
+                android:layout_rowWeight="1"
+                android:text="تدريب احترافي"
+                android:textSize="23sp"
+                android:textStyle="bold"
+                android:background="@drawable/rounded_corners"
+                android:textColor="?attr/colorPrimary"
+                android:padding="30dp"
+                android:gravity="center"
+                android:layout_margin="5dp"/>
+
+        </GridLayout>
+    </ScrollView>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

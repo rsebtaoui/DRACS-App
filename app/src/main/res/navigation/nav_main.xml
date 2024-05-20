@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_home_to_RNA"
             app:destination="@id/RNA" />
+        <action
+            android:id="@+id/action_home_to_setting2"
+            app:destination="@id/setting2" />
     </fragment>
     <fragment
         android:id="@+id/RNA"
@@ -22,17 +25,16 @@
         <action
             android:id="@+id/action_RNA_to_home"
             app:destination="@id/home" />
-        <action
-            android:id="@+id/action_RNA_to_R_centers"
-            app:destination="@id/R_center" />
+
     </fragment>
     <fragment
-        android:id="@+id/R_center"
-        android:name="com.example.DRACS.R_centres"
-        android:label="مراكز التسجيل"
-        tools:layout="@layout/fragment_r_centres" >
+        android:id="@+id/setting2"
+        android:name="com.example.DRACS.setting2"
+        android:label="Settings"
+        tools:layout="@layout/fragment_setting2" >
         <action
-            android:id="@+id/action_R_center_to_RNA"
-            app:destination="@id/R_center" />
+            android:id="@+id/action_setting2_to_home"
+            app:destination="@id/home" />
+
     </fragment>
 </navigation>

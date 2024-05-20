@@ -7,9 +7,12 @@ import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.ui.NavigationUI;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
@@ -17,8 +20,12 @@ import android.widget.TextView;
 
 import com.google.android.material.navigation.NavigationView;
 
+import me.ibrahimsn.lib.OnItemSelectedListener;
+import me.ibrahimsn.lib.SmoothBottomBar;
+
 public class Activity_main extends AppCompatActivity {
 
+    SmoothBottomBar smoothBottomBar;
     DrawerLayout drawerLayout;
     NavController navController;
     ActionBarDrawerToggle toggle;
@@ -28,11 +35,13 @@ public class Activity_main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home); // Ensure the correct layout is set
+        setContentView(R.layout.activity_home);
 
+        smoothBottomBar = findViewById(R.id.bottomBar);
         drawerLayout = findViewById(R.id.drawer_layout);
         drawer_icon = findViewById(R.id.drawer_icon);
         info = findViewById(R.id.FAQ_icon);
+
 
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer);
         drawerLayout.addDrawerListener(toggle);
@@ -52,12 +61,34 @@ public class Activity_main extends AppCompatActivity {
         navController.addOnDestinationChangedListener((controller, destination, arguments) ->
                 textTitle.setText(destination.getLabel()));
 
+        smoothBottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
+            @Override
+            public boolean onItemSelect(int i) {
+//                Intent intent;
+                switch (i) {
+                    case 0:
+                        navController.navigate(R.id.home);
+
+                        break;
+//                        intent = new Intent(Activity_main.this, setting.class);
+//                        startActivity(intent);
+//                        return true;
+                    case 1:
+                        navController.navigate(R.id.setting2);
+                        break;
+                }
+                return false;
+            }
+        });
+
         // Handle drawer navigation item clicks
         navigationView.setNavigationItemSelectedListener(item -> {
             if (item.getItemId() == R.id.home) {
                 navController.navigate(R.id.home);
+                smoothBottomBar.setItemActiveIndex(0);
             } else if (item.getItemId() == R.id.RNA) {
                 navController.navigate(R.id.RNA);
+                smoothBottomBar.setItemActiveIndex(0);
             }
             drawerLayout.closeDrawer(GravityCompat.START);
             return true;

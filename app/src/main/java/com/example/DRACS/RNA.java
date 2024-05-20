@@ -4,7 +4,6 @@ package com.example.DRACS;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -18,11 +17,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -105,25 +104,29 @@ public class RNA extends Fragment {
         clickableWordsR_centers.add(new Item.ClickableWord("تحميل إستمارة طلب التسجيل", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                copyFileFromAssets(v.getContext(), "DSF app.docx");
-            }
+                copyFileFromAssets(v.getContext(), "Demande_de_restriction_de_l'exploitation_agricole.pdf");            }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("تحميل الطريقة", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                copyFileFromAssets(v.getContext(), "DSF app.docx");
+            }
+        }));
+        clickableWordsR_centers.add(new Item.ClickableWord("تتمة الطريقة", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyFileFromAssets(v.getContext(), "Demande_de_restriction_de_l'exploitation_agricole(suite).pdf");
             }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("تحميل استمارة طلب تحيين", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                copyFileFromAssets(v.getContext(), "DSF app.docx");
+                copyFileFromAssets(v.getContext(), "Demande_de_mise_à_jour_des_données_précédemment_divulguées.pdf");
             }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("تحميل استمارة طلب التشطيب", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                copyFileFromAssets(v.getContext(), "DSF app.docx");
+                copyFileFromAssets(v.getContext(), "Demande_de_levée_de_la_restriction_de_l'exploitation_agricole.pdf");
             }
         }));
 
@@ -134,17 +137,6 @@ public class RNA extends Fragment {
                 "- تسهيل الوصول إلى المساعدات والبرامج المقدمة من وزارة الفلاحة: برامج التدريب والدعم والاستشارة التقنية الفلاحية\n" +
                 "- تسهيل الولوج إلى التمويل والحماية الاجتماعية لتحسن الظروف المعيشية للفلاحين\n" +
                 "- تعزيز العلاقة بين الدولة والمستغلين الفلاحيين: يمكن الوزارة من تلبية أفضل لاحتياجات الفلاحين واستهداف الإعانات","", clickableWordsR_centers));
-
-        items.add(new Item("  ▼  الوثائق المطلوبة للتسجيل:", "تجدر الإشارة الى ان التسجيل في السجل الوطني الفلاحي يخص المستغلين الذاتيين والمستغلين الاعتبارين أو التنظيمات مثل التعاونيات الفلاحية والشركات الفلاحية،",
-                "- تعبئة استمارة طلب التسجيل الاستغلالية الفلاحية في السجل الوطني الفلاحية (معلومات عن الاستغلالية الفلاحية والنشاط الفلاحي والوسائل المسخرة) <<تحميل إستمارة طلب التسجيل >> \n" +
-                        "- نسخة من البطاقة الوطنية للتعريف الإلكترونية للمستغل الذاتي\n" +
-                        "----> بالنسبة للأجانب: نسخة من سند الإقامة؛\n" +
-                        "- بالنسبة للتنظيمات: نسخة من البطاقة الوطنية للتعريف الإلكترونية للممثل القانوني للشخص الاعتباري عند الاقتضاء؛\n" +
-                        "- تسمية الشخص الاعتباري وطبيعته ومقره الاجتماعي؛\n" +
-                        "- وثيقة تثبت الطبيعة القانونية للعقار موضوع الاستغلالية؛\n" +
-                        "- الإحداثيات الجغرافية للبقع الفلاحية للضيعة الفلاحية ومساحتها.<<تحميل الطريقة>>",
-                "يتسلم المستغل \"وثيقة المعلومات الخاصة باستغلاليته\" وتتوفر الإدارة على اجل أقصاه 30 يومًا لفحص الملف والتحقق منه إذا كانت المعلومات متوافقة، يتلقى المستغل شهادة التسجيل في السجل الوطني الفلاحي. إذا كانت المعلومات غير متوافقة أو غير دقيقة، فلدى المستغل 45 يومًا لتصحيح طلبه وإعادة تقديمه",
-                clickableWordsR_centers));
 
 
         items.add(new Item("  ▼  مراكز التسجيل:","يمكن تقديم طلبات التسجيل والتحيين والتشطيب على مستوى:\n" ,
@@ -161,6 +153,17 @@ public class RNA extends Fragment {
         items.add(new Item("  ▼  التشطيب من السجل:", "يأتي تشطيب الاستغلالية الفلاحية بعد توقف النشاط الفلاحي، بناء على طلب المستغل الفلاحي",
                 "- تعبئة استمارة طلب التشطيب على تقييد الاستغلالية الفلاحية <<تحميل استمارة طلب التشطيب>>",
                 "", clickableWordsR_centers));
+
+        items.add(new Item("  ▼  الوثائق المطلوبة للتسجيل:", "تجدر الإشارة الى ان التسجيل في السجل الوطني الفلاحي يخص المستغلين الذاتيين والمستغلين الاعتبارين أو التنظيمات مثل التعاونيات الفلاحية والشركات الفلاحية،",
+                "- تعبئة استمارة طلب التسجيل الاستغلالية الفلاحية في السجل الوطني الفلاحية (معلومات عن الاستغلالية الفلاحية والنشاط الفلاحي والوسائل المسخرة) <<تحميل إستمارة طلب التسجيل >> و <<تتمة الطريقة >> \n" +
+                        "- نسخة من البطاقة الوطنية للتعريف الإلكترونية للمستغل الذاتي\n" +
+                        "----> بالنسبة للأجانب: نسخة من سند الإقامة؛\n" +
+                        "- بالنسبة للتنظيمات: نسخة من البطاقة الوطنية للتعريف الإلكترونية للممثل القانوني للشخص الاعتباري عند الاقتضاء؛\n" +
+                        "- تسمية الشخص الاعتباري وطبيعته ومقره الاجتماعي؛\n" +
+                        "- وثيقة تثبت الطبيعة القانونية للعقار موضوع الاستغلالية؛\n" +
+                        "- الإحداثيات الجغرافية للبقع الفلاحية للضيعة الفلاحية ومساحتها.<<تحميل الطريقة>>",
+                "يتسلم المستغل \"وثيقة المعلومات الخاصة باستغلاليته\" وتتوفر الإدارة على اجل أقصاه 30 يومًا لفحص الملف والتحقق منه إذا كانت المعلومات متوافقة، يتلقى المستغل شهادة التسجيل في السجل الوطني الفلاحي. إذا كانت المعلومات غير متوافقة أو غير دقيقة، فلدى المستغل 45 يومًا لتصحيح طلبه وإعادة تقديمه",
+                clickableWordsR_centers));
 
         items.add(new Item("  ▼  الإطار القانوني المنظم:", "","- الظهير رقم 36-22-1 بتاريخ 24 ماي 2022 تنفيذا للقانون رقم 80.21 بإحداث السجل الوطني الفلاحي\n" +
                 "- المرسوم رقم 2-22-472 بتاريخ 3 غشت 2022 المتعلق بتطبيق قانون السجل الوطني الفلاحي\n" +
@@ -206,24 +209,28 @@ public class RNA extends Fragment {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(context, "Failed to copy file to internal storage.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Failed to Download file to internal storage.", Toast.LENGTH_SHORT).show();
                 return;
             }
         }
 
         // Copy file to external storage
         File externalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
-        try {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                Files.copy(internalFile.toPath(), externalFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+        try (InputStream is = new FileInputStream(internalFile);
+             OutputStream os = new FileOutputStream(externalFile)) {
+            byte[] buffer = new byte[1024];
+            int length;
+            while ((length = is.read(buffer)) > 0) {
+                os.write(buffer, 0, length);
             }
-            Log.i("Download", "File copied to: " + externalFile.getAbsolutePath());
+            Log.i("Download", "File downloaded to: " + externalFile.getAbsolutePath());
             Toast.makeText(context, "File downloaded to: " + externalFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(context, "Failed to copy file to external storage.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Failed to downloaded file to external storage.", Toast.LENGTH_SHORT).show();
         }
     }
+
 
     private void openGoogleMaps(double latitude, double longitude) {
         Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + latitude + "," + longitude + "(Label+Name)");

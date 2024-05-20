@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 public class home extends Fragment {
 
@@ -39,7 +40,7 @@ public class home extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
 
-        ImageView RNA = view.findViewById(R.id.RNA);
+        TextView RNA = view.findViewById(R.id.RNA);
 
         RNA.setOnClickListener(new View.OnClickListener() {
             @Override
