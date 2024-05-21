@@ -209,13 +209,15 @@ public class RNA extends Fragment {
                 }
             } catch (IOException e) {
                 e.printStackTrace();
-                Toast.makeText(context, "Failed to Download file to internal storage.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Failed to download file to internal storage.", Toast.LENGTH_SHORT).show();
                 return;
             }
         }
 
-        // Copy file to external storage
-        File externalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), fileName);
+        // Create a unique file name for the copy in external storage
+        String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
+        File externalFile = new File(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS), uniqueFileName);
+
         try (InputStream is = new FileInputStream(internalFile);
              OutputStream os = new FileOutputStream(externalFile)) {
             byte[] buffer = new byte[1024];
@@ -227,9 +229,10 @@ public class RNA extends Fragment {
             Toast.makeText(context, "File downloaded to: " + externalFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
         } catch (IOException e) {
             e.printStackTrace();
-            Toast.makeText(context, "Failed to downloaded file to external storage.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(context, "Failed to download file to external storage.", Toast.LENGTH_SHORT).show();
         }
     }
+
 
 
     private void openGoogleMaps(double latitude, double longitude) {

@@ -64,15 +64,10 @@ public class Activity_main extends AppCompatActivity {
         smoothBottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public boolean onItemSelect(int i) {
-//                Intent intent;
                 switch (i) {
                     case 0:
                         navController.navigate(R.id.home);
-
                         break;
-//                        intent = new Intent(Activity_main.this, setting.class);
-//                        startActivity(intent);
-//                        return true;
                     case 1:
                         navController.navigate(R.id.setting2);
                         break;
