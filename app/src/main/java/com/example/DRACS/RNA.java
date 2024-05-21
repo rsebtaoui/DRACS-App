@@ -72,49 +72,49 @@ public class RNA extends Fragment {
         clickableWordsR_centers.add(new Item.ClickableWord("الجديدة", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGoogleMaps(33.247881771701344, -8.502983357646494);
+                openGoogleMaps(33.247881771701344, -8.502983357646494,"(المديريات+الإقليمية+للفلاحة+بالجديدة)");
             }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("البيضاء", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGoogleMaps(33.59457671474566, -7.60098941654711);
+                openGoogleMaps(33.59457671474566, -7.60098941654711,"(المديريات+الإقليمية+للفلاحة+بالبيضاء)");
             }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("بنسليمان", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGoogleMaps(33.61036819358808, -7.124757284407918);            }
+                openGoogleMaps(33.61036819358808, -7.124757284407918,"(المديريات+الإقليمية+للفلاحة+ببنسليمان)");            }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("سطات", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGoogleMaps(33.012851049943926, -7.616730529883791);            }
+                openGoogleMaps(33.012851049943926, -7.616730529883791,"(المديريات+الإقليمية+للفلاحة+بسطات)");            }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("برشيد", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGoogleMaps(33.2738516182784, -7.586592444747574);            }
+                openGoogleMaps(33.2738516182784, -7.586592444747574,"(المديريات+الإقليمية+للفلاحة+ببرشيد)");            }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("سيدي بنور", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGoogleMaps(32.65750840219919, -8.425363994368995);          }
+                openGoogleMaps(32.65750840219919, -8.425363994368995,"(المديريات+الإقليمية+للفلاحة+بسيدي+بنور)");          }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("خميس الزمامرة", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGoogleMaps(32.6305907107246, -8.754465575491885);            }
+                openGoogleMaps(32.6305907107246, -8.754465575491885,"(المديريات+الإقليمية+للفلاحة+بخميس+الزمامرة)");            }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("أولاد فرج", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGoogleMaps(32.95870479583255, -8.221324423614597);           }
+                openGoogleMaps(32.95870479583255, -8.221324423614597,"(المديريات+الإقليمية+للفلاحة+بأولاد+فرج)");           }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("تحميل إستمارة طلب التسجيل", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                copyFileFromAssets(v.getContext(), "Demande_de_restriction_de_l'exploitation_agricole.pdf");            }
+                copyFileFromAssets(v.getContext(), "إستمارة طلب التسجيل.pdf");            }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("تحميل الطريقة", new View.OnClickListener() {
             @Override
@@ -130,13 +130,13 @@ public class RNA extends Fragment {
         clickableWordsR_centers.add(new Item.ClickableWord("تحميل استمارة طلب تحيين", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                copyFileFromAssets(v.getContext(), "Demande_de_mise_à_jour_des_données_précédemment_divulguées.pdf");
+                copyFileFromAssets(v.getContext(), "استمارة طلب تحيين.pdf");
             }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("تحميل استمارة طلب التشطيب", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                copyFileFromAssets(v.getContext(), "Demande_de_levée_de_la_restriction_de_l'exploitation_agricole.pdf");
+                copyFileFromAssets(v.getContext(), "استمارة طلب التشطيب.pdf");
             }
         }));
 
@@ -285,8 +285,8 @@ public class RNA extends Fragment {
 
 
 
-    private void openGoogleMaps(double latitude, double longitude) {
-        Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + latitude + "," + longitude + "(Label+Name)");
+    private void openGoogleMaps(double latitude, double longitude,String label) {
+        Uri gmmIntentUri = Uri.parse("geo:0,0?q=" + latitude + "," + longitude + label);
         Intent mapIntent = new Intent(Intent.ACTION_VIEW, gmmIntentUri);
         mapIntent.setPackage("com.google.android.apps.maps");
         startActivity(mapIntent);
