@@ -1,9 +1,13 @@
 package com.example.DRACS;
 
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
@@ -12,6 +16,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.core.app.NotificationCompat;
+import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,8 +33,12 @@ import java.util.List;
 
 public class RNA extends Fragment {
 
+    // Add this to the top of your RNA class
+    private static final String CHANNEL_ID = "download_channel";
+    private static final int NOTIFICATION_ID = 1;
     private RecyclerView recyclerView;
     private ExpandableAdapter adapter;
+
 
     public RNA() {
         // Required empty public constructor
@@ -196,7 +206,44 @@ public class RNA extends Fragment {
         return view;
     }
 
+    private void createNotificationChannel(Context context) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            CharSequence name = "Download Channel";
+            String description = "Channel for download notifications";
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, name, importance);
+            channel.setDescription(description);
+            NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    private void showDownloadNotification(Context context, String filePath) {
+        // Create an intent to open the file
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        File file = new File(filePath);
+        Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
+        intent.setDataAndType(uri, "application/pdf");
+        intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
+
+        PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
+                .setSmallIcon(android.R.drawable.stat_sys_download_done)
+                .setContentTitle("Download Complete")
+                .setContentText("File downloaded to: " + filePath)
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)  // Set the pending intent
+                .setAutoCancel(true);
+
+        NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+        notificationManager.notify(NOTIFICATION_ID, builder.build());
+    }
+
+
     private void copyFileFromAssets(Context context, String fileName) {
+        createNotificationChannel(context);
+
         // Copy file from assets to internal storage if not already present
         File internalFile = new File(context.getFilesDir(), fileName);
         if (!internalFile.exists()) {
@@ -227,6 +274,9 @@ public class RNA extends Fragment {
             }
             Log.i("Download", "File downloaded to: " + externalFile.getAbsolutePath());
             Toast.makeText(context, "File downloaded to: " + externalFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+
+            // Show notification
+            showDownloadNotification(context, externalFile.getAbsolutePath());
         } catch (IOException e) {
             e.printStackTrace();
             Toast.makeText(context, "Failed to download file to external storage.", Toast.LENGTH_SHORT).show();
