@@ -15,6 +15,7 @@ import androidx.navigation.ui.NavigationUI;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -45,16 +46,35 @@ public class Activity_main extends AppCompatActivity {
 
 
         //parametrizing the navigation drawer
-        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer);
-        drawerLayout.addDrawerListener(toggle);
-        toggle.syncState();
-        drawer_icon.setOnClickListener(view -> drawerLayout.openDrawer(GravityCompat.START));
-        NavigationView navigationView = findViewById(R.id.navigation_view);
-        navigationView.setItemIconTintList(null);
+//        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer);
+//        drawerLayout.addDrawerListener(toggle);
+//        toggle.syncState();
 
-        // Handling navigation
+        info.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                navController.navigate(R.id.App_ifo);
+            }
+        });
+
+        //to assign the drawer to the icon , when click the button the drawer open
+        drawer_icon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //de-comment to assign it
+//                drawerLayout.openDrawer(GravityCompat.START);
+                //back home
+                navController.navigate(R.id.home);
+            }
+        });
+
+        //handling drawer
+//        NavigationView navigationView = findViewById(R.id.navigation_view);
+//        navigationView.setItemIconTintList(null);
+//
+//        // Handling navigation
         navController = findNavController(this, R.id.navHostFragment);
-        NavigationUI.setupWithNavController(navigationView, navController);
+//        NavigationUI.setupWithNavController(navigationView, navController);
         TextView textTitle = findViewById(R.id.title);
         navController.addOnDestinationChangedListener((controller, destination, arguments) ->
                 textTitle.setText(destination.getLabel()));
@@ -78,17 +98,17 @@ public class Activity_main extends AppCompatActivity {
         });
 
         // Handle drawer navigation item clicks
-        navigationView.setNavigationItemSelectedListener(item -> {
-            if (item.getItemId() == R.id.home) {
-                navController.navigate(R.id.home);
-                smoothBottomBar.setItemActiveIndex(0);
-            } else if (item.getItemId() == R.id.RNA) {
-                navController.navigate(R.id.RNA);
-                smoothBottomBar.setItemActiveIndex(0);
-            }
-            drawerLayout.closeDrawer(GravityCompat.START);
-            return true;
-        });
+//        navigationView.setNavigationItemSelectedListener(item -> {
+//            if (item.getItemId() == R.id.home) {
+//                navController.navigate(R.id.home);
+//                smoothBottomBar.setItemActiveIndex(0);
+//            } else if (item.getItemId() == R.id.RNA) {
+//                navController.navigate(R.id.RNA);
+//                smoothBottomBar.setItemActiveIndex(0);
+//            }
+//            drawerLayout.closeDrawer(GravityCompat.START);
+//            return true;
+//        });
     }
 
     @Override

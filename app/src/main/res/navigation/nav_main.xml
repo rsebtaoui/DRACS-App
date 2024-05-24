@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_home_to_setting2"
             app:destination="@id/setting2" />
+        <action
+            android:id="@+id/action_home_to_App_info"
+            app:destination="@id/App_ifo" />
     </fragment>
     <fragment
         android:id="@+id/RNA"
@@ -35,6 +38,15 @@
         <action
             android:id="@+id/action_setting2_to_home"
             app:destination="@id/home" />
+    </fragment>
 
+    <fragment
+        android:id="@+id/App_ifo"
+        android:name="com.example.DRACS.App_info"
+        android:label="حول التطبيق"
+        tools:layout="@layout/fragment_app_info" >
+        <action
+            android:id="@+id/action_App_inof_to_home"
+            app:destination="@id/home" />
     </fragment>
 </navigation>
