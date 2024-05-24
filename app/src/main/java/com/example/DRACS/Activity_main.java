@@ -71,6 +71,8 @@ public class Activity_main extends AppCompatActivity {
                     case 1:
                         navController.navigate(R.id.setting2);
                         break;
+                    case 2:
+                        exitApp();
                 }
                 return false;
             }
@@ -116,4 +118,10 @@ public class Activity_main extends AppCompatActivity {
             info.setImageResource(newIconResId);
         }
     }
+
+    public void exitApp() {
+        finishAffinity();
+        System.exit(0);
+    }
+
 }

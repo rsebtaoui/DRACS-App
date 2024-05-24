@@ -14,4 +14,11 @@
         android:title="@string/إعدادات"
         />
 
+    <item
+        android:id="@+id/exit"
+        android:icon="@drawable/exit_svgrepo_com__3_"
+        android:title="@string/خروج"
+        />
+
+
 </menu>

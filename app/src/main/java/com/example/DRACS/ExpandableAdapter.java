@@ -1,6 +1,7 @@
 package com.example.DRACS;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
@@ -57,8 +58,9 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
                     @Override
                     public void updateDrawState(TextPaint ds) {
                         super.updateDrawState(ds);
-                        ds.setColor(ContextCompat.getColor(context,R.color.Emerald_Green_700)); // Set your custom color here
-                        ds.setUnderlineText(false); // Optional: disable underline
+                        ds.setColor(ContextCompat.getColor(context,R.color.Emerald_Green_800));
+                        ds.setStyle(Paint.Style.FILL_AND_STROKE);
+                        ds.setUnderlineText(true);
                     }
                 }, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }

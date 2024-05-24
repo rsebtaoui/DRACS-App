@@ -1,28 +1,11 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layoutDirection="rtl"
+    android:textDirection="rtl">
 
     <item
         android:id="@+id/home"
-        android:title="@string/المديرية_الجهوية"
-        />
+        android:title="القائمة الرئيسية" />
     <item
         android:id="@+id/RNA"
         android:title="السجل الوطني الفلاحي"/>
-
-    <item
-        android:id="@+id/PS"
-        android:title="الحماية الإجتماعية"
-        />
-    <item
-        android:id="@+id/FDA"
-        android:title="صندوق التنمية الزراعية"
-        />
-    <item
-        android:id="@+id/JE"
-        android:title="رجل أعمال شاب"
-        />
-    <item
-        android:id="@+id/FP"
-        android:title="تدريب احترافي"
-        />
-
 </menu>

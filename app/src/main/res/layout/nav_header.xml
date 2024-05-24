@@ -18,7 +18,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAlignment="center"
-        android:text="@string/وزارة"
+        android:text="@string/المديرية_الجهوية"
         android:textSize="14sp"
         android:textColor="?attr/colorOnSecondary"/>
 
