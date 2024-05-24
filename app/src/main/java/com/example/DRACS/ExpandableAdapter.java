@@ -55,6 +55,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
                     public void onClick(View widget) {
                         clickableWord.getOnClickListener().onClick(widget);
                     }
+                    //clickable text style
                     @Override
                     public void updateDrawState(TextPaint ds) {
                         super.updateDrawState(ds);
@@ -66,12 +67,15 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
             }
         }
 
+        //setting content
         holder.intro.setText(item.getintro());
         holder.lists.setText(spannableString);
         holder.conclu.setText(item.getconclu());
 
-        holder.lists.setMovementMethod(LinkMovementMethod.getInstance()); // Enable clickable links
+        // Enable clickable links
+        holder.lists.setMovementMethod(LinkMovementMethod.getInstance());
 
+        //handling the expanding
         final boolean isExpanded = holder.getAdapterPosition() == expandedPosition;
         holder.expandableLayout.setExpanded(isExpanded, false);
         holder.intro.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
@@ -92,6 +96,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
         return items.size();
     }
 
+    //content
     public static class ViewHolder extends RecyclerView.ViewHolder {
         public TextView title;
         public TextView intro;

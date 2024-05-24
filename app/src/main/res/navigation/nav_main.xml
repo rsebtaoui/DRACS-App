@@ -30,7 +30,7 @@
     <fragment
         android:id="@+id/setting2"
         android:name="com.example.DRACS.setting2"
-        android:label="Settings"
+        android:label="ألإعدادات"
         tools:layout="@layout/fragment_setting2" >
         <action
             android:id="@+id/action_setting2_to_home"

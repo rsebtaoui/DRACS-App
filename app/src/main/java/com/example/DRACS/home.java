@@ -42,6 +42,7 @@ public class home extends Fragment {
 
         TextView RNA = view.findViewById(R.id.RNA);
 
+        //navigation to RNA screen
         RNA.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

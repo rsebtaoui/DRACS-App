@@ -37,30 +37,29 @@ public class Activity_main extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
+        //define the views
         smoothBottomBar = findViewById(R.id.bottomBar);
         drawerLayout = findViewById(R.id.drawer_layout);
         drawer_icon = findViewById(R.id.drawer_icon);
         info = findViewById(R.id.FAQ_icon);
 
 
+        //parametrizing the navigation drawer
         toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer);
         drawerLayout.addDrawerListener(toggle);
         toggle.syncState();
-
         drawer_icon.setOnClickListener(view -> drawerLayout.openDrawer(GravityCompat.START));
-
         NavigationView navigationView = findViewById(R.id.navigation_view);
         navigationView.setItemIconTintList(null);
 
         // Handling navigation
         navController = findNavController(this, R.id.navHostFragment);
         NavigationUI.setupWithNavController(navigationView, navController);
-
         TextView textTitle = findViewById(R.id.title);
-
         navController.addOnDestinationChangedListener((controller, destination, arguments) ->
                 textTitle.setText(destination.getLabel()));
 
+        //handling button nav bar navigation
         smoothBottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public boolean onItemSelect(int i) {
@@ -106,16 +105,6 @@ public class Activity_main extends AppCompatActivity {
             drawerLayout.closeDrawer(GravityCompat.START);
         } else if (!navController.popBackStack()) {
             super.onBackPressed();
-        }
-    }
-    public void changeIconmenu(int newIconResId) {
-        if (drawer_icon != null) {
-            drawer_icon.setImageResource(newIconResId);
-        }
-    }
-    public void changeIconinfo(int newIconResId) {
-        if (info != null) {
-            info.setImageResource(newIconResId);
         }
     }
 

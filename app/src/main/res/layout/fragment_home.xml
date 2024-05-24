@@ -60,19 +60,21 @@
                 android:padding="30dp"
                 android:gravity="center"
                 android:layout_margin="5dp"/>
+
             <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_columnWeight="1"
-                android:layout_rowWeight="1"
-                android:text="صندوق التنمية الزراعية"
-                android:textSize="23sp"
-                android:textStyle="bold"
-                android:background="@drawable/rounded_corners_disabled"
-                android:textColor="?attr/colorPrimary"
-                android:padding="30dp"
-                android:gravity="center"
-                android:layout_margin="5dp"/>
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_columnWeight="1"
+            android:layout_rowWeight="1"
+            android:text="المقاولين الشباب "
+            android:textSize="23sp"
+            android:textStyle="bold"
+            android:background="@drawable/rounded_corners_disabled"
+            android:textColor="?attr/colorPrimary"
+            android:padding="30dp"
+            android:gravity="center"
+            android:layout_margin="5dp"/>
+
             <TextView
                 android:id="@+id/R_enregistrement"
                 android:layout_width="0dp"
@@ -92,7 +94,7 @@
                 android:layout_height="wrap_content"
                 android:layout_columnWeight="1"
                 android:layout_rowWeight="1"
-                android:text="تدريب احترافي"
+                android:text="صندوق التنمية الزراعية"
                 android:textSize="23sp"
                 android:textStyle="bold"
                 android:background="@drawable/rounded_corners_disabled"
@@ -100,6 +102,8 @@
                 android:padding="30dp"
                 android:gravity="center"
                 android:layout_margin="5dp"/>
+
+
 
         </GridLayout>
     </ScrollView>

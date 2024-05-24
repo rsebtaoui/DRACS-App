@@ -33,7 +33,6 @@ import java.util.List;
 
 public class RNA extends Fragment {
 
-    // Add this to the top of your RNA class
     private static final String CHANNEL_ID = "download_channel";
     private static final int NOTIFICATION_ID = 1;
     private RecyclerView recyclerView;
@@ -67,34 +66,36 @@ public class RNA extends Fragment {
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
+        //this is the list of the clickable words that we passe as a parameter
         List<Item.ClickableWord> clickableWordsR_centers = new ArrayList<>();
 
+        //handling the click of the word "الجديدة"
         clickableWordsR_centers.add(new Item.ClickableWord("الجديدة", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGoogleMaps(33.247881771701344, -8.502983357646494,"(المديريات+الإقليمية+للفلاحة+بالجديدة)");
+                openGoogleMaps(33.247973, -8.502161,"(المديريات+الإقليمية+للفلاحة+بالجديدة)");
             }
         }));
-        clickableWordsR_centers.add(new Item.ClickableWord("البيضاء", new View.OnClickListener() {
+        clickableWordsR_centers.add(new Item.ClickableWord("الدار البيضاء ", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGoogleMaps(33.59457671474566, -7.60098941654711,"(المديريات+الإقليمية+للفلاحة+بالبيضاء)");
+                openGoogleMaps(33.594278, -7.601056,"(المديريات+الإقليمية+للفلاحة+بالبيضاء)");
             }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("بنسليمان", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGoogleMaps(33.61036819358808, -7.124757284407918,"(المديريات+الإقليمية+للفلاحة+ببنسليمان)");            }
+                openGoogleMaps(33.6090340,-7.1259160,"(المديريات+الإقليمية+للفلاحة+ببنسليمان)");            }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("سطات", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGoogleMaps(33.012851049943926, -7.616730529883791,"(المديريات+الإقليمية+للفلاحة+بسطات)");            }
+                openGoogleMaps(33.0100280, -7.6162690,"(المديريات+الإقليمية+للفلاحة+بسطات)");            }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("برشيد", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openGoogleMaps(33.2738516182784, -7.586592444747574,"(المديريات+الإقليمية+للفلاحة+ببرشيد)");            }
+                openGoogleMaps(33.264458, -7.581894,"(المديريات+الإقليمية+للفلاحة+ببرشيد)");            }
         }));
         clickableWordsR_centers.add(new Item.ClickableWord("سيدي بنور", new View.OnClickListener() {
             @Override
@@ -109,24 +110,31 @@ public class RNA extends Fragment {
         clickableWordsR_centers.add(new Item.ClickableWord("أولاد فرج", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //this function OpenGoogleMaps take 3 arguments (latitude,longitude,title you wanna show in the location)
                 openGoogleMaps(32.95870479583255, -8.221324423614597,"(المقاطعة+التابعة+للمكتب+الجهوي+للاستثمار+الفلاحي+لدكالة+بأولاد+فرج)");           }
         }));
+
         clickableWordsR_centers.add(new Item.ClickableWord("تحميل إستمارة طلب التسجيل", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 copyFileFromAssets(v.getContext(), "إستمارة طلب التسجيل.pdf");            }
         }));
+
+        clickableWordsR_centers.add(new Item.ClickableWord("تتمة الطلب", new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                copyFileFromAssets(v.getContext(), "تتمة إستمارة طلب التسجيل .pdf");
+            }
+        }));
+
         clickableWordsR_centers.add(new Item.ClickableWord("تحميل الطريقة", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //the link to open video in youtube
             }
         }));
-        clickableWordsR_centers.add(new Item.ClickableWord("تتمة الطريقة", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                copyFileFromAssets(v.getContext(), "Demande_de_restriction_de_l'exploitation_agricole(suite).pdf");
-            }
-        }));
+
+
         clickableWordsR_centers.add(new Item.ClickableWord("تحميل استمارة طلب تحيين", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,8 +149,13 @@ public class RNA extends Fragment {
         }));
 
 
-
+        //setting the content fo the expandable places
         List<Item> items = new ArrayList<>();
+
+        //item parameters(title,intro,content,conclu,list_of_clickable_words)
+        //the item have title that will be clickable and inside the expanding space there is:
+        // introduction and content and conclusion .
+        // along with an other parameter witch is the list of clickable words
         items.add(new Item("  ▼  الامتيازات:", "","- الاستفادة من الإعانات المقدمة من طرف وزارة الفلاحة \n" +
                 "- الاعتراف القانوني بالاستغلالية الفلاحية وإمكانية تتبعها: مما يُسهل عليهم الوصول إلى مختلف الخدمات والفرص المتاحة\n" +
                 "- تسهيل الوصول إلى المساعدات والبرامج المقدمة من وزارة الفلاحة: برامج التدريب والدعم والاستشارة التقنية الفلاحية\n" +
@@ -150,7 +163,7 @@ public class RNA extends Fragment {
                 "- تعزيز العلاقة بين الدولة والمستغلين الفلاحيين: يمكن الوزارة من تلبية أفضل لاحتياجات الفلاحين واستهداف الإعانات","", clickableWordsR_centers));
 
         items.add(new Item("  ▼  الوثائق المطلوبة للتسجيل:", "تجدر الإشارة الى ان التسجيل في السجل الوطني الفلاحي يخص المستغلين الذاتيين والمستغلين الاعتبارين أو التنظيمات مثل التعاونيات الفلاحية والشركات الفلاحية،",
-                "- تعبئة استمارة طلب التسجيل الاستغلالية الفلاحية في السجل الوطني الفلاحية (معلومات عن الاستغلالية الفلاحية والنشاط الفلاحي والوسائل المسخرة) <<تحميل إستمارة طلب التسجيل >> و <<تتمة الطريقة >> \n" +
+                "- تعبئة استمارة طلب التسجيل الاستغلالية الفلاحية في السجل الوطني الفلاحية (معلومات عن الاستغلالية الفلاحية والنشاط الفلاحي والوسائل المسخرة) <<تحميل إستمارة طلب التسجيل >> و << تتمة الطلب >> \n" +
                         "- نسخة من البطاقة الوطنية للتعريف الإلكترونية للمستغل الذاتي\n" +
                         "----> بالنسبة للأجانب: نسخة من سند الإقامة؛\n" +
                         "- بالنسبة للتنظيمات: نسخة من البطاقة الوطنية للتعريف الإلكترونية للممثل القانوني للشخص الاعتباري عند الاقتضاء؛\n" +
@@ -162,8 +175,8 @@ public class RNA extends Fragment {
 
         items.add(new Item("  ▼  مراكز التسجيل:","يمكن تقديم طلبات التسجيل والتحيين والتشطيب على مستوى:\n" ,
                 "- المديريات الإقليمية  للفلاحة (DPA): \n" +
-                        "الجديدة، البيضاء، بنسليمان، سطات، برشيد\n" +
-                        "- والمقاطعات التابعة للمكتب الجهوي للاستثمار الفلاحي بدكالة  (ORMVAD)\n" +
+                        "الجديدة، الدار البيضاء ، بنسليمان، سطات، برشيد\n" +
+                        "- والمقاطعات التابعة للمكتب الجهوي للاستثمار الفلاحي بدكالة  (ORMVAD):\n" +
                         " : سيدي بنور، خميس الزمامرة، أولاد فرج، الغربية",
                 "", clickableWordsR_centers));
 
@@ -202,7 +215,7 @@ public class RNA extends Fragment {
                 "- الاستغلاليات الفلاحية في السجل الوطني الفلاحي، وتحين المعطيات، والتشطيب على التقييد، وكذا نموذج شهادة التقييد.","", clickableWordsR_centers));
 
 
-
+        //set the adapter to show the content
         adapter = new ExpandableAdapter(getContext(), items);
         recyclerView.setAdapter(adapter);
 
@@ -229,6 +242,7 @@ public class RNA extends Fragment {
             File file = new File(filePath);
             Uri uri;
 
+            //Avoiding API level bugs/Exceptions using this test
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 // For API 24 and above, use FileProvider
                 uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
@@ -259,7 +273,7 @@ public class RNA extends Fragment {
         private void copyFileFromAssets(Context context, String fileName) {
         createNotificationChannel(context);
 
-        // Copy file from assets to internal storage if not already present
+        // Copy file from assets to internal storage even if it is already exist suing the unique name
         File internalFile = new File(context.getFilesDir(), fileName);
         if (!internalFile.exists()) {
             try (InputStream is = context.getAssets().open(fileName);
