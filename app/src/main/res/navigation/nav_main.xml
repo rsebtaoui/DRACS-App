@@ -44,7 +44,7 @@
     </fragment>
 
     <fragment
-        android:id="@+id/App_ifo"
+        android:id="@+id/App_info"
         android:name="com.khalil.DRACS.App_info"
         android:label="حول التطبيق"
         tools:layout="@layout/fragment_app_info" >

@@ -2,6 +2,11 @@ package com.khalil.DRACS;
 
 import static androidx.navigation.Navigation.findNavController;
 
+import androidx.activity.result.ActivityResult;
+import androidx.activity.result.ActivityResultCallback;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.IntentSenderRequest;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,11 +14,27 @@ import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
 
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentSender;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.play.core.appupdate.AppUpdateInfo;
+import com.google.android.play.core.appupdate.AppUpdateManager;
+import com.google.android.play.core.appupdate.AppUpdateManagerFactory;
+import com.google.android.play.core.appupdate.AppUpdateOptions;
+import com.google.android.play.core.install.InstallStateUpdatedListener;
+import com.google.android.play.core.install.model.AppUpdateType;
+import com.google.android.play.core.install.model.InstallStatus;
+import com.google.android.play.core.install.model.UpdateAvailability;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
@@ -26,54 +47,42 @@ public class Activity_main extends AppCompatActivity {
     ActionBarDrawerToggle toggle;
     ImageView drawer_icon;
     ImageView info;
+    private AppUpdateManager appUpdateManager;
+
+    private ActivityResultLauncher<IntentSenderRequest> activityResultLauncher;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
 
-        //define the views
+        // Define the views
         smoothBottomBar = findViewById(R.id.bottomBar);
         drawerLayout = findViewById(R.id.drawer_layout);
         drawer_icon = findViewById(R.id.drawer_icon);
         info = findViewById(R.id.FAQ_icon);
 
+        // Register the ActivityResultLauncher for app updates
+        activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartIntentSenderForResult(),
+                result -> {
+                    if (result.getResultCode() != RESULT_OK) {
+                        Log.w("Activity_main", "Update flow failed! Result code: " + result.getResultCode());
+                        Toast.makeText(this, "Update failed, try again later", Toast.LENGTH_SHORT).show();
+                    }
+                });
 
-        //parametrizing the navigation drawer
-//        toggle = new ActionBarDrawerToggle(this, drawerLayout, R.string.open_drawer, R.string.close_drawer);
-//        drawerLayout.addDrawerListener(toggle);
-//        toggle.syncState();
+        info.setOnClickListener(v -> navController.navigate(R.id.App_info));
 
-        info.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                navController.navigate(R.id.App_ifo);
-            }
-        });
+        drawer_icon.setOnClickListener(v -> navController.navigate(R.id.home));
 
-        //to assign the drawer to the icon , when click the button the drawer open
-        drawer_icon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //de-comment to assign it
-//                drawerLayout.openDrawer(GravityCompat.START);
-                //back home
-                navController.navigate(R.id.home);
-            }
-        });
-
-        //handling drawer
-//        NavigationView navigationView = findViewById(R.id.navigation_view);
-//        navigationView.setItemIconTintList(null);
-//
-//        // Handling navigation
+        // Handling navigation
         navController = findNavController(this, R.id.navHostFragment);
-//        NavigationUI.setupWithNavController(navigationView, navController);
         TextView textTitle = findViewById(R.id.title);
         navController.addOnDestinationChangedListener((controller, destination, arguments) ->
                 textTitle.setText(destination.getLabel()));
 
-        //handling button nav bar navigation
+        // Handling bottom nav bar navigation
         smoothBottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
             @Override
             public boolean onItemSelect(int i) {
@@ -91,18 +100,7 @@ public class Activity_main extends AppCompatActivity {
             }
         });
 
-        // Handle drawer navigation item clicks
-//        navigationView.setNavigationItemSelectedListener(item -> {
-//            if (item.getItemId() == R.id.home) {
-//                navController.navigate(R.id.home);
-//                smoothBottomBar.setItemActiveIndex(0);
-//            } else if (item.getItemId() == R.id.RNA) {
-//                navController.navigate(R.id.RNA);
-//                smoothBottomBar.setItemActiveIndex(0);
-//            }
-//            drawerLayout.closeDrawer(GravityCompat.START);
-//            return true;
-//        });
+        checkForAppUpdate();
     }
 
     @Override
@@ -127,4 +125,55 @@ public class Activity_main extends AppCompatActivity {
         System.exit(0);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        appUpdateManager.unregisterListener(listener);
+    }
+
+    private void checkForAppUpdate() {
+        appUpdateManager = AppUpdateManagerFactory.create(this);
+
+        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+
+        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                appUpdateManager.startUpdateFlowForResult(
+                        appUpdateInfo,
+                        activityResultLauncher,
+                        AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build());
+            }
+        });
+
+        appUpdateManager.registerListener(listener);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        appUpdateManager.getAppUpdateInfo()
+                .addOnSuccessListener(appUpdateInfo -> {
+                    if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                        popupSnackbarForCompleteUpdate();
+                    }
+                });
+    }
+
+    InstallStateUpdatedListener listener = state -> {
+        if (state.installStatus() == InstallStatus.DOWNLOADED) {
+            popupSnackbarForCompleteUpdate();
+        }
+    };
+
+    private void popupSnackbarForCompleteUpdate() {
+        Snackbar snackbar = Snackbar.make(
+                findViewById(android.R.id.content),
+                "An update has just been downloaded.",
+                Snackbar.LENGTH_INDEFINITE);
+        snackbar.setAction("INSTALL", view -> appUpdateManager.completeUpdate());
+        snackbar.setActionTextColor(getResources().getColor(R.color.Emerald_Green_700));
+        snackbar.show();
+    }
 }

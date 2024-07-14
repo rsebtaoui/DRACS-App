@@ -67,6 +67,6 @@
         implementation("com.github.cachapa:ExpandableLayout:2.9.2")
 
         //notification of the app update
-        implementation("com.google.android.play:core:1.12.0")
+        implementation("com.google.android.play:app-update:2.1.0")
 
     }
