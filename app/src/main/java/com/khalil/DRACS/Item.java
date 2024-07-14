@@ -1,4 +1,4 @@
-package com.example.DRACS;
+package com.khalil.DRACS;
 
 import android.view.View;
 
@@ -10,13 +10,15 @@ public class Item {
     private String lists;
     private String conclu;
     private List<ClickableWord> clickableWords;
+    private List<Coloredlines> coloredlines;
 
-    public Item(String title, String intro, String lists, String conclu, List<ClickableWord> clickableWords) {
+    public Item(String title, String intro, String lists, String conclu, List<ClickableWord> clickableWords, List<Coloredlines> coloredlines) {
         this.title = title;
         this.intro = intro;
         this.lists = lists;
         this.conclu = conclu;
         this.clickableWords = clickableWords;
+        this.coloredlines = coloredlines;
     }
 
     public String getTitle() {
@@ -39,6 +41,10 @@ public class Item {
         return clickableWords;
     }
 
+    public List<Coloredlines> getColoredlines() {
+        return coloredlines;
+    }
+
     public static class ClickableWord {
         private String word;
         private View.OnClickListener onClickListener;
@@ -54,6 +60,19 @@ public class Item {
 
         public View.OnClickListener getOnClickListener() {
             return onClickListener;
+        }
+    }
+
+    public static class Coloredlines {
+        private String line;
+
+
+        public Coloredlines(String line) {
+            this.line = line;
+        }
+
+        public String getLine() {
+            return line;
         }
     }
 }

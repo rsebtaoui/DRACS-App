@@ -1,18 +1,19 @@
-package com.example.DRACS;
+package com.khalil.DRACS;
 
 import android.content.Context;
 import android.graphics.Paint;
-import android.text.Html;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.style.ClickableSpan;
 import android.text.method.LinkMovementMethod;
+import android.text.style.ForegroundColorSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -66,6 +67,26 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
                 }, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }
         }
+
+        //set color to the colored lines
+        for (Item.Coloredlines coloredLine : item.getColoredlines()) {
+            int startIndex = item.getlists().indexOf(coloredLine.getLine());
+            int endIndex = startIndex + coloredLine.getLine().length();
+            if (startIndex != -1) {
+                spannableString.setSpan(new ClickableSpan() {
+                    @Override
+                    public void onClick(@NonNull View widget) {}
+
+                    @Override
+                    public void updateDrawState(TextPaint ds) {
+                        super.updateDrawState(ds);
+                        ds.setColor(ContextCompat.getColor(context,R.color.green));
+                        ds.setStyle(Paint.Style.FILL);
+                    }
+                }, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+
 
         //setting content
         holder.intro.setText(item.getintro());

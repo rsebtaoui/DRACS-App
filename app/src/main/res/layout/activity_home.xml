@@ -37,7 +37,7 @@
             android:layout_marginTop="13dp"
             android:clickable="true"
             android:focusable="true"
-            android:src="@drawable/ic_menu"/>
+            android:src="@drawable/home"/>
 
         <ImageView
             android:id="@+id/FAQ_icon"

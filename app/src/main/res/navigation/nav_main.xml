@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/home"
-        android:name="com.example.DRACS.home"
+        android:name="com.khalil.DRACS.home"
         android:label="@string/المديرية_الجهوية"
         tools:layout="@layout/fragment_home" >
         <action
@@ -19,10 +19,13 @@
         <action
             android:id="@+id/action_home_to_App_info"
             app:destination="@id/App_ifo" />
+        <action
+            android:id="@+id/action_home_to_PS"
+            app:destination="@+id/PS"/>
     </fragment>
     <fragment
         android:id="@+id/RNA"
-        android:name="com.example.DRACS.RNA"
+        android:name="com.khalil.DRACS.RNA"
         android:label="السجل الوطني الفلاحي"
         tools:layout="@layout/fragment_r_n_a" >
         <action
@@ -32,7 +35,7 @@
     </fragment>
     <fragment
         android:id="@+id/setting2"
-        android:name="com.example.DRACS.setting2"
+        android:name="com.khalil.DRACS.setting2"
         android:label="ألإعدادات"
         tools:layout="@layout/fragment_setting2" >
         <action
@@ -42,11 +45,18 @@
 
     <fragment
         android:id="@+id/App_ifo"
-        android:name="com.example.DRACS.App_info"
+        android:name="com.khalil.DRACS.App_info"
         android:label="حول التطبيق"
         tools:layout="@layout/fragment_app_info" >
         <action
             android:id="@+id/action_App_inof_to_home"
             app:destination="@id/home" />
     </fragment>
+
+    <fragment
+        android:id="@+id/PS"
+        android:name="com.khalil.DRACS.PS"
+        android:label="الحماية الاجتماعية"
+        tools:layout="@layout/fragment_p_s" />
+
 </navigation>

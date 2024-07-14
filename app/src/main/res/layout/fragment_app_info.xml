@@ -8,32 +8,13 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_marginTop="25dp">
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="مرحبا بكم في التطبيق الرسمي للهاتف المحمول للمديرية الجهوية للفلاحة بجهة الدار البيضاء سطات. تم تصميم هذا التطبيق لتوفير المعلومات والموارد المستهدفة لمستخدمينا المتنوعين، بما في ذلك المزارعين ورجال الأعمال وعامة الناس. هدفنا هو تبسيط البحث والوصول إلى المعلومات والخدمات الزراعية الهامة."
-            android:textSize="15sp"
-            android:textColor="@color/black"
-            android:layout_marginTop="35dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="10dp"
-            android:text="دلائل الميزات"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="23sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="1. المعلومات المستهدفة"
+            android:text="1. مرحبا بكم في التطبيق الرسمي للهاتف المحمول للمديرية الجهوية للفلاحة لجهة الدار البيضاء سطات."
             android:textSize="19sp"
             android:textColor="@color/black"
             android:layout_marginTop="10dp"
@@ -44,106 +25,47 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="ابق على اطلاع بأحدث المشاريع والاستراتيجيات والمعلومات الأساسية مثل المستندات اللازمة للإعانات والدعم."
-            android:textSize="15sp"
-            android:textColor="@color/black"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="2. عمليات إعادة التوجيه المباشرة"
+            android:text="2. تم إنجاز هذا التطبيق لتوفير المعلومات الخاصة بالخدمات المقدمة من طرف هاته المديرية. هدفنا هو تبسيط البحث والوصول إلى المعلومات والخدمات الهامة."
             android:textSize="19sp"
             android:textColor="@color/black"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="يمكنك الوصول بسهولة إلى منصات الإنترنت والمواقع الإدارية من خلال روابط مباشرة وخرائط متكاملة لتنقل أفضل."
-            android:textSize="15sp"
-            android:textColor="@color/black"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="3. الأسئلة المتداولة (الأسئلة الشائعة)"
+            android:text="3. تم تطوير هذا التطبيق من طرف المديرية الجهوية للفلاحة لجهة الدار البيضاء سطات بالجديدة بالتعاون مع المدرسة للتكنولوجيا العليا سيدي بنور. "
             android:textSize="19sp"
             android:textColor="@color/black"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="يمكنك العثور على إجابات للأسئلة الشائعة في قسم الأسئلة الشائعة المخصص لدينا، والذي يوفر إجابات مفصلة ويسمح للمستخدمين بقراءة الاستفسارات الخاصة بكل موضوع."
-            android:textSize="15sp"
-            android:textColor="@color/black"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="10dp"
-            android:text="4. الوصول إلى الوثيقة"
-            android:textColor="@color/black"
+            android:text="4. تم تصميمه من طرف السيد رشيد سبتاوي (رئيس مصلحة نظم المعلومات الفلاحية) والسيد رضوان عبد الباسط (رئيس قسم الحماية الاجتماعية) بالمديرية الجهوية، وتمت برمجته من طرف المتدرب السيد كميلي خليل "
             android:textSize="19sp"
-            />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="قم بتنزيل المستندات وتنظيمها حسب الفئة لتسهيل الوصول إلى المعلومات والموارد الإضافية."
-            android:textSize="15sp"
             android:textColor="@color/black"
-            android:layout_marginTop="5dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="10dp"
-            android:text="شكر وتقدير"
-            android:textColor="?attr/colorPrimary"
-            android:textSize="23sp" />
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="10dp"
+            android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
-            android:text="تم تطوير هذا التطبيق بالتعاون مع المديرية الجهوية للفلاحة بالدار البيضاء سطات والمدرسة العليا للتكنولوجيا (EST-SB). ونعرب عن امتناننا للفريق المتفاني في الإدارة، ولا سيما السيد رشيد سبتاوي (رئيس قسم المعلوماتية) و السيد رضوان عبد الباسط (قسم الحماية الاجتماعية)، الذين كان لهم دور قيادي ودعم في إنشاء هذا التطبيق، إلى جانب جميع رؤساء الأقسام الذين قدموا الأفكار والمحتوى اللازم لهذا التطبيق"
-            android:textColor="@color/black"
-            android:textSize="15sp"
             />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="شكرا لك على استخدام تطبيقنا. نأمل أن يعزز تجربتك ويدعم مساعيك الزراعية."
-            android:textSize="15sp"
+            android:text="5. نتقدم بالشكر إلى كل الذين كان لهم دور قيادي في إنشاء هذا التطبيق، وإلى كل من قدم الأفكار والمحتوى اللازم لهذا التطبيق. "
+            android:textSize="19sp"
             android:textColor="@color/black"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"/>
+            android:layout_marginEnd="10dp"
+            />
+
 
     </LinearLayout>
 </ScrollView>
