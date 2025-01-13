@@ -23,13 +23,11 @@ public class PS extends Fragment {
         // Required empty public constructor
     }
 
-    public static PS newInstance(String param1, String param2) {
+    public static PS newInstance() {
         PS fragment = new PS();
-        Bundle args = new Bundle();
-
-        fragment.setArguments(args);
         return fragment;
     }
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -45,6 +43,9 @@ public class PS extends Fragment {
 
         recyclerView = view.findViewById(R.id.psrecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+
+        //this is the list of the Colored lines that we passe as a parameter
+        List<Item.Coloredlines> coloredlinesps = new ArrayList<>();
 
         //this is the list of the clickable words that we passe as a parameter
         List<Item.ClickableWord> clickableWordsps = new ArrayList<>();
@@ -77,7 +78,6 @@ public class PS extends Fragment {
             public void onClick(View v) {
                 FileUtils.openGoogleMaps(v.getContext(),33.264458, -7.581894,"المديرية+الإقليمية+للفلاحة+ببرشيد");            }
         }));
-
         clickableWordsps.add(new Item.ClickableWord("سيدي بنور", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -94,30 +94,24 @@ public class PS extends Fragment {
                 //this function OpenGoogleMaps take 3 arguments (latitude,longitude,title you wanna show in the location)
                 FileUtils.openGoogleMaps(v.getContext(),32.95870479583255, -8.221324423614597,"المقاطعة+التابعة+للمكتب+الجهوي+للاستثمار+الفلاحي+لدكالة+بأولاد+فرج");           }
         }));
-
         clickableWordsps.add(new Item.ClickableWord("استمارة طلب التسجيل", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FileUtils.copyFileFromAssets(v.getContext(),"إستمارة الفلاح الخاصة بطلب التسجيل في التغطية الصحية للفلاحين.pdf");
             }
         }));
-
         clickableWordsps.add(new Item.ClickableWord("استمارة طلب تحيين المعطيات", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FileUtils.copyFileFromAssets(v.getContext(),"إستمارة الفلاح الخاصة بطلب تحيين المعلومات الخاصة بالتغطية الصحية.pdf");
             }
         }));
-
         clickableWordsps.add(new Item.ClickableWord("استمارة طلب التشطيب", new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 FileUtils.copyFileFromAssets(v.getContext(),"تصريح بالشرف بعدم ممارسة أي نشاط فلاحي.pdf");
             }
         }));
-
-        //this is the list of the Colored lines that we passe as a parameter
-        List<Item.Coloredlines> coloredlinesps = new ArrayList<>();
 
         coloredlinesps.add(new Item.Coloredlines("كيف تتم معالجة الطلبات؟"));
 

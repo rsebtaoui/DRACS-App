@@ -38,7 +38,6 @@ public class home extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_home, container, false);
 
-
         TextView RNAclick = view.findViewById(R.id.RNA);
         TextView PSclick = view.findViewById(R.id.ps);
 
@@ -59,6 +58,7 @@ public class home extends Fragment {
                 navController.navigate(R.id.action_home_to_PS);
             }
         });
+
         return view;
     }
 }

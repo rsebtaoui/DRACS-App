@@ -72,10 +72,6 @@ public class Activity_main extends AppCompatActivity {
                     }
                 });
 
-        info.setOnClickListener(v -> navController.navigate(R.id.App_info));
-
-        drawer_icon.setOnClickListener(v -> navController.navigate(R.id.home));
-
         // Handling navigation
         navController = findNavController(this, R.id.navHostFragment);
         TextView textTitle = findViewById(R.id.title);
@@ -99,6 +95,10 @@ public class Activity_main extends AppCompatActivity {
                 return false;
             }
         });
+
+        info.setOnClickListener(v -> navController.navigate(R.id.App_info));
+
+        drawer_icon.setOnClickListener(v -> navController.navigate(R.id.home));
 
         checkForAppUpdate();
     }

@@ -18,7 +18,7 @@
             app:destination="@id/setting2" />
         <action
             android:id="@+id/action_home_to_App_info"
-            app:destination="@id/App_ifo" />
+            app:destination="@id/App_info" />
         <action
             android:id="@+id/action_home_to_PS"
             app:destination="@+id/PS"/>

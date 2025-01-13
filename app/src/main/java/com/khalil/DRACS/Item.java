@@ -46,8 +46,8 @@ public class Item {
     }
 
     public static class ClickableWord {
-        private String word;
-        private View.OnClickListener onClickListener;
+        private final String word;
+        private final View.OnClickListener onClickListener;
 
         public ClickableWord(String word, View.OnClickListener onClickListener) {
             this.word = word;
