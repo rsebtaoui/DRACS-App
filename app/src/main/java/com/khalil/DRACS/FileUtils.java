@@ -48,7 +48,7 @@ public class FileUtils {
         createNotificationChannel(context);
 
         // Check if we need to ask for notification permission (API level 33+)
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (!NotificationManagerCompat.from(context).areNotificationsEnabled()) {
                 Toast.makeText(context, "enable the notification to receive the file path", Toast.LENGTH_SHORT).show();
                 // Request notification permission if it's not enabled
