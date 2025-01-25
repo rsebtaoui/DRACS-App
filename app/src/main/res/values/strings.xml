@@ -8,9 +8,15 @@
     <string name="open_drawer">open</string>
     <string name="close_drawer">close\n</string>
     <string name="وزارة">وزارة الفلاحة والصيد البحري والتنمية القروية والمياه والغابات</string>
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="المديرية_الجهوية">المديرية الجهوية للفلاحة لجهة الدارالبيضاء-سطات</string>
     <string name="الامتيازات">الامتيازات</string>
     <string name="خروج">خروج</string>
+    <string name="لا_توجد_إعدادات_بعد">لا توجد إعدادات بعد</string>
+    <string name="more_information">more_information</string>
+    <string name="home_icon">Home icon</string>
+    <string name="title">title</string>
+    <string name="المقاولين_الشباب">المقاولين الشباب</string>
+    <string name="صندوق_التنمية_الزراعية">صندوق التنمية الزراعية</string>
+    <string name="cart_image">cart image</string>
 </resources>
