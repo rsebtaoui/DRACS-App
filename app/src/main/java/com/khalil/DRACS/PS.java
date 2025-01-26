@@ -1,15 +1,13 @@
 package com.khalil.DRACS;
 
 import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,11 +19,6 @@ public class PS extends Fragment {
 
     public PS() {
         // Required empty public constructor
-    }
-
-    public static PS newInstance() {
-        PS fragment = new PS();
-        return fragment;
     }
 
 
@@ -51,67 +44,19 @@ public class PS extends Fragment {
         List<Item.ClickableWord> clickableWordsps = new ArrayList<>();
 
         //handling clickable words
-        clickableWordsps.add(new Item.ClickableWord("الجديدة", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.openGoogleMaps(v.getContext(),33.247973, -8.502161,"المديرية+الإقليمية+للفلاحة+بالجديدة");
-            }
-        }));
-        clickableWordsps.add(new Item.ClickableWord("الدارالبيضاء", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.openGoogleMaps(v.getContext(),33.594278, -7.601056,"المديرية+الإقليمية+للفلاحة+بالبيضاء");
-            }
-        }));
-        clickableWordsps.add(new Item.ClickableWord("بنسليمان", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.openGoogleMaps(v.getContext(),33.6090340,-7.1259160,"المديرية+الإقليمية+للفلاحة+ببنسليمان");            }
-        }));
-        clickableWordsps.add(new Item.ClickableWord("سطات", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.openGoogleMaps(v.getContext(),33.0100280, -7.6162690,"المديرية+الإقليمية+للفلاحة+بسطات");            }
-        }));
-        clickableWordsps.add(new Item.ClickableWord("برشيد", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.openGoogleMaps(v.getContext(),33.264458, -7.581894,"المديرية+الإقليمية+للفلاحة+ببرشيد");            }
-        }));
-        clickableWordsps.add(new Item.ClickableWord("سيدي بنور", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.openGoogleMaps(v.getContext(),32.65750840219919, -8.425363994368995,"المقاطعة+التابعة+للمكتب+الجهوي+للاستثمار+الفلاحي+لدكالة+ببسيدي+بنور");          }
-        }));
-        clickableWordsps.add(new Item.ClickableWord("خميس الزمامرة", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.openGoogleMaps(v.getContext(),32.6305907107246, -8.754465575491885,"المقاطعة+التابعة+للمكتب+الجهوي+للاستثمار+الفلاحي+لدكالة+بخميس+الزمامرة");            }
-        }));
-        clickableWordsps.add(new Item.ClickableWord("أولاد فرج", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //this function OpenGoogleMaps take 3 arguments (latitude,longitude,title you wanna show in the location)
-                FileUtils.openGoogleMaps(v.getContext(),32.95870479583255, -8.221324423614597,"المقاطعة+التابعة+للمكتب+الجهوي+للاستثمار+الفلاحي+لدكالة+بأولاد+فرج");           }
-        }));
-        clickableWordsps.add(new Item.ClickableWord("استمارة طلب التسجيل", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.copyFileFromAssets(v.getContext(),"إستمارة الفلاح الخاصة بطلب التسجيل في التغطية الصحية للفلاحين.pdf");
-            }
-        }));
-        clickableWordsps.add(new Item.ClickableWord("استمارة طلب تحيين المعطيات", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.copyFileFromAssets(v.getContext(),"إستمارة الفلاح الخاصة بطلب تحيين المعلومات الخاصة بالتغطية الصحية.pdf");
-            }
-        }));
-        clickableWordsps.add(new Item.ClickableWord("استمارة طلب التشطيب", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.copyFileFromAssets(v.getContext(),"تصريح بالشرف بعدم ممارسة أي نشاط فلاحي.pdf");
-            }
-        }));
+        clickableWordsps.add(new Item.ClickableWord("الجديدة", v -> FileUtils.openGoogleMaps(v.getContext(),33.247973, -8.502161,"المديرية+الإقليمية+للفلاحة+بالجديدة")));
+        clickableWordsps.add(new Item.ClickableWord("الدارالبيضاء", v -> FileUtils.openGoogleMaps(v.getContext(),33.594278, -7.601056,"المديرية+الإقليمية+للفلاحة+بالبيضاء")));
+        clickableWordsps.add(new Item.ClickableWord("بنسليمان", v -> FileUtils.openGoogleMaps(v.getContext(),33.6090340,-7.1259160,"المديرية+الإقليمية+للفلاحة+ببنسليمان")));
+        clickableWordsps.add(new Item.ClickableWord("سطات", v -> FileUtils.openGoogleMaps(v.getContext(),33.0100280, -7.6162690,"المديرية+الإقليمية+للفلاحة+بسطات")));
+        clickableWordsps.add(new Item.ClickableWord("برشيد", v -> FileUtils.openGoogleMaps(v.getContext(),33.264458, -7.581894,"المديرية+الإقليمية+للفلاحة+ببرشيد")));
+        clickableWordsps.add(new Item.ClickableWord("سيدي بنور", v -> FileUtils.openGoogleMaps(v.getContext(),32.65750840219919, -8.425363994368995,"المقاطعة+التابعة+للمكتب+الجهوي+للاستثمار+الفلاحي+لدكالة+ببسيدي+بنور")));
+        clickableWordsps.add(new Item.ClickableWord("خميس الزمامرة", v -> FileUtils.openGoogleMaps(v.getContext(),32.6305907107246, -8.754465575491885,"المقاطعة+التابعة+للمكتب+الجهوي+للاستثمار+الفلاحي+لدكالة+بخميس+الزمامرة")));
+        clickableWordsps.add(new Item.ClickableWord("أولاد فرج", v -> {
+            //this function OpenGoogleMaps take 3 arguments (latitude,longitude,title you wanna show in the location)
+            FileUtils.openGoogleMaps(v.getContext(),32.95870479583255, -8.221324423614597,"المقاطعة+التابعة+للمكتب+الجهوي+للاستثمار+الفلاحي+لدكالة+بأولاد+فرج");           }));
+        clickableWordsps.add(new Item.ClickableWord("استمارة طلب التسجيل", v -> FileUtils.copyFileFromAssets(v.getContext(),"إستمارة الفلاح الخاصة بطلب التسجيل في التغطية الصحية للفلاحين.pdf")));
+        clickableWordsps.add(new Item.ClickableWord("استمارة طلب تحيين المعطيات", v -> FileUtils.copyFileFromAssets(v.getContext(),"إستمارة الفلاح الخاصة بطلب تحيين المعلومات الخاصة بالتغطية الصحية.pdf")));
+        clickableWordsps.add(new Item.ClickableWord("استمارة طلب التشطيب", v -> FileUtils.copyFileFromAssets(v.getContext(),"تصريح بالشرف بعدم ممارسة أي نشاط فلاحي.pdf")));
 
         coloredlinesps.add(new Item.Coloredlines("كيف تتم معالجة الطلبات؟"));
 

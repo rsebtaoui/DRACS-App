@@ -14,7 +14,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="1. مرحبا بكم في التطبيق الرسمي للهاتف المحمول للمديرية الجهوية للفلاحة لجهة الدار البيضاء سطات."
+            android:text="@string/مرحبا_بكم"
             android:textSize="19sp"
             android:textColor="@color/black"
             android:layout_marginTop="10dp"
@@ -25,7 +25,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="2. تم إنجاز هذا التطبيق لتوفير المعلومات الخاصة بالخدمات المقدمة من طرف هاته المديرية. هدفنا هو تبسيط البحث والوصول إلى المعلومات والخدمات الهامة."
+            android:text="@string/تم_إنجاز_هذا_التطبيق"
             android:textSize="19sp"
             android:textColor="@color/black"
             android:layout_marginTop="10dp"
@@ -36,7 +36,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="3. تم تطوير هذا التطبيق من طرف المديرية الجهوية للفلاحة لجهة الدار البيضاء سطات بالجديدة بالتعاون مع المدرسة للتكنولوجيا العليا سيدي بنور. "
+            android:text="@string/تم_تطوير_هذا"
             android:textSize="19sp"
             android:textColor="@color/black"
             android:layout_marginTop="10dp"
@@ -47,7 +47,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="4. تم تصميمه من طرف السيد رشيد سبتاوي (رئيس مصلحة نظم المعلومات الفلاحية) والسيد رضوان عبد الباسط (رئيس قسم الحماية الاجتماعية) بالمديرية الجهوية، وتمت برمجته من طرف المتدرب السيد كميلي خليل "
+            android:text="@string/تم_تصميمه_من_طرف"
             android:textSize="19sp"
             android:textColor="@color/black"
             android:layout_marginTop="10dp"
@@ -58,7 +58,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="5. نتقدم بالشكر إلى كل الذين كان لهم دور قيادي في إنشاء هذا التطبيق، وإلى كل من قدم الأفكار والمحتوى اللازم لهذا التطبيق. "
+            android:text="@string/نتقدم_بالشكر_إلى"
             android:textSize="19sp"
             android:textColor="@color/black"
             android:layout_marginTop="10dp"

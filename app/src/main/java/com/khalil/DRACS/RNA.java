@@ -1,35 +1,18 @@
 package com.khalil.DRACS;
 
 
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.core.app.NotificationCompat;
-import androidx.core.content.FileProvider;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,18 +26,9 @@ public class RNA extends Fragment {
         // Required empty public constructor
     }
 
-    public static RNA newInstance(String param1, String param2) {
-        RNA fragment = new RNA();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-        }
     }
 
     @Override
@@ -69,90 +43,29 @@ public class RNA extends Fragment {
         List<Item.ClickableWord> clickableWordsrna = new ArrayList<>();
 
         //handling the click of the word "الجديدة"
-        clickableWordsrna.add(new Item.ClickableWord("الجديدة", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.openGoogleMaps(v.getContext(), 33.247973, -8.502161, "المديرية+الإقليمية+للفلاحة+بالجديدة");
-            }
-        }));
-        clickableWordsrna.add(new Item.ClickableWord("الدار البيضاء ", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.openGoogleMaps(v.getContext(), 33.594278, -7.601056, "المديرية+الإقليمية+للفلاحة+بالبيضاء");
-            }
-        }));
-        clickableWordsrna.add(new Item.ClickableWord("بنسليمان", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.openGoogleMaps(v.getContext(), 33.6090340, -7.1259160, "المديرية+الإقليمية+للفلاحة+ببنسليمان");
-            }
-        }));
-        clickableWordsrna.add(new Item.ClickableWord("سطات", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.openGoogleMaps(v.getContext(), 33.0100280, -7.6162690, "المديرية+الإقليمية+للفلاحة+بسطات");
-            }
-        }));
-        clickableWordsrna.add(new Item.ClickableWord("برشيد", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.openGoogleMaps(v.getContext(), 33.264458, -7.581894, "المديرية+الإقليمية+للفلاحة+ببرشيد");
-            }
-        }));
-        clickableWordsrna.add(new Item.ClickableWord("سيدي بنور", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.openGoogleMaps(v.getContext(), 32.65750840219919, -8.425363994368995, "المقاطعة+التابعة+للمكتب+الجهوي+للاستثمار+الفلاحي+لدكالة+ببسيدي+بنور");
-            }
-        }));
-        clickableWordsrna.add(new Item.ClickableWord("خميس الزمامرة", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.openGoogleMaps(v.getContext(), 32.6305907107246, -8.754465575491885, "المقاطعة+التابعة+للمكتب+الجهوي+للاستثمار+الفلاحي+لدكالة+بخميس+الزمامرة");
-            }
-        }));
-        clickableWordsrna.add(new Item.ClickableWord("أولاد فرج", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //this function OpenGoogleMaps take 3 arguments (latitude,longitude,title you wanna show in the location)
-                FileUtils.openGoogleMaps(v.getContext(), 32.95870479583255, -8.221324423614597, "المقاطعة+التابعة+للمكتب+الجهوي+للاستثمار+الفلاحي+لدكالة+بأولاد+فرج");
-            }
+        clickableWordsrna.add(new Item.ClickableWord("الجديدة", v -> FileUtils.openGoogleMaps(v.getContext(), 33.247973, -8.502161, "المديرية+الإقليمية+للفلاحة+بالجديدة")));
+        clickableWordsrna.add(new Item.ClickableWord("الدار البيضاء ", v -> FileUtils.openGoogleMaps(v.getContext(), 33.594278, -7.601056, "المديرية+الإقليمية+للفلاحة+بالبيضاء")));
+        clickableWordsrna.add(new Item.ClickableWord("بنسليمان", v -> FileUtils.openGoogleMaps(v.getContext(), 33.6090340, -7.1259160, "المديرية+الإقليمية+للفلاحة+ببنسليمان")));
+        clickableWordsrna.add(new Item.ClickableWord("سطات", v -> FileUtils.openGoogleMaps(v.getContext(), 33.0100280, -7.6162690, "المديرية+الإقليمية+للفلاحة+بسطات")));
+        clickableWordsrna.add(new Item.ClickableWord("برشيد", v -> FileUtils.openGoogleMaps(v.getContext(), 33.264458, -7.581894, "المديرية+الإقليمية+للفلاحة+ببرشيد")));
+        clickableWordsrna.add(new Item.ClickableWord("سيدي بنور", v -> FileUtils.openGoogleMaps(v.getContext(), 32.65750840219919, -8.425363994368995, "المقاطعة+التابعة+للمكتب+الجهوي+للاستثمار+الفلاحي+لدكالة+ببسيدي+بنور")));
+        clickableWordsrna.add(new Item.ClickableWord("خميس الزمامرة", v -> FileUtils.openGoogleMaps(v.getContext(), 32.6305907107246, -8.754465575491885, "المقاطعة+التابعة+للمكتب+الجهوي+للاستثمار+الفلاحي+لدكالة+بخميس+الزمامرة")));
+        clickableWordsrna.add(new Item.ClickableWord("أولاد فرج", v -> {
+            //this function OpenGoogleMaps take 3 arguments (latitude,longitude,title you wanna show in the location)
+            FileUtils.openGoogleMaps(v.getContext(), 32.95870479583255, -8.221324423614597, "المقاطعة+التابعة+للمكتب+الجهوي+للاستثمار+الفلاحي+لدكالة+بأولاد+فرج");
         }));
 
-        clickableWordsrna.add(new Item.ClickableWord("تحميل إستمارة طلب التسجيل", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.copyFileFromAssets(v.getContext(), "إستمارة طلب التسجيل.pdf");
-            }
-        }));
+        clickableWordsrna.add(new Item.ClickableWord("تحميل إستمارة طلب التسجيل", v -> FileUtils.copyFileFromAssets(v.getContext(), "إستمارة طلب التسجيل.pdf")));
 
-        clickableWordsrna.add(new Item.ClickableWord("تتمة الطلب", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.copyFileFromAssets(v.getContext(), "تتمة إستمارة طلب التسجيل .pdf");
-            }
-        }));
+        clickableWordsrna.add(new Item.ClickableWord("تتمة الطلب", v -> FileUtils.copyFileFromAssets(v.getContext(), "تتمة إستمارة طلب التسجيل .pdf")));
 
-        clickableWordsrna.add(new Item.ClickableWord("تحميل الطريقة", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //the link to open video in youtube
-            }
+        clickableWordsrna.add(new Item.ClickableWord("تحميل الطريقة", v -> {
+            //the link to open video in youtube
         }));
 
 
-        clickableWordsrna.add(new Item.ClickableWord("تحميل استمارة طلب تحيين", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.copyFileFromAssets(v.getContext(), "استمارة طلب تحيين.pdf");
-            }
-        }));
-        clickableWordsrna.add(new Item.ClickableWord("تحميل استمارة طلب التشطيب", new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                FileUtils.copyFileFromAssets(v.getContext(), "استمارة طلب التشطيب.pdf");
-            }
-        }));
+        clickableWordsrna.add(new Item.ClickableWord("تحميل استمارة طلب تحيين", v -> FileUtils.copyFileFromAssets(v.getContext(), "استمارة طلب تحيين.pdf")));
+        clickableWordsrna.add(new Item.ClickableWord("تحميل استمارة طلب التشطيب", v -> FileUtils.copyFileFromAssets(v.getContext(), "استمارة طلب التشطيب.pdf")));
 
         List<Item.Coloredlines> coloredlinesrna = new ArrayList<>();
 

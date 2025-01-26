@@ -2,8 +2,13 @@ package com.khalil.DRACS;
 
 import static androidx.navigation.Navigation.findNavController;
 
-import androidx.activity.result.ActivityResult;
-import androidx.activity.result.ActivityResultCallback;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.MenuItem;
+import android.widget.ImageView;
+import android.widget.TextView;
+import android.widget.Toast;
+
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -13,17 +18,6 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
-
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentSender;
-import android.os.Bundle;
-import android.util.Log;
-import android.view.MenuItem;
-import android.view.View;
-import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
@@ -79,21 +73,18 @@ public class Activity_main extends AppCompatActivity {
                 textTitle.setText(destination.getLabel()));
 
         // Handling bottom nav bar navigation
-        smoothBottomBar.setOnItemSelectedListener(new OnItemSelectedListener() {
-            @Override
-            public boolean onItemSelect(int i) {
-                switch (i) {
-                    case 0:
-                        navController.navigate(R.id.home);
-                        break;
-                    case 1:
-                        navController.navigate(R.id.setting2);
-                        break;
-                    case 2:
-                        exitApp();
-                }
-                return false;
+        smoothBottomBar.setOnItemSelectedListener((OnItemSelectedListener) i -> {
+            switch (i) {
+                case 0:
+                    navController.navigate(R.id.home);
+                    break;
+                case 1:
+                    navController.navigate(R.id.setting2);
+                    break;
+                case 2:
+                    exitApp();
             }
+            return false;
         });
 
         info.setOnClickListener(v -> navController.navigate(R.id.App_info));

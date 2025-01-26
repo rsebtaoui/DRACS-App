@@ -1,15 +1,14 @@
 package com.khalil.DRACS;
 
 import android.os.Bundle;
-
-import androidx.fragment.app.Fragment;
-import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
-
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
 
 public class home extends Fragment {
 
@@ -17,19 +16,9 @@ public class home extends Fragment {
         // Required empty public constructor
     }
 
-    public static home newInstance(String param1, String param2) {
-        home fragment = new home();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            // Handle arguments if needed
-        }
     }
 
     @Override
@@ -42,21 +31,15 @@ public class home extends Fragment {
         TextView PSclick = view.findViewById(R.id.ps);
 
         //navigation to RNA fragment
-        RNAclick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
-                navController.navigate(R.id.action_home_to_RNA);
-            }
+        RNAclick.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
+            navController.navigate(R.id.action_home_to_RNA);
         });
 
         //navigation to PS fragment
-        PSclick.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
-                navController.navigate(R.id.action_home_to_PS);
-            }
+        PSclick.setOnClickListener(v -> {
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
+            navController.navigate(R.id.action_home_to_PS);
         });
 
         return view;

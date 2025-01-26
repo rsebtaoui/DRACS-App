@@ -5,9 +5,8 @@ import android.graphics.Paint;
 import android.text.SpannableString;
 import android.text.Spanned;
 import android.text.TextPaint;
-import android.text.style.ClickableSpan;
 import android.text.method.LinkMovementMethod;
-import android.text.style.ForegroundColorSpan;
+import android.text.style.ClickableSpan;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,15 +21,16 @@ import net.cachapa.expandablelayout.ExpandableLayout;
 import java.util.List;
 
 public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.ViewHolder> {
-    private List<Item> items;
+    private final List<Item> items;
     private int expandedPosition = -1;
-    private Context context;
+    private final Context context;
 
     public ExpandableAdapter(Context context, List<Item> items) {
         this.context = context;
         this.items = items;
     }
 
+    @NonNull
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
@@ -53,12 +53,12 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
             if (startIndex != -1) {
                 spannableString.setSpan(new ClickableSpan() {
                     @Override
-                    public void onClick(View widget) {
+                    public void onClick(@NonNull View widget) {
                         clickableWord.getOnClickListener().onClick(widget);
                     }
                     //clickable text style
                     @Override
-                    public void updateDrawState(TextPaint ds) {
+                    public void updateDrawState(@NonNull TextPaint ds) {
                         super.updateDrawState(ds);
                         ds.setColor(ContextCompat.getColor(context,R.color.Emerald_Green_800));
                         ds.setStyle(Paint.Style.FILL_AND_STROKE);
@@ -78,7 +78,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
                     public void onClick(@NonNull View widget) {}
 
                     @Override
-                    public void updateDrawState(TextPaint ds) {
+                    public void updateDrawState(@NonNull TextPaint ds) {
                         super.updateDrawState(ds);
                         ds.setColor(ContextCompat.getColor(context,R.color.green));
                         ds.setStyle(Paint.Style.FILL);
@@ -103,12 +103,9 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
         holder.lists.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.conclu.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
 
-        holder.title.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                expandedPosition = isExpanded ? -1 : holder.getAdapterPosition();
-                notifyItemRangeChanged(0, items.size()); // Notify all items to ensure proper expansion/collapse
-            }
+        holder.title.setOnClickListener(v -> {
+            expandedPosition = isExpanded ? -1 : holder.getAdapterPosition();
+            notifyItemRangeChanged(0, items.size()); // Notify all items to ensure proper expansion/collapse
         });
     }
 

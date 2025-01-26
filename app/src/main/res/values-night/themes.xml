@@ -1,5 +1,5 @@
 <!-- res/values-night/styles.xml -->
-<resources xmlns:tools="http://schemas.android.com/tools">
+<resources>
     <!-- Base application theme. -->
     <style name="Theme.المديريةالجهويةللفلاحةلجهةالدارالبيضاءسطات" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->

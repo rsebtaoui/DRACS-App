@@ -2,15 +2,8 @@
     <string name="app_name">المديرية الجهوية للفلاحة لجهة الدارالبيضاء-سطات</string>
     <string name="navigation_bar">navigation bar</string>
     <string name="القائمة">القائمة</string>
-    <string name="البحت">البحت</string>
-    <string name="حفظ">حفظ</string>
     <string name="إعدادات">إعدادات</string>
-    <string name="open_drawer">open</string>
-    <string name="close_drawer">close\n</string>
-    <string name="وزارة">وزارة الفلاحة والصيد البحري والتنمية القروية والمياه والغابات</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="المديرية_الجهوية">المديرية الجهوية للفلاحة لجهة الدارالبيضاء-سطات</string>
-    <string name="الامتيازات">الامتيازات</string>
     <string name="خروج">خروج</string>
     <string name="لا_توجد_إعدادات_بعد">لا توجد إعدادات بعد</string>
     <string name="more_information">more_information</string>
@@ -19,4 +12,17 @@
     <string name="المقاولين_الشباب">المقاولين الشباب</string>
     <string name="صندوق_التنمية_الزراعية">صندوق التنمية الزراعية</string>
     <string name="cart_image">cart image</string>
+    <string name="السجل_الوطني_الفلاحي">السجل الوطني الفلاحي</string>
+    <string name="الحماية_الإجتماعية">الحماية الإجتماعية</string>
+    <string name="التكوين_المهني">التكوين المهني</string>
+    <string name="royaume_du_maroc">royaume du maroc</string>
+    <string name="مرحبا_بكم">1. مرحبا بكم في التطبيق الرسمي للهاتف المحمول للمديرية الجهوية للفلاحة لجهة الدار البيضاء سطات.</string>
+    <string name="تم_إنجاز_هذا_التطبيق">2. تم إنجاز هذا التطبيق لتوفير المعلومات الخاصة بالخدمات المقدمة من طرف هاته المديرية. هدفنا هو تبسيط البحث والوصول إلى المعلومات والخدمات الهامة.</string>
+    <string name="تم_تطوير_هذا">3. تم تطوير هذا التطبيق من طرف المديرية الجهوية للفلاحة لجهة الدار البيضاء سطات بالجديدة بالتعاون مع المدرسة للتكنولوجيا العليا سيدي بنور.</string>
+    <string name="تم_تصميمه_من_طرف">4. تم تصميمه من طرف السيد رشيد سبتاوي (رئيس مصلحة نظم المعلومات الفلاحية) والسيد رضوان عبد الباسط (رئيس قسم الحماية الاجتماعية) بالمديرية الجهوية، وتمت برمجته من طرف المتدرب السيد كميلي خليل</string>
+    <string name="نتقدم_بالشكر_إلى">5. نتقدم بالشكر إلى كل الذين كان لهم دور قيادي في إنشاء هذا التطبيق، وإلى كل من قدم الأفكار والمحتوى اللازم لهذا التطبيق.</string>
+    <string name="intro">intro</string>
+    <string name="lists">lists</string>
+    <string name="conclu">conclu</string>
+    <string name="القائمة_الرئيسية">القائمة الرئيسية</string>
 </resources>

@@ -5,12 +5,12 @@ import android.view.View;
 import java.util.List;
 
 public class Item {
-    private String title;
-    private String intro;
-    private String lists;
-    private String conclu;
-    private List<ClickableWord> clickableWords;
-    private List<Coloredlines> coloredlines;
+    private final String title;
+    private final String intro;
+    private final String lists;
+    private final String conclu;
+    private final List<ClickableWord> clickableWords;
+    private final List<Coloredlines> coloredlines;
 
     public Item(String title, String intro, String lists, String conclu, List<ClickableWord> clickableWords, List<Coloredlines> coloredlines) {
         this.title = title;
@@ -64,7 +64,7 @@ public class Item {
     }
 
     public static class Coloredlines {
-        private String line;
+        private final String line;
 
 
         public Coloredlines(String line) {
