@@ -22,8 +22,8 @@ import java.util.List;
 
 public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.ViewHolder> {
     private final List<Item> items;
-    private int expandedPosition = -1;
     private final Context context;
+    private int expandedPosition = -1;
 
     public ExpandableAdapter(Context context, List<Item> items) {
         this.context = context;
@@ -56,11 +56,12 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
                     public void onClick(@NonNull View widget) {
                         clickableWord.getOnClickListener().onClick(widget);
                     }
+
                     //clickable text style
                     @Override
                     public void updateDrawState(@NonNull TextPaint ds) {
                         super.updateDrawState(ds);
-                        ds.setColor(ContextCompat.getColor(context,R.color.Emerald_Green_800));
+                        ds.setColor(ContextCompat.getColor(context, R.color.Emerald_Green_800));
                         ds.setStyle(Paint.Style.FILL_AND_STROKE);
                         ds.setUnderlineText(true);
                     }
@@ -75,12 +76,13 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
             if (startIndex != -1) {
                 spannableString.setSpan(new ClickableSpan() {
                     @Override
-                    public void onClick(@NonNull View widget) {}
+                    public void onClick(@NonNull View widget) {
+                    }
 
                     @Override
                     public void updateDrawState(@NonNull TextPaint ds) {
                         super.updateDrawState(ds);
-                        ds.setColor(ContextCompat.getColor(context,R.color.green));
+                        ds.setColor(ContextCompat.getColor(context, R.color.green));
                         ds.setStyle(Paint.Style.FILL);
                     }
                 }, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

@@ -3,16 +3,19 @@
     xmlns:tools="http://schemas.android.com/tools"
     package="com.khalil.DRACS">
 
-<!--    no restrictions for internet-->
+    <!--    no restrictions for internet-->
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- For API 28 and below, request storage permissions -->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
         android:maxSdkVersion="28" />
     <!-- For API 29 and above, request notification permission -->
-    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"
-        android:minSdkVersion="32"/>
+    <uses-permission
+        android:name="android.permission.POST_NOTIFICATIONS"
+        android:minSdkVersion="32" />
 
     <application
         android:allowBackup="true"
@@ -35,7 +38,7 @@
             </intent-filter>
         </activity>
 
-<!--     to access the scoop storage for download-->
+        <!--     to access the scoop storage for download-->
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"

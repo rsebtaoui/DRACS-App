@@ -9,8 +9,8 @@
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="8dp"
         android:background="@drawable/rounded_corners"
+        android:padding="8dp"
         android:text="@string/title"
         android:textColor="?attr/colorSecondaryVariant"
         android:textSize="21sp"
@@ -27,37 +27,38 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical">
+
             <TextView
                 android:id="@+id/intro"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
+                android:text="@string/intro"
                 android:textColor="@color/black"
                 android:textSize="19sp"
-                android:text="@string/intro"
-                android:visibility="gone"/>
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/lists"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="-5dp"
                 android:padding="8dp"
+                android:text="@string/lists"
                 android:textColor="#1E1E1E"
                 android:textSize="17sp"
-                android:text="@string/lists"
-                android:visibility="gone"
-                android:layout_marginTop="-5dp" />
+                android:visibility="gone" />
 
             <TextView
                 android:id="@+id/conclusion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="-5dp"
                 android:padding="8dp"
+                android:text="@string/conclu"
                 android:textColor="@color/black"
                 android:textSize="19sp"
-                android:text="@string/conclu"
-                android:visibility="gone"
-                android:layout_marginTop="-5dp" />
+                android:visibility="gone" />
 
         </LinearLayout>
     </net.cachapa.expandablelayout.ExpandableLayout>

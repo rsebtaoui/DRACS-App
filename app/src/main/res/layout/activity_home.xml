@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.drawerlayout.widget.DrawerLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/drawer_layout"
-    android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:layoutDirection="rtl"
     tools:context=".Activity_main">
 
@@ -25,7 +24,7 @@
             android:layout_below="@+id/title"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
-            app:navGraph="@navigation/nav_main"/>
+            app:navGraph="@navigation/nav_main" />
 
         <ImageView
             android:id="@+id/drawer_icon"
@@ -36,22 +35,22 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="13dp"
             android:clickable="true"
-            android:focusable="true"
             android:contentDescription="@string/home_icon"
-            android:src="@drawable/home"/>
+            android:focusable="true"
+            android:src="@drawable/home" />
 
         <ImageView
             android:id="@+id/FAQ_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
-            android:layout_alignParentEnd="true"
             android:layout_alignParentTop="true"
+            android:layout_alignParentEnd="true"
             android:layout_marginStart="10dp"
             android:layout_marginTop="13dp"
             android:clickable="true"
-            android:focusable="true"
             android:contentDescription="@string/more_information"
-            android:src="@drawable/outline_info_24"/>
+            android:focusable="true"
+            android:src="@drawable/outline_info_24" />
 
         <TextView
             android:id="@+id/title"
@@ -60,41 +59,41 @@
             android:layout_marginTop="20dp"
             android:layout_toStartOf="@+id/FAQ_icon"
             android:layout_toEndOf="@+id/drawer_icon"
-            android:text="@string/title"
-            android:textColor="@color/black"
-            android:textStyle="bold"
-            android:textSize="22sp"
-            android:textAlignment="center"
             android:layoutDirection="rtl"
-            android:textDirection="rtl"/>
+            android:text="@string/title"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textDirection="rtl"
+            android:textSize="22sp"
+            android:textStyle="bold" />
 
         <me.ibrahimsn.lib.SmoothBottomBar
             android:id="@+id/bottomBar"
             android:layout_width="match_parent"
             android:layout_height="60dp"
             android:layout_alignParentBottom="true"
+            android:contentDescription="@string/navigation_bar"
             app:backgroundColor="?attr/colorSecondary"
-            app:textColor="?attr/colorOnPrimary"
             app:iconSize="25dp"
             app:iconTint="?attr/colorSecondaryVariant"
             app:iconTintActive="?attr/colorOnPrimary"
             app:indicatorColor="?attr/colorSecondaryVariant"
             app:indicatorRadius="10dp"
             app:menu="@menu/menu"
-            android:contentDescription="@string/navigation_bar"/>
+            app:textColor="?attr/colorOnPrimary" />
 
     </RelativeLayout>
-<!--this part is for adding a drawer layout for navigation-->
-<!--    <com.google.android.material.navigation.NavigationView-->
-<!--        android:id="@+id/navigation_view"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="match_parent"-->
-<!--        android:layout_gravity="start"-->
-<!--        android:fitsSystemWindows="true"-->
-<!--        android:background="?android:attr/windowBackground"-->
-<!--        app:headerLayout="@layout/nav_header"-->
-<!--        app:menu="@menu/nav_menu"-->
-<!--        android:layoutDirection="rtl"-->
-<!--        android:textDirection="rtl"/>-->
+    <!--this part is for adding a drawer layout for navigation-->
+    <!--    <com.google.android.material.navigation.NavigationView-->
+    <!--        android:id="@+id/navigation_view"-->
+    <!--        android:layout_width="wrap_content"-->
+    <!--        android:layout_height="match_parent"-->
+    <!--        android:layout_gravity="start"-->
+    <!--        android:fitsSystemWindows="true"-->
+    <!--        android:background="?android:attr/windowBackground"-->
+    <!--        app:headerLayout="@layout/nav_header"-->
+    <!--        app:menu="@menu/nav_menu"-->
+    <!--        android:layoutDirection="rtl"-->
+    <!--        android:textDirection="rtl"/>-->
 
 </androidx.drawerlayout.widget.DrawerLayout>

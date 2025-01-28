@@ -42,7 +42,11 @@ public class Activity_main extends AppCompatActivity {
     ImageView drawer_icon;
     ImageView info;
     private AppUpdateManager appUpdateManager;
-
+    InstallStateUpdatedListener listener = state -> {
+        if (state.installStatus() == InstallStatus.DOWNLOADED) {
+            popupSnackbarForCompleteUpdate();
+        }
+    };
     private ActivityResultLauncher<IntentSenderRequest> activityResultLauncher;
 
     @Override
@@ -151,12 +155,6 @@ public class Activity_main extends AppCompatActivity {
                     }
                 });
     }
-
-    InstallStateUpdatedListener listener = state -> {
-        if (state.installStatus() == InstallStatus.DOWNLOADED) {
-            popupSnackbarForCompleteUpdate();
-        }
-    };
 
     private void popupSnackbarForCompleteUpdate() {
         Snackbar snackbar = Snackbar.make(

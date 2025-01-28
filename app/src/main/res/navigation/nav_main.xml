@@ -2,14 +2,13 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/nav_main"
     app:startDestination="@id/home">
 
     <fragment
         android:id="@+id/home"
         android:name="com.khalil.DRACS.home"
         android:label="@string/المديرية_الجهوية"
-        tools:layout="@layout/fragment_home" >
+        tools:layout="@layout/fragment_home">
         <action
             android:id="@+id/action_home_to_RNA"
             app:destination="@id/RNA" />
@@ -21,13 +20,13 @@
             app:destination="@id/App_info" />
         <action
             android:id="@+id/action_home_to_PS"
-            app:destination="@+id/PS"/>
+            app:destination="@+id/PS" />
     </fragment>
     <fragment
         android:id="@+id/RNA"
         android:name="com.khalil.DRACS.RNA"
         android:label="السجل الوطني الفلاحي"
-        tools:layout="@layout/fragment_r_n_a" >
+        tools:layout="@layout/fragment_r_n_a">
         <action
             android:id="@+id/action_RNA_to_home"
             app:destination="@id/home" />
@@ -37,7 +36,7 @@
         android:id="@+id/setting2"
         android:name="com.khalil.DRACS.setting2"
         android:label="ألإعدادات"
-        tools:layout="@layout/fragment_setting2" >
+        tools:layout="@layout/fragment_setting2">
         <action
             android:id="@+id/action_setting2_to_home"
             app:destination="@id/home" />
@@ -47,7 +46,7 @@
         android:id="@+id/App_info"
         android:name="com.khalil.DRACS.App_info"
         android:label="حول التطبيق"
-        tools:layout="@layout/fragment_app_info" >
+        tools:layout="@layout/fragment_app_info">
         <action
             android:id="@+id/action_App_inof_to_home"
             app:destination="@id/home" />

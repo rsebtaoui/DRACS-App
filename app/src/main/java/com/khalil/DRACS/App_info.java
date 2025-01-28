@@ -22,15 +22,14 @@ public class App_info extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_app_info, container, false);
 
     }
 // for the button of the update
 //    private void openAppInPlayStore() {
-//        String packageName = getPackageName(); // Get the app's package name
+//        String packageName = requireContext().getPackageName(); // Get the app's package name
 //        try {
 //            // Open Play Store app if installed
 //            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));

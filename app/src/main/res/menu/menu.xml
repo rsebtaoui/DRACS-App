@@ -4,21 +4,16 @@
     <item
         android:id="@+id/home"
         android:icon="@drawable/ic_menu"
-        android:title="@string/القائمة"
-        />
+        android:title="@string/القائمة" />
 
 
     <item
-        android:id="@+id/setting"
         android:icon="@drawable/settings"
-        android:title="@string/إعدادات"
-        />
+        android:title="@string/إعدادات" />
 
     <item
-        android:id="@+id/exit"
         android:icon="@drawable/exit_left"
-        android:title="@string/خروج"
-        />
+        android:title="@string/خروج" />
 
 
 </menu>
