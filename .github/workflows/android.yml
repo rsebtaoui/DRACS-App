@@ -33,7 +33,7 @@ jobs:
           export PATH="$HOME/.firebase/tools:$PATH"
       
       - name: Authenticate with Firebase
-        uses: google-github-actions/auth@v0
+        uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
 
