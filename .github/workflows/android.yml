@@ -13,7 +13,8 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - name: set up JDK 17
+
+      - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
           java-version: '17'
@@ -22,7 +23,7 @@ jobs:
 
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
-        
+
       - name: Build with Gradle
         run: ./gradlew build
 
@@ -31,12 +32,16 @@ jobs:
 
       - name: Build AndroidTest APK
         run: ./gradlew assembleAndroidTest
+
+      - name: Verify APK files exist
+        run: ls -l ./app/build/outputs/apk/androidTest/debug/
+
       # Firebase Test Lab integration
       - name: Set up Firebase CLI
         run: |
           curl -sL https://firebase.tools | bash
           export PATH="$HOME/.firebase/tools:$PATH"
-      
+
       - name: Authenticate with Firebase
         uses: google-github-actions/auth@v1
         with:
