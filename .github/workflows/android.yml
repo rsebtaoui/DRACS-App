@@ -26,6 +26,11 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew build
 
+      - name: Build Debug APK
+        run: ./gradlew assembleDebug
+
+      - name: Build AndroidTest APK
+        run: ./gradlew assembleAndroidTest
       # Firebase Test Lab integration
       - name: Set up Firebase CLI
         run: |
