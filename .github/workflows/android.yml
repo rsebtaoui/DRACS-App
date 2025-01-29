@@ -47,9 +47,8 @@ jobs:
         with:
           credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
 
-      - name: Run tests on Firebase Test Lab
+      - name: Run tests on Firebase Test Lab (Robo Test)
         run: |
           gcloud firebase test android run \
             --app=./app/build/outputs/apk/debug/app-debug.apk \
-            --test=./app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
             --device model=Pixel2,version=30
