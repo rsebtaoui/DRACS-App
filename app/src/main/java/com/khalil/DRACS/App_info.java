@@ -1,9 +1,12 @@
 package com.khalil.DRACS;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
@@ -24,22 +27,18 @@ public class App_info extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_app_info, container, false);
+        View view = inflater.inflate(R.layout.fragment_app_info, container, false);
+        Button Update = view.findViewById(R.id.Update);
 
+        Update.setOnClickListener(v -> openAppInPlayStore());
+
+        return view;
     }
-// for the button of the update
-//    private void openAppInPlayStore() {
-//        String packageName = requireContext().getPackageName(); // Get the app's package name
-//        try {
-//            // Open Play Store app if installed
-//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=" + packageName));
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent);
-//        } catch (Exception e) {
-//            // Fallback to browser if Play Store app is not installed
-//            Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=" + packageName));
-//            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-//            startActivity(intent);
-//        }
-//    }
+    // for the button of the update
+    private void openAppInPlayStore() {
+        String testUrl = "https://play.google.com/store/apps/details?id=com.khalil.DRACS";
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(testUrl));
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+    }
 }
