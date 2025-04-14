@@ -2,17 +2,19 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/home"
-        android:icon="@drawable/ic_menu"
+        android:id="@+id/save"
+        android:icon="@drawable/outline_save_alt_24"
         android:title="@string/القائمة" />
 
 
     <item
-        android:icon="@drawable/settings"
+        android:id="@+id/favorits"
+        android:icon="@drawable/baseline_star_border_24"
         android:title="@string/إعدادات" />
 
     <item
-        android:icon="@drawable/exit_left"
+        android:id="@+id/search"
+        android:icon="@drawable/baseline_search_24"
         android:title="@string/خروج" />
 
 

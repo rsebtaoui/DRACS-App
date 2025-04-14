@@ -37,20 +37,20 @@
             android:clickable="true"
             android:contentDescription="@string/home_icon"
             android:focusable="true"
-            android:src="@drawable/home" />
+            android:src="@drawable/ic_menu" />
 
         <ImageView
-            android:id="@+id/FAQ_icon"
+            android:id="@+id/notif_icon"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_alignParentTop="true"
             android:layout_alignParentEnd="true"
-            android:layout_marginStart="10dp"
             android:layout_marginTop="13dp"
+            android:layout_marginEnd="10dp"
             android:clickable="true"
             android:contentDescription="@string/more_information"
             android:focusable="true"
-            android:src="@drawable/outline_info_24" />
+            android:src="@drawable/outline_notifications_24" />
 
         <TextView
             android:id="@+id/title"
@@ -83,17 +83,17 @@
             app:textColor="?attr/colorOnPrimary" />
 
     </RelativeLayout>
-    <!--this part is for adding a drawer layout for navigation-->
-    <!--    <com.google.android.material.navigation.NavigationView-->
-    <!--        android:id="@+id/navigation_view"-->
-    <!--        android:layout_width="wrap_content"-->
-    <!--        android:layout_height="match_parent"-->
-    <!--        android:layout_gravity="start"-->
-    <!--        android:fitsSystemWindows="true"-->
-    <!--        android:background="?android:attr/windowBackground"-->
-    <!--        app:headerLayout="@layout/nav_header"-->
-    <!--        app:menu="@menu/nav_menu"-->
-    <!--        android:layoutDirection="rtl"-->
-    <!--        android:textDirection="rtl"/>-->
+<!--    this part is for adding a drawer layout for navigation-->
+        <com.google.android.material.navigation.NavigationView
+            android:id="@+id/navigation_view"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:fitsSystemWindows="true"
+            android:background="?android:attr/windowBackground"
+            app:headerLayout="@layout/nav_header"
+            app:menu="@menu/nav_menu"
+            android:layoutDirection="rtl"
+            android:textDirection="rtl"/>
 
 </androidx.drawerlayout.widget.DrawerLayout>

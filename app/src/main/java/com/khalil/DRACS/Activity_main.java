@@ -2,6 +2,7 @@ package com.khalil.DRACS;
 
 import static androidx.navigation.Navigation.findNavController;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -83,7 +84,8 @@ public class Activity_main extends AppCompatActivity {
                     navController.navigate(R.id.home);
                     break;
                 case 1:
-                    navController.navigate(R.id.setting2);
+                    Intent intent = new Intent(this, Activity_setting.class);
+                    startActivity(intent);
                     break;
                 case 2:
                     exitApp();
@@ -91,7 +93,7 @@ public class Activity_main extends AppCompatActivity {
             return false;
         });
 
-        info.setOnClickListener(v -> navController.navigate(R.id.App_info));
+//        info.setOnClickListener(v -> navController.navigate(R.id.Activity_info));
 
         drawer_icon.setOnClickListener(v -> navController.navigate(R.id.home));
 

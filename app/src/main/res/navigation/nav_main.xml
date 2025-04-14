@@ -13,15 +13,16 @@
             android:id="@+id/action_home_to_RNA"
             app:destination="@id/RNA" />
         <action
-            android:id="@+id/action_home_to_setting2"
-            app:destination="@id/setting2" />
+            android:id="@+id/action_home_to_setting"
+            app:destination="@id/Activity_setting" />
         <action
-            android:id="@+id/action_home_to_App_info"
-            app:destination="@id/App_info" />
+            android:id="@+id/action_home_to_info"
+            app:destination="@id/Activity_info" />
         <action
             android:id="@+id/action_home_to_PS"
             app:destination="@+id/PS" />
     </fragment>
+
     <fragment
         android:id="@+id/RNA"
         android:name="com.khalil.DRACS.RNA"
@@ -30,32 +31,30 @@
         <action
             android:id="@+id/action_RNA_to_home"
             app:destination="@id/home" />
-
-    </fragment>
-    <fragment
-        android:id="@+id/setting2"
-        android:name="com.khalil.DRACS.setting2"
-        android:label="ألإعدادات"
-        tools:layout="@layout/fragment_setting2">
-        <action
-            android:id="@+id/action_setting2_to_home"
-            app:destination="@id/home" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/App_info"
-        android:name="com.khalil.DRACS.App_info"
-        android:label="حول التطبيق"
-        tools:layout="@layout/fragment_app_info">
-        <action
-            android:id="@+id/action_App_inof_to_home"
-            app:destination="@id/home" />
     </fragment>
 
     <fragment
         android:id="@+id/PS"
         android:name="com.khalil.DRACS.PS"
         android:label="الحماية الاجتماعية"
-        tools:layout="@layout/fragment_p_s" />
+        tools:layout="@layout/fragment_p_s" >
+        <action
+            android:id="@+id/action_PS_to_home"
+            app:destination="@id/home" />
+    </fragment>
+
+    <activity
+        android:id="@+id/Activity_info"
+        android:name="com.khalil.DRACS.Activity_info"
+        android:label="حول التطبيق"
+        tools:layout="@layout/activity_info" >
+    </activity>
+
+    <activity
+        android:id="@+id/Activity_setting"
+        android:name="com.khalil.DRACS.Activity_setting"
+        android:label="activity_setting"
+        tools:layout="@layout/activity_setting" >
+    </activity>
 
 </navigation>
