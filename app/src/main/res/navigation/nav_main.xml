@@ -14,10 +14,7 @@
             app:destination="@id/RNA" />
         <action
             android:id="@+id/action_home_to_setting"
-            app:destination="@id/Activity_setting" />
-        <action
-            android:id="@+id/action_home_to_info"
-            app:destination="@id/Activity_info" />
+            app:destination="@id/setting" />
         <action
             android:id="@+id/action_home_to_PS"
             app:destination="@+id/PS" />
@@ -43,18 +40,11 @@
             app:destination="@id/home" />
     </fragment>
 
-    <activity
-        android:id="@+id/Activity_info"
-        android:name="com.khalil.DRACS.Activity_info"
-        android:label="حول التطبيق"
-        tools:layout="@layout/activity_info" >
-    </activity>
-
-    <activity
-        android:id="@+id/Activity_setting"
-        android:name="com.khalil.DRACS.Activity_setting"
-        android:label="activity_setting"
-        tools:layout="@layout/activity_setting" >
-    </activity>
+    <fragment
+        android:id="@+id/setting"
+        android:name="com.khalil.DRACS.settings"
+        android:label="الإعدادات"
+        tools:layout="@layout/fragment_settings" >
+    </fragment>
 
 </navigation>

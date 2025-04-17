@@ -2,7 +2,6 @@ package com.khalil.DRACS;
 
 import static androidx.navigation.Navigation.findNavController;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -59,7 +58,7 @@ public class Activity_main extends AppCompatActivity {
         smoothBottomBar = findViewById(R.id.bottomBar);
         drawerLayout = findViewById(R.id.drawer_layout);
         drawer_icon = findViewById(R.id.drawer_icon);
-        info = findViewById(R.id.FAQ_icon);
+//        info = findViewById(R.id.FAQ_icon);
 
         // Register the ActivityResultLauncher for app updates
         activityResultLauncher = registerForActivityResult(
@@ -84,18 +83,18 @@ public class Activity_main extends AppCompatActivity {
                     navController.navigate(R.id.home);
                     break;
                 case 1:
-                    Intent intent = new Intent(this, Activity_setting.class);
-                    startActivity(intent);
+                    navController.navigate(R.id.home);
                     break;
                 case 2:
-                    exitApp();
+                    navController.navigate(R.id.home);
+                    break;
             }
             return false;
         });
 
 //        info.setOnClickListener(v -> navController.navigate(R.id.Activity_info));
 
-        drawer_icon.setOnClickListener(v -> navController.navigate(R.id.home));
+        drawer_icon.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
 
         checkForAppUpdate();
     }
