@@ -2,10 +2,14 @@ package com.khalil.DRACS.Avtivities;
 
 import static androidx.navigation.Navigation.findNavController;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -54,7 +58,47 @@ public class Activity_main extends AppCompatActivity {
 
         // Define the views
         smoothBottomBar = findViewById(R.id.bottomBar);
-//        info = findViewById(R.id.FAQ_icon);
+        ImageView moreIcon = findViewById(R.id.notif_icon);
+
+        // Set up more icon click listener
+        moreIcon.setOnClickListener(v -> {
+            PopupMenu popup = new PopupMenu(Activity_main.this, v);
+            popup.getMenuInflater().inflate(R.menu.more_menu, popup.getMenu());
+
+            // Force show icons in the popup menu
+            try {
+                java.lang.reflect.Field[] fields = popup.getClass().getDeclaredFields();
+                for (java.lang.reflect.Field field : fields) {
+                    if ("mPopup".equals(field.getName())) {
+                        field.setAccessible(true);
+                        Object menuPopupHelper = field.get(popup);
+                        Class<?> classPopupHelper = Class.forName(menuPopupHelper.getClass().getName());
+                        java.lang.reflect.Method setForceIcons = classPopupHelper.getMethod("setForceShowIcon", boolean.class);
+                        setForceIcons.invoke(menuPopupHelper, true);
+                        break;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+            popup.setOnMenuItemClickListener(item -> {
+                int itemId = item.getItemId();
+                if (itemId == R.id.share_app) {
+                    shareApp();
+                    return true;
+                } else if (itemId == R.id.visit_website) {
+                    visitWebsite();
+                    return true;
+                } else if (itemId == R.id.update_app) {
+                    checkForAppUpdate();
+                    return true;
+                }
+                return false;
+            });
+
+            popup.show();
+        });
 
         // Register the ActivityResultLauncher for app updates
         activityResultLauncher = registerForActivityResult(
@@ -93,6 +137,21 @@ public class Activity_main extends AppCompatActivity {
         checkForAppUpdate();
     }
 
+    private void shareApp() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        String shareMessage = "تحميل تطبيق المديرية الجهوية للفلاحة لجهة الدارالبيضاء-سطات\n";
+        shareMessage = shareMessage + "https://play.google.com/store/apps/details?id=" + getPackageName();
+        shareIntent.putExtra(Intent.EXTRA_TEXT, shareMessage);
+        startActivity(Intent.createChooser(shareIntent, "شارك التطبيق"));
+    }
+
+    private void visitWebsite() {
+        String url = "https://www.agriculture.gov.ma/"; // Replace with your actual website URL
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setData(Uri.parse(url));
+        startActivity(intent);
+    }
 
     public void exitApp() {
         finishAffinity();

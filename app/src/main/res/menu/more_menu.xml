@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/share_app"
+        android:icon="@drawable/share"
+        android:title="شارك التطبيق"
+        app:iconTint="?attr/colorOnPrimary"/>
+    <item
+        android:id="@+id/visit_website"
+        android:icon="@drawable/link"
+        android:title="زر موقعنا"
+        app:iconTint="?attr/colorOnPrimary"/>
+    <item
+        android:id="@+id/update_app"
+        android:icon="@drawable/exit_left"
+        android:title="خروج"
+        app:iconTint="?attr/colorOnPrimary"/>
+</menu> 
