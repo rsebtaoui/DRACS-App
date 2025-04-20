@@ -6,10 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
+import androidx.activity.OnBackPressedCallback;
 
-import com.khalil.DRACS.Avtivities.Activity_main;
 import com.khalil.DRACS.R;
-
 
 public class settings extends Fragment {
 
@@ -17,16 +17,18 @@ public class settings extends Fragment {
         // Required empty public constructor
     }
 
-    public static settings newInstance(String param1, String param2) {
-        settings fragment = new settings();
-        Bundle args = new Bundle();
-        fragment.setArguments(args);
-        return fragment;
-    }
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Set up back press handling
+        requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Navigate back to home
+                Navigation.findNavController(requireView()).navigate(R.id.home);
+            }
+        });
     }
 
     @Override

@@ -21,5 +21,5 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "المديرية الجهوية للفلاحة لجهة الدارالبيضاء-سطات"
+rootProject.name = "DRACS-App"
 include(":app")

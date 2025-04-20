@@ -12,7 +12,7 @@
         android:title="زر موقعنا"
         app:iconTint="?attr/colorOnPrimary"/>
     <item
-        android:id="@+id/update_app"
+        android:id="@+id/exite"
         android:icon="@drawable/exit_left"
         android:title="خروج"
         app:iconTint="?attr/colorOnPrimary"/>

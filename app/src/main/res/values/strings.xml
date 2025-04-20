@@ -1,17 +1,17 @@
 <resources>
     <string name="app_name">المديرية الجهوية للفلاحة لجهة الدارالبيضاء-سطات</string>
-    <string name="navigation_bar">navigation bar</string>
+    <string name="navigation_bar">شريط التنقل</string>
     <string name="القائمة">القائمة</string>
     <string name="إعدادات">إعدادات</string>
     <string name="المديرية_الجهوية">المديرية الجهوية للفلاحة لجهة الدارالبيضاء-سطات</string>
     <string name="خروج">خروج</string>
     <string name="لا_توجد_إعدادات_بعد">لا توجد إعدادات بعد</string>
-    <string name="more_information">more_information</string>
-    <string name="home_icon">Home icon</string>
-    <string name="title">title</string>
+    <string name="more_information">معلومات إضافية</string>
+    <string name="home_icon">الرئيسية</string>
+    <string name="title">المديرية الجهوية للفلاحة</string>
     <string name="المقاولين_الشباب">المقاولين الشباب</string>
     <string name="صندوق_التنمية_الزراعية">صندوق التنمية الزراعية</string>
-    <string name="cart_image">cart image</string>
+    <string name="cart_image">عربة التسوق</string>
     <string name="السجل_الوطني_الفلاحي">السجل الوطني الفلاحي</string>
     <string name="الحماية_الإجتماعية">الحماية الإجتماعية</string>
     <string name="التكوين_المهني">التكوين المهني</string>
@@ -20,10 +20,21 @@
     <string name="تم_تطوير_هذا">3. تم تطوير هذا التطبيق من طرف المديرية الجهوية للفلاحة لجهة الدار البيضاء سطات بالجديدة بالتعاون مع المدرسة للتكنولوجيا العليا سيدي بنور.</string>
     <string name="تم_تصميمه_من_طرف">4. تم تصميمه من طرف السيد رشيد سبتاوي (رئيس مصلحة نظم المعلومات الفلاحية) والسيد رضوان عبد الباسط (رئيس قسم الحماية الاجتماعية) بالمديرية الجهوية، وتمت برمجته من طرف المتدرب السيد كميلي خليل</string>
     <string name="نتقدم_بالشكر_إلى">5. نتقدم بالشكر إلى كل الذين كان لهم دور قيادي في إنشاء هذا التطبيق، وإلى كل من قدم الأفكار والمحتوى اللازم لهذا التطبيق.</string>
-    <string name="intro">intro</string>
-    <string name="lists">lists</string>
-    <string name="conclu">conclu</string>
+    <string name="intro">مقدمة</string>
+    <string name="lists">القوائم</string>
+    <string name="conclu">خاتمة</string>
     <string name="تحديث_التطبيق">تحديث التطبيق</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="hello_blank_fragment">مرحبا</string>
+
+    <!-- Settings Strings -->
+    <string name="app_settings">إعدادات التطبيق</string>
+    <string name="arabic_language">اللغة العربية</string>
+    <string name="dark_theme">الوضع الليلي</string>
+    <string name="enable_notifications">تفعيل الإشعارات</string>
+    <string name="storage">التخزين</string>
+    <string name="clear_cache">مسح ذاكرة التخزين المؤقت</string>
+    <string name="about">حول التطبيق</string>
+    <string name="app_version">إصدار التطبيق: 1.1</string>
+    <string name="developed_by">تم التطوير بواسطة: المديرية الجهوية للفلاحة لجهة الدارالبيضاء-سطات</string>
+    <string name="settings_not_available">الإعدادات غير متوفرة حالياً</string>
 </resources>

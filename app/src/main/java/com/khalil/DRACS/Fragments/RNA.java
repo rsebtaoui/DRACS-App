@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,12 +36,26 @@ public class RNA extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Enable back press handling
+        setHasOptionsMenu(true);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_r_n_a, container, false);
+
+        // Set up back press handling
+        view.setFocusableInTouchMode(true);
+        view.requestFocus();
+        view.setOnKeyListener((v, keyCode, event) -> {
+            if (keyCode == android.view.KeyEvent.KEYCODE_BACK && event.getAction() == android.view.KeyEvent.ACTION_UP) {
+                // Navigate back to home
+                Navigation.findNavController(view).navigate(R.id.action_RNA_to_home);
+                return true;
+            }
+            return false;
+        });
 
         recyclerView = view.findViewById(R.id.psrecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -136,7 +151,7 @@ public class RNA extends Fragment {
         // Access the MainActivity
         Activity_main mainActivity = (Activity_main) requireActivity();
         // Hide the bottom app bar
-//        mainActivity.hideBottomAppBar();
+        mainActivity.hideBottomAppBar();
     }
 
     @Override
@@ -144,7 +159,7 @@ public class RNA extends Fragment {
         super.onStop();
         // Access the MainActivity
         Activity_main mainActivity = (Activity_main) requireActivity();
-        // Hide the bottom app bar
+        // Show the bottom app bar
         mainActivity.showBottomAppBar();
     }
 

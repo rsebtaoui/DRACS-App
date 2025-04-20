@@ -20,7 +20,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:text="@string/مرحبا_بكم"
-            android:textColor="@color/black"
             android:textSize="19sp" />
 
         <TextView
@@ -30,7 +29,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:text="@string/تم_إنجاز_هذا_التطبيق"
-            android:textColor="@color/black"
             android:textSize="19sp" />
 
         <TextView
@@ -40,7 +38,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:text="@string/تم_تطوير_هذا"
-            android:textColor="@color/black"
             android:textSize="19sp" />
 
         <TextView
@@ -50,7 +47,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:text="@string/تم_تصميمه_من_طرف"
-            android:textColor="@color/black"
             android:textSize="19sp" />
 
         <TextView
@@ -60,7 +56,6 @@
             android:layout_marginTop="10dp"
             android:layout_marginEnd="10dp"
             android:text="@string/نتقدم_بالشكر_إلى"
-            android:textColor="@color/black"
             android:textSize="19sp" />
 
         <Button
@@ -73,7 +68,6 @@
             android:paddingVertical="10dp"
             android:textColor="@color/white"
             android:layout_gravity="center_horizontal"/>
-
 
     </LinearLayout>
 

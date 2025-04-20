@@ -1,21 +1,22 @@
-<!-- res/values-night/styles.xml -->
 <resources>
-    <!-- Base application theme. -->
-    <style name="Theme.المديريةالجهويةللفلاحةلجهةالدارالبيضاءسطات" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+    <!-- Dark application theme. -->
+    <style name="Theme.المديريةالجهويةللفلاحةلجهةالدارالبيضاءسطات.Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/Emerald_Green_700</item>
-        <item name="colorPrimaryVariant">@color/Emerald_Green_500</item>
-        <item name="colorOnPrimary">@color/black</item>
+        <item name="colorPrimary">@color/Emerald_Green_300</item>
+        <item name="colorPrimaryVariant">@color/Emerald_Green_700</item>
+        <item name="colorOnPrimary">@color/dark_surface</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/Emerald_Green_200</item>
-        <item name="colorSecondaryVariant">@color/Emerald_Green_700</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondaryVariant">@color/Emerald_Green_500</item>
+        <item name="colorOnSecondary">@color/dark_surface</item>
+        <!-- Background colors -->
+        <item name="android:colorBackground">@color/dark_background</item>
+        <item name="colorSurface">@color/dark_surface</item>
+        <item name="colorOnBackground">@color/dark_on_background</item>
+        <item name="colorOnSurface">@color/dark_on_surface</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
-        <!-- Background color. -->
-        <item name="android:windowBackground">@color/black</item>
-        <!-- Text color. -->
-        <item name="android:textColorPrimary">@color/white</item>
+        <item name="android:statusBarColor">@color/dark_status_bar</item>
         <!-- Customize your theme here. -->
+        <item name="android:navigationBarColor">@color/dark_background</item>
     </style>
 </resources>

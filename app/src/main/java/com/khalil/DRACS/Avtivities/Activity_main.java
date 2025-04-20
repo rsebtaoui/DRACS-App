@@ -90,8 +90,8 @@ public class Activity_main extends AppCompatActivity {
                 } else if (itemId == R.id.visit_website) {
                     visitWebsite();
                     return true;
-                } else if (itemId == R.id.update_app) {
-                    checkForAppUpdate();
+                } else if (itemId == R.id.exite) {
+                    exitApp();
                     return true;
                 }
                 return false;
@@ -131,8 +131,6 @@ public class Activity_main extends AppCompatActivity {
             }
             return false;
         });
-
-//        info.setOnClickListener(v -> navController.navigate(R.id.Activity_info));
 
         checkForAppUpdate();
     }
