@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.khalil.DRACS.Adapters.ExpandableAdapter;
+import com.khalil.DRACS.Avtivities.Activity_main;
 import com.khalil.DRACS.Utils.FileUtils;
 import com.khalil.DRACS.Models.Item;
 import com.khalil.DRACS.R;
@@ -144,5 +145,23 @@ public class PS extends Fragment {
         recyclerView.setAdapter(adapter);
 
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Access the MainActivity
+        Activity_main mainActivity = (Activity_main) requireActivity();
+        // Hide the bottom app bar
+        mainActivity.hideBottomAppBar();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Access the MainActivity
+        Activity_main mainActivity = (Activity_main) requireActivity();
+        // Hide the bottom app bar
+        mainActivity.showBottomAppBar();
     }
 }

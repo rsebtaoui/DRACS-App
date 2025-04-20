@@ -10,6 +10,7 @@ import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
 
+import com.khalil.DRACS.Avtivities.Activity_main;
 import com.khalil.DRACS.R;
 
 public class About extends Fragment {

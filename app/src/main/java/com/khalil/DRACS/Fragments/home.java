@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
+import com.khalil.DRACS.Avtivities.Activity_main;
 import com.khalil.DRACS.R;
 
 public class home extends Fragment {

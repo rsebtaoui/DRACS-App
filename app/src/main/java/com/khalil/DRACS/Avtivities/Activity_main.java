@@ -203,4 +203,20 @@ public class Activity_main extends AppCompatActivity {
         snackbar.setActionTextColor(getResources().getColor(R.color.Emerald_Green_700));
         snackbar.show();
     }
+
+    public void hideBottomAppBar() {
+        // Access your bottom app bar view
+        SmoothBottomBar bottomAppBar = findViewById(R.id.bottomBar);
+
+        // Hide the bottom app bar
+        bottomAppBar.setVisibility(View.GONE);
+    }
+
+    public void showBottomAppBar() {
+        // Access your bottom app bar view
+        SmoothBottomBar bottomAppBar = findViewById(R.id.bottomBar);
+
+        // Hide the bottom app bar
+        bottomAppBar.setVisibility(View.VISIBLE);
+    }
 }
