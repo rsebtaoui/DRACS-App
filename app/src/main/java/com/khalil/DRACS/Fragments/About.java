@@ -1,4 +1,4 @@
-package com.khalil.DRACS;
+package com.khalil.DRACS.Fragments;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -9,6 +9,8 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import androidx.fragment.app.Fragment;
+
+import com.khalil.DRACS.R;
 
 public class About extends Fragment {
 
@@ -33,7 +35,7 @@ public class About extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_home, container, false);
+        View view = inflater.inflate(R.layout.fragment_about, container, false);
         Button Update = view.findViewById(R.id.Update);
 
         Update.setOnClickListener(v -> openAppInPlayStore());

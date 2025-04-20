@@ -1,4 +1,4 @@
-package com.khalil.DRACS;
+package com.khalil.DRACS.Fragments;
 
 
 import android.content.pm.PackageManager;
@@ -12,6 +12,11 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.khalil.DRACS.Adapters.ExpandableAdapter;
+import com.khalil.DRACS.Utils.FileUtils;
+import com.khalil.DRACS.Models.Item;
+import com.khalil.DRACS.R;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.khalil.DRACS;
+package com.khalil.DRACS.Avtivities;
 
 import static androidx.navigation.Navigation.findNavController;
 
@@ -29,6 +29,7 @@ import com.google.android.play.core.install.InstallStateUpdatedListener;
 import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
+import com.khalil.DRACS.R;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
@@ -36,10 +37,7 @@ import me.ibrahimsn.lib.SmoothBottomBar;
 public class Activity_main extends AppCompatActivity {
 
     SmoothBottomBar smoothBottomBar;
-    DrawerLayout drawerLayout;
     NavController navController;
-    ActionBarDrawerToggle toggle;
-    ImageView drawer_icon;
     ImageView info;
     private AppUpdateManager appUpdateManager;
     InstallStateUpdatedListener listener = state -> {
@@ -56,8 +54,6 @@ public class Activity_main extends AppCompatActivity {
 
         // Define the views
         smoothBottomBar = findViewById(R.id.bottomBar);
-        drawerLayout = findViewById(R.id.drawer_layout);
-        drawer_icon = findViewById(R.id.drawer_icon);
 //        info = findViewById(R.id.FAQ_icon);
 
         // Register the ActivityResultLauncher for app updates
@@ -83,10 +79,10 @@ public class Activity_main extends AppCompatActivity {
                     navController.navigate(R.id.home);
                     break;
                 case 1:
-                    navController.navigate(R.id.home);
+                    navController.navigate(R.id.setting);
                     break;
                 case 2:
-                    navController.navigate(R.id.home);
+                    navController.navigate(R.id.About);
                     break;
             }
             return false;
@@ -94,27 +90,9 @@ public class Activity_main extends AppCompatActivity {
 
 //        info.setOnClickListener(v -> navController.navigate(R.id.Activity_info));
 
-        drawer_icon.setOnClickListener(v -> drawerLayout.openDrawer(GravityCompat.START));
-
         checkForAppUpdate();
     }
 
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if (toggle.onOptionsItemSelected(item)) {
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public void onBackPressed() {
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            drawerLayout.closeDrawer(GravityCompat.START);
-        } else if (!navController.popBackStack()) {
-            super.onBackPressed();
-        }
-    }
 
     public void exitApp() {
         finishAffinity();

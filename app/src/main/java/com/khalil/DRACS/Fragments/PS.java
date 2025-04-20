@@ -1,4 +1,4 @@
-package com.khalil.DRACS;
+package com.khalil.DRACS.Fragments;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -8,6 +8,11 @@ import android.view.ViewGroup;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.khalil.DRACS.Adapters.ExpandableAdapter;
+import com.khalil.DRACS.Utils.FileUtils;
+import com.khalil.DRACS.Models.Item;
+import com.khalil.DRACS.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,7 +37,7 @@ public class PS extends Fragment {
                              Bundle savedInstanceState) {
 
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_r_n_a, container, false);
+        View view = inflater.inflate(R.layout.fragment_p_s, container, false);
 
         recyclerView = view.findViewById(R.id.psrecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));

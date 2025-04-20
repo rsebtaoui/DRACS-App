@@ -7,19 +7,13 @@
         android:title="@string/القائمة" />
 
     <item
-        android:id="@+id/favorits"
-        android:icon="@drawable/baseline_star_border_24"
+        android:id="@+id/setting"
+        android:icon="@drawable/settings"
         android:title="@string/إعدادات" />
 
     <item
-        android:id="@+id/search"
-        android:icon="@drawable/baseline_search_24"
-        android:title="@string/خروج" />
-
-    <item
-        android:id="@+id/save"
-        android:icon="@drawable/outline_save_alt_24"
-        android:title="@string/القائمة" />
-
+        android:id="@+id/About"
+        android:icon="@drawable/info"
+        android:title="معلومات" />
 
 </menu>

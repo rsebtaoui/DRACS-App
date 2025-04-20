@@ -1,4 +1,4 @@
-package com.khalil.DRACS;
+package com.khalil.DRACS.Adapters;
 
 import android.content.Context;
 import android.graphics.Paint;
@@ -15,6 +15,9 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.khalil.DRACS.Models.Item;
+import com.khalil.DRACS.R;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 

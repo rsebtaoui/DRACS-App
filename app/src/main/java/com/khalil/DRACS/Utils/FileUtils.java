@@ -1,4 +1,4 @@
-package com.khalil.DRACS;
+package com.khalil.DRACS.Utils;
 
 import android.Manifest;
 import android.app.Activity;

@@ -7,7 +7,7 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     android:layoutDirection="rtl"
-    tools:context=".Activity_main">
+    tools:context=".Avtivities.Activity_main">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -37,7 +37,7 @@
             android:clickable="true"
             android:contentDescription="@string/home_icon"
             android:focusable="true"
-            android:src="@drawable/ic_menu" />
+            android:src="@mipmap/ic_dra_3" />
 
         <ImageView
             android:id="@+id/notif_icon"
@@ -50,7 +50,7 @@
             android:clickable="true"
             android:contentDescription="@string/more_information"
             android:focusable="true"
-            android:src="@drawable/outline_notifications_24" />
+            android:src="@drawable/more" />
 
         <TextView
             android:id="@+id/title"
@@ -83,17 +83,4 @@
             app:textColor="?attr/colorOnPrimary" />
 
     </RelativeLayout>
-<!--    this part is for adding a drawer layout for navigation-->
-        <com.google.android.material.navigation.NavigationView
-            android:id="@+id/navigation_view"
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:fitsSystemWindows="true"
-            android:background="?android:attr/windowBackground"
-            app:headerLayout="@layout/nav_header"
-            app:menu="@menu/nav_menu"
-            android:layoutDirection="rtl"
-            android:textDirection="rtl"/>
-
 </androidx.drawerlayout.widget.DrawerLayout>
