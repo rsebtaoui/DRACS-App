@@ -10,6 +10,13 @@ DRACS (Digital Resource for the "Direction Régionale d'Agriculture Casablanca s
 - **Arabic Interface**: Full Arabic language support
 - **Interactive Elements**: Clickable locations and downloadable forms
 
+## Screenshots
+![main](https://github.com/user-attachments/assets/b769bd15-a340-48d9-8beb-18626a2e243f)
+
+![redirect](https://github.com/user-attachments/assets/9df66a43-09c1-48f7-9ea6-9102a140df50)
+
+![drawer](https://github.com/user-attachments/assets/003858f7-e166-44ae-99d5-3ee871d9df97)
+
 ## Technical Requirements
 
 - Android Studio Hedgehog | 2023.1.1
