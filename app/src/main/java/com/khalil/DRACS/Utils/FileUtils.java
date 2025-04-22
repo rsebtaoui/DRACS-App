@@ -142,4 +142,35 @@ public class FileUtils {
         mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(mapIntent);
     }
+
+    public static void handleAction(Context context, String actionType, String actionValue) {
+        switch (actionType) {
+            case "download":
+                copyFileFromAssets(context, actionValue);
+                break;
+            case "map":
+                String[] coords = actionValue.split(",");
+                if (coords.length == 2) {
+                    double lat = Double.parseDouble(coords[0]);
+                    double lng = Double.parseDouble(coords[1]);
+                    openGoogleMaps(context, lat, lng, "");
+                }
+                break;
+            case "youtube":
+                openYouTube(context, actionValue);
+                break;
+            default:
+                Toast.makeText(context, "Action not supported", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    private static void openYouTube(Context context, String videoId) {
+        Intent intent = new Intent(Intent.ACTION_VIEW,
+                Uri.parse("vnd.youtube:" + videoId));
+        if (intent.resolveActivity(context.getPackageManager()) == null) {
+            intent = new Intent(Intent.ACTION_VIEW,
+                    Uri.parse("https://www.youtube.com/watch?v=" + videoId));
+        }
+        context.startActivity(intent);
+    }
 }

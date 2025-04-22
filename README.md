@@ -78,6 +78,13 @@ implementation("de.hdodenhof:circleimageview:3.1.0")
      }
      ```
 
+## Security Notes
+
+- Never commit `google-services.json` to version control
+- Use the provided `google-services.json.template` as a reference
+- Keep your Firebase API keys and configuration secure
+- Follow Firebase security rules best practices
+
 ## Project Structure
 
 ```
@@ -103,7 +110,7 @@ app/
 │   │   │       └── strings.xml
 │   │   └── AndroidManifest.xml
 │   └── build.gradle.kts
-└── google-services.json
+└── google-services.json (DO NOT COMMIT THIS FILE)
 ```
 
 ## Firebase Integration

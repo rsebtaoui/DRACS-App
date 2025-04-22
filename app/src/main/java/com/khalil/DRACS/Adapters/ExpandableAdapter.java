@@ -60,12 +60,10 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
                         clickableWord.getOnClickListener().onClick(widget);
                     }
 
-                    //clickable text style
                     @Override
                     public void updateDrawState(@NonNull TextPaint ds) {
                         super.updateDrawState(ds);
                         ds.setColor(ContextCompat.getColor(context, R.color.Emerald_Green_800));
-                        ds.setStyle(Paint.Style.FILL_AND_STROKE);
                         ds.setUnderlineText(true);
                     }
                 }, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
