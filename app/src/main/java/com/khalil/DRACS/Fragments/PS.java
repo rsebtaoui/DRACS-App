@@ -1,4 +1,3 @@
-// PS.java (updated)
 package com.khalil.DRACS.Fragments;
 
 import android.os.Bundle;
@@ -9,18 +8,13 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.navigation.Navigation;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.khalil.DRACS.Adapters.ExpandableAdapter;
-import com.khalil.DRACS.Avtivities.Activity_main;
 import com.khalil.DRACS.Models.FirestoreModel;
-import com.khalil.DRACS.Models.Item;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.FileUtils;
 
@@ -60,65 +54,50 @@ public class PS extends Fragment {
                         if (document.exists()) {
                             FirestoreModel model = document.toObject(FirestoreModel.class);
                             if (model != null) {
-                                List<Item> items = convertFirestoreToItems(model);
-                                adapter = new ExpandableAdapter(getContext(), items);
+                                // Debug logging for Firestore data
+                                Map<String, FirestoreModel.Section> sections = model.getSections();
+                                for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
+                                    String sectionName = entry.getKey();
+                                    FirestoreModel.Section section = entry.getValue();
+                                    
+
+                                    // Log each clickable word
+                                    if (section.getClickableWords() != null) {
+                                        for (FirestoreModel.ClickableWord cw : section.getClickableWords()) {
+                                            Toast.makeText(getContext(),
+                                                "Clickable word found:\n" +
+                                                "Text: " + cw.getText() + "\n" +
+                                                "Color: " + cw.getColor() + "\n",
+                                                Toast.LENGTH_LONG).show();
+                                        }
+                                    }
+                                }
+
+                                // Set up click listeners for clickable words
+                                setupClickListeners(model);
+                                adapter = new ExpandableAdapter(getContext(), model);
                                 recyclerView.setAdapter(adapter);
+                            } else {
+                                Toast.makeText(getContext(), "Failed to parse Firestore data", Toast.LENGTH_SHORT).show();
                             }
                         } else {
                             Toast.makeText(getContext(), "Document does not exist", Toast.LENGTH_SHORT).show();
                         }
                     } else {
-                        Toast.makeText(getContext(), "Error getting document", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Error getting document: " + task.getException(), Toast.LENGTH_SHORT).show();
                     }
                 });
     }
 
-    private List<Item> convertFirestoreToItems(FirestoreModel model) {
-        List<Item> items = new ArrayList<>();
+    private void setupClickListeners(FirestoreModel model) {
         Map<String, FirestoreModel.Section> sections = model.getSections();
-
-        for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
-            String sectionTitle = entry.getKey();
-            FirestoreModel.Section section = entry.getValue();
-
-            // Convert clickable words
-            List<Item.ClickableWord> clickableWords = new ArrayList<>();
+        for (FirestoreModel.Section section : sections.values()) {
             if (section.getClickableWords() != null) {
                 for (FirestoreModel.ClickableWord cw : section.getClickableWords()) {
-                    clickableWords.add(new Item.ClickableWord(cw.getText(), v -> {
-                        handleClickableWordAction(cw.getActionType(), cw.getActionValue());
-                    }));
+                    cw.setOnClickListener(v -> handleClickableWordAction(cw.getActionType(), cw.getActionValue()));
                 }
             }
-
-            // Convert colored lines
-            List<Item.Coloredlines> coloredLines = new ArrayList<>();
-            if (section.getColoredLines() != null) {
-                for (FirestoreModel.ColoredLine cl : section.getColoredLines()) {
-                    coloredLines.add(new Item.Coloredlines(cl.getText()));
-                }
-            }
-
-            // Convert dashes to a single string
-            StringBuilder dashesBuilder = new StringBuilder();
-            if (section.getDashes() != null) {
-                for (String dash : section.getDashes()) {
-                    dashesBuilder.append("- ").append(dash).append("\n");
-                }
-            }
-
-            // Create the Item
-            items.add(new Item(
-                    "▼ " + sectionTitle,
-                    section.getIntroduction() != null ? section.getIntroduction() : "",
-                    dashesBuilder.toString(),
-                    section.getConclusion() != null ? section.getConclusion() : "",
-                    clickableWords,
-                    coloredLines
-            ));
         }
-
-        return items;
     }
 
     private void handleClickableWordAction(String actionType, String actionValue) {
@@ -134,10 +113,6 @@ public class PS extends Fragment {
                     FileUtils.openGoogleMaps(getContext(), lat, lng, "");
                 }
                 break;
-            case "youtube":
-                // Handle YouTube video opening
-                break;
-            // Add other action types as needed
         }
     }
 
