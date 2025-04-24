@@ -24,6 +24,8 @@ import com.khalil.DRACS.R;
 import net.cachapa.expandablelayout.ExpandableLayout;
 
 import java.util.Map;
+import java.util.List;
+import java.util.ArrayList;
 
 public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.ViewHolder> {
     private final Context context;
@@ -46,9 +48,13 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        // Sort sections by order property
         Map<String, FirestoreModel.Section> sections = model.getSections();
-        String sectionKey = (String) sections.keySet().toArray()[position];
-        FirestoreModel.Section section = sections.get(sectionKey);
+        List<Map.Entry<String, FirestoreModel.Section>> sectionEntries = new ArrayList<>(sections.entrySet());
+        sectionEntries.sort((a, b) -> Integer.compare(a.getValue().getOrder(), b.getValue().getOrder()));
+        Map.Entry<String, FirestoreModel.Section> entry = sectionEntries.get(position);
+        String sectionKey = entry.getKey();
+        FirestoreModel.Section section = entry.getValue();
 
         // Debug logging
         Log.d(TAG, "Processing section: " + sectionKey);
@@ -109,24 +115,10 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
                 
                 if (isWholeWord) {
                     foundCount++;
-                    // Show debug Toast for found clickable word
-                    Toast.makeText(context, 
-                        "Found clickable word: '" + searchText + 
-                        "' at position: " + startIndex + 
-                        " in section: " + sectionKey, 
-                        Toast.LENGTH_SHORT).show();
-
                     spannableString.setSpan(new ClickableSpan() {
                         @Override
                         public void onClick(@NonNull View widget) {
                             if (cw.getOnClickListener() != null) {
-                                // Show debug Toast for click
-                                Toast.makeText(context, 
-                                    "Clicked word: '" + searchText + 
-                                    "' with action: " + cw.getActionType() + 
-                                    " and value: " + cw.getActionValue(), 
-                                    Toast.LENGTH_SHORT).show();
-                                
                                 cw.getOnClickListener().onClick(widget);
                             }
                         }
@@ -157,6 +149,11 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
                 int startIndex = contentBuilder.indexOf(cl.getText());
                 int endIndex = startIndex + cl.getText().length();
                 if (startIndex != -1) {
+                    Toast.makeText(context, 
+                        "Found colored line: '" + cl.getText() + 
+                        "' with color: " + cl.getColor(), 
+                        Toast.LENGTH_SHORT).show();
+
                     spannableString.setSpan(new ClickableSpan() {
                         @Override
                         public void onClick(@NonNull View widget) {
@@ -168,15 +165,21 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
                             super.updateDrawState(ds);
                             String colorHex = cl.getColor();
                             try {
-                                // Remove # if present and parse the hex color
-                                colorHex = colorHex.replace("#", "");
-                                int color = Color.parseColor("#" + colorHex);
-                                ds.setColor(color);
+                                if (colorHex == null || colorHex.isEmpty()) {
+                                    // If no color is specified, use the default green color
+                                    ds.setColor(ContextCompat.getColor(context, R.color.green));
+                                } else {
+                                    // Remove # if present and parse the hex color
+                                    colorHex = colorHex.replace("#", "");
+                                    int color = Color.parseColor("#" + colorHex);
+                                    ds.setColor(color);
+                                }
                             } catch (Exception e) {
                                 // Fallback to default color if hex parsing fails
                                 ds.setColor(ContextCompat.getColor(context, R.color.green));
                             }
                             ds.setStyle(TextPaint.Style.FILL);
+                            ds.setUnderlineText(false); // Make sure text is not underlined
                         }
                     }, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
                 }
@@ -206,7 +209,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return model.getSections().size();
+        return model.getSections().size(); // No change needed here, as the count remains the same
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

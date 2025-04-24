@@ -46,7 +46,7 @@ public class PS extends Fragment {
     }
 
     private void fetchDataFromFirestore() {
-        db.collection("pages").document("RNA")
+        db.collection("pages").document("ps")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
@@ -59,18 +59,6 @@ public class PS extends Fragment {
                                 for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
                                     String sectionName = entry.getKey();
                                     FirestoreModel.Section section = entry.getValue();
-                                    
-
-                                    // Log each clickable word
-                                    if (section.getClickableWords() != null) {
-                                        for (FirestoreModel.ClickableWord cw : section.getClickableWords()) {
-                                            Toast.makeText(getContext(),
-                                                "Clickable word found:\n" +
-                                                "Text: " + cw.getText() + "\n" +
-                                                "Color: " + cw.getColor() + "\n",
-                                                Toast.LENGTH_LONG).show();
-                                        }
-                                    }
                                 }
 
                                 // Set up click listeners for clickable words

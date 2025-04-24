@@ -24,6 +24,12 @@ public class FirestoreModel {
 
         private String conclusion;
 
+        @PropertyName("order")
+        private int order = 0;
+
+        @PropertyName("order")
+        public int getOrder() { return order; }
+
         // Getters and setters with null checks
         public String getTitle() { return title != null ? title : ""; }
         public String getIntroduction() { return introduction != null ? introduction : ""; }

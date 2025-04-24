@@ -33,7 +33,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="8dp"
-                android:text="@string/intro"
                 android:textColor="@color/black"
                 android:textSize="19sp"
                 android:visibility="gone" />
@@ -44,7 +43,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-5dp"
                 android:padding="8dp"
-                android:text="@string/lists"
                 android:textColor="#1E1E1E"
                 android:textSize="17sp"
                 android:visibility="gone" />
@@ -55,7 +53,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="-5dp"
                 android:padding="8dp"
-                android:text="@string/conclu"
                 android:textColor="@color/black"
                 android:textSize="19sp"
                 android:visibility="gone" />
