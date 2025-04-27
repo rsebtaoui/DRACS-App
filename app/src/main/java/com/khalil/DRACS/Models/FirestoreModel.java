@@ -13,7 +13,6 @@ public class FirestoreModel {
     public static class Section {
         private String title;
         private String introduction;
-        private String body;
         private List<String> dashes;
 
         @PropertyName("clickable_words")
@@ -33,7 +32,6 @@ public class FirestoreModel {
         // Getters and setters with null checks
         public String getTitle() { return title != null ? title : ""; }
         public String getIntroduction() { return introduction != null ? introduction : ""; }
-        public String getBody() { return body != null ? body : ""; }
         public List<String> getDashes() { return dashes != null ? dashes : new ArrayList<>(); }
 
         @PropertyName("clickable_words")

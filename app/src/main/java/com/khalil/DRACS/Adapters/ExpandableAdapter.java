@@ -23,6 +23,7 @@ import com.khalil.DRACS.R;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
+import java.util.Comparator;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
@@ -48,158 +49,115 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        // Sort sections by order property
         Map<String, FirestoreModel.Section> sections = model.getSections();
         List<Map.Entry<String, FirestoreModel.Section>> sectionEntries = new ArrayList<>(sections.entrySet());
-        sectionEntries.sort((a, b) -> Integer.compare(a.getValue().getOrder(), b.getValue().getOrder()));
+        sectionEntries.sort(Comparator.comparingInt(a -> a.getValue().getOrder()));
         Map.Entry<String, FirestoreModel.Section> entry = sectionEntries.get(position);
-        String sectionKey = entry.getKey();
         FirestoreModel.Section section = entry.getValue();
 
-        // Debug logging
-        Log.d(TAG, "Processing section: " + sectionKey);
-        Log.d(TAG, "Total dashes: " + section.getDashes().size());
-        Log.d(TAG, "Total clickable words: " + section.getClickableWords().size());
+        holder.title.setText("▼ " + entry.getKey());
 
-        holder.title.setText("▼ " + sectionKey);
-
-        // Create a SpannableString for the content
-        StringBuilder contentBuilder = new StringBuilder();
+        // 1. Build FULL content: intro + dashes + conclusion
+        StringBuilder fullContentBuilder = new StringBuilder();
+        if (section.getIntroduction() != null) {
+            fullContentBuilder.append(section.getIntroduction()).append("\n\n");
+        }
         for (String dash : section.getDashes()) {
             if (dash != null && !dash.isEmpty()) {
-                contentBuilder.append("- ").append(dash).append("\n");
+                fullContentBuilder.append("- ").append(dash).append("\n");
             }
         }
+        if (section.getConclusion() != null) {
+            fullContentBuilder.append("\n").append(section.getConclusion());
+        }
 
-        // Debug logging for content
-        Log.d(TAG, "Content length: " + contentBuilder.length());
-        Log.d(TAG, "Content preview: " + (contentBuilder.length() > 0 ? 
-            contentBuilder.substring(0, Math.min(100, contentBuilder.length())) : "Empty"));
+        SpannableString spannableString = new SpannableString(fullContentBuilder.toString());
 
-        SpannableString spannableString = new SpannableString(contentBuilder.toString());
-
-        // Set ClickableSpan for each clickable word
+        // 2. Apply ClickableWords
         for (FirestoreModel.ClickableWord cw : section.getClickableWords()) {
             String searchText = cw.getText();
-            if (searchText == null || searchText.isEmpty()) {
-                Log.d(TAG, "Skipping empty clickable word");
-                continue;
-            }
+            if (searchText == null || searchText.isEmpty()) continue;
 
-            Log.d(TAG, "Looking for word: '" + searchText + "'");
             int startIndex = 0;
-            int foundCount = 0;
-            
-            // Search for all occurrences of the clickable word
-            while (true) {
-                startIndex = contentBuilder.indexOf(searchText, startIndex);
-                if (startIndex == -1) {
-                    if (foundCount == 0) {
-                        Log.d(TAG, "Word not found: '" + searchText + "'");
-                    }
-                    break;
-                }
-                
+            while ((startIndex = fullContentBuilder.indexOf(searchText, startIndex)) != -1) {
                 int endIndex = startIndex + searchText.length();
-                
-                // Check if this is a whole word (not part of a larger word)
-                boolean isWholeWord = true;
-                if (startIndex > 0) {
-                    char prevChar = contentBuilder.charAt(startIndex - 1);
-                    isWholeWord = !Character.isLetterOrDigit(prevChar);
-                }
-                if (endIndex < contentBuilder.length()) {
-                    char nextChar = contentBuilder.charAt(endIndex);
-                    isWholeWord = isWholeWord && !Character.isLetterOrDigit(nextChar);
-                }
-                
-                if (isWholeWord) {
-                    foundCount++;
-                    spannableString.setSpan(new ClickableSpan() {
-                        @Override
-                        public void onClick(@NonNull View widget) {
-                            if (cw.getOnClickListener() != null) {
-                                cw.getOnClickListener().onClick(widget);
-                            }
-                        }
 
-                        @Override
-                        public void updateDrawState(@NonNull TextPaint ds) {
-                            super.updateDrawState(ds);
-                            String colorHex = cw.getColor();
-                            try {
-                                colorHex = colorHex.replace("#", "");
-                                int color = Color.parseColor("#" + colorHex);
-                                ds.setColor(color);
-                            } catch (Exception e) {
-                                ds.setColor(ContextCompat.getColor(context, R.color.Emerald_Green_800));
-                            }
-                            ds.setUnderlineText(true);
-                        }
-                    }, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                // Optional: Check for full-word match (if you want)
+                boolean isWholeWord = true;
+                if (startIndex > 0) isWholeWord &= !Character.isLetterOrDigit(fullContentBuilder.charAt(startIndex - 1));
+                if (endIndex < fullContentBuilder.length()) isWholeWord &= !Character.isLetterOrDigit(fullContentBuilder.charAt(endIndex));
+                if (!isWholeWord) {
+                    startIndex = endIndex;
+                    continue;
                 }
-                
+
+                spannableString.setSpan(new ClickableSpan() {
+                    @Override
+                    public void onClick(@NonNull View widget) {
+                        if (cw.getOnClickListener() != null) {
+                            cw.getOnClickListener().onClick(widget);
+                        }
+                    }
+
+                    @Override
+                    public void updateDrawState(@NonNull TextPaint ds) {
+                        super.updateDrawState(ds);
+                        try {
+                            int color = Color.parseColor(cw.getColor());
+                            ds.setColor(color);
+                        } catch (Exception e) {
+                            ds.setColor(ContextCompat.getColor(context, R.color.Emerald_Green_800));
+                        }
+                        ds.setUnderlineText(true);
+                    }
+                }, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
                 startIndex = endIndex;
             }
         }
 
-        // Set color for colored lines
+        // 3. Apply ColoredLines
         if (section.getColoredLines() != null) {
             for (FirestoreModel.ColoredLine cl : section.getColoredLines()) {
-                int startIndex = contentBuilder.indexOf(cl.getText());
-                int endIndex = startIndex + cl.getText().length();
-                if (startIndex != -1) {
-                    Toast.makeText(context, 
-                        "Found colored line: '" + cl.getText() + 
-                        "' with color: " + cl.getColor(), 
-                        Toast.LENGTH_SHORT).show();
+                String searchText = cl.getText();
+                if (searchText == null || searchText.isEmpty()) continue;
+
+                int startIndex = 0;
+                while ((startIndex = fullContentBuilder.indexOf(searchText, startIndex)) != -1) {
+                    int endIndex = startIndex + searchText.length();
 
                     spannableString.setSpan(new ClickableSpan() {
                         @Override
                         public void onClick(@NonNull View widget) {
-                            // No action needed for colored lines
+                            // No click action needed
                         }
 
                         @Override
                         public void updateDrawState(@NonNull TextPaint ds) {
                             super.updateDrawState(ds);
-                            String colorHex = cl.getColor();
                             try {
-                                if (colorHex == null || colorHex.isEmpty()) {
-                                    // If no color is specified, use the default green color
-                                    ds.setColor(ContextCompat.getColor(context, R.color.green));
-                                } else {
-                                    // Remove # if present and parse the hex color
-                                    colorHex = colorHex.replace("#", "");
-                                    int color = Color.parseColor("#" + colorHex);
-                                    ds.setColor(color);
-                                }
+                                int color = Color.parseColor(cl.getColor());
+                                ds.setColor(color);
                             } catch (Exception e) {
-                                // Fallback to default color if hex parsing fails
                                 ds.setColor(ContextCompat.getColor(context, R.color.green));
                             }
-                            ds.setStyle(TextPaint.Style.FILL);
-                            ds.setUnderlineText(false); // Make sure text is not underlined
+                            ds.setUnderlineText(false);
                         }
                     }, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+                    startIndex = endIndex;
                 }
             }
         }
 
-        // Set content
-        holder.intro.setText(section.getIntroduction());
+        // 4. Set final content
         holder.lists.setText(spannableString);
-        holder.conclu.setText(section.getConclusion());
-
-        // Enable clickable links
         holder.lists.setMovementMethod(LinkMovementMethod.getInstance());
 
         // Handle expansion
         final boolean isExpanded = position == expandedPosition;
         holder.expandableLayout.setExpanded(isExpanded, false);
-        holder.intro.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
         holder.lists.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
-        holder.conclu.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
 
         holder.title.setOnClickListener(v -> {
             expandedPosition = isExpanded ? -1 : position;
@@ -214,17 +172,17 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView title;
-        TextView intro;
+        TextView introduction;
         TextView lists;
-        TextView conclu;
+        TextView conclusion;
         ExpandableLayout expandableLayout;
 
         ViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.title);
-            intro = itemView.findViewById(R.id.intro);
+            introduction = itemView.findViewById(R.id.intro);
             lists = itemView.findViewById(R.id.lists);
-            conclu = itemView.findViewById(R.id.conclusion);
+            conclusion = itemView.findViewById(R.id.conclusion);
             expandableLayout = itemView.findViewById(R.id.expandableLayout);
         }
     }

@@ -14,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.khalil.DRACS.Adapters.ExpandableAdapter;
+import com.khalil.DRACS.Avtivities.Activity_main;
 import com.khalil.DRACS.Models.FirestoreModel;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.FileUtils;
@@ -104,5 +105,22 @@ public class PS extends Fragment {
         }
     }
 
-    // ... rest of your existing PS fragment code ...
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Access the MainActivity
+        Activity_main mainActivity = (Activity_main) requireActivity();
+        // Hide the bottom app bar
+        mainActivity.hideBottomAppBar();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        // Access the MainActivity
+        Activity_main mainActivity = (Activity_main) requireActivity();
+        // Show the bottom app bar
+        mainActivity.showBottomAppBar();
+    }
+
 }
