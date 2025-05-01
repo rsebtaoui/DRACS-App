@@ -27,16 +27,17 @@ import java.util.Comparator;
 import java.util.Map;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
 
 public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.ViewHolder> {
     private final Context context;
-    private final FirestoreModel model;
+    private final Map<String, FirestoreModel.Section> sections;
     private int expandedPosition = -1;
     private static final String TAG = "ExpandableAdapter";
 
-    public ExpandableAdapter(Context context, FirestoreModel model) {
+    public ExpandableAdapter(Context context, Map<String, FirestoreModel.Section> sections) {
         this.context = context;
-        this.model = model;
+        this.sections = sections;
     }
 
     @NonNull
@@ -49,7 +50,6 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Map<String, FirestoreModel.Section> sections = model.getSections();
         List<Map.Entry<String, FirestoreModel.Section>> sectionEntries = new ArrayList<>(sections.entrySet());
         sectionEntries.sort(Comparator.comparingInt(a -> a.getValue().getOrder()));
         Map.Entry<String, FirestoreModel.Section> entry = sectionEntries.get(position);
@@ -167,7 +167,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return model.getSections().size(); // No change needed here, as the count remains the same
+        return sections.size();
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {

@@ -1,10 +1,18 @@
 package com.khalil.DRACS.Fragments;
 
+import static android.content.Context.MODE_PRIVATE;
+
+import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
+import com.khalil.DRACS.Utils.ConnectionUtils;
+import com.facebook.shimmer.ShimmerFrameLayout;
+import com.khalil.DRACS.Adapters.ExpandableAdapter;
+import com.khalil.DRACS.Adapters.ShimmerAdapter;
 
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -30,20 +38,48 @@ import java.util.Map;
 
 public class RNA extends Fragment {
     private RecyclerView recyclerView;
+    private RecyclerView shimmerRecyclerView;
     private ExpandableAdapter adapter;
     private FirebaseFirestore db;
+    private ShimmerFrameLayout shimmerContainer;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        // Check for persistent data
+        SharedPreferences prefs = requireActivity().getSharedPreferences("DRACS_Prefs", MODE_PRIVATE);
+        boolean hasPersistentData = prefs.getBoolean("has_persistent_data", false);
+
+        // If no persistent data and no internet connection, show error and stay in home
+        if (!hasPersistentData && !ConnectionUtils.isNetworkAvailable(requireContext())) {
+            Toast.makeText(requireContext(), "أولاً، تحتاج إلى اتصال بالإنترنت", Toast.LENGTH_LONG).show();
+            // Navigate back to home
+            NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
+            navController.navigate(R.id.action_RNA_to_home);
+            return null; // Don't inflate this fragment
+        }
+
         View view = inflater.inflate(R.layout.fragment_r_n_a, container, false);
     
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
-        // Set up RecyclerView
+        // Set up RecyclerViews
         recyclerView = view.findViewById(R.id.rnarecyclerView);
+        shimmerRecyclerView = view.findViewById(R.id.shimmerRecyclerView);
+        shimmerContainer = view.findViewById(R.id.shimmerContainer);
+
+        // Set up layouts
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        shimmerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        
+        // Set up shimmer adapter
+        shimmerRecyclerView.setAdapter(new ShimmerAdapter());
+
+        // Show shimmer effect initially
+        shimmerContainer.startShimmer();
+        recyclerView.setVisibility(View.GONE);
+        shimmerContainer.setVisibility(View.VISIBLE);
 
         // Fetch data from Firestore
         fetchDataFromFirestore();
@@ -64,25 +100,44 @@ public class RNA extends Fragment {
     }
 
     private void fetchDataFromFirestore() {
+        // Try to get data from pre-fetcher first
+        FirestoreModel model = ((Activity_main) requireActivity()).getDataPreFetcher().getCachedData("rna");
+        if (model != null) {
+            // Use pre-fetched data
+            Map<String, FirestoreModel.Section> sections = model.getSections();
+            setupClickListeners(sections);
+            adapter = new ExpandableAdapter(getContext(), sections);
+            recyclerView.setAdapter(adapter);
+            
+            // Hide shimmer and show content
+            shimmerContainer.stopShimmer();
+            shimmerContainer.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        // Fallback to direct Firestore fetch if pre-fetched data is not available
         db.collection("pages").document("rna")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            FirestoreModel model = document.toObject(FirestoreModel.class);
-                            if (model != null) {
-                                // Debug logging for Firestore data
-                                Map<String, FirestoreModel.Section> sections = model.getSections();
-                                for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
-                                    String sectionName = entry.getKey();
-                                    FirestoreModel.Section section = entry.getValue();
-                                }
-
-                                // Set up click listeners for clickable words
-                                setupClickListeners(model);
-                                adapter = new ExpandableAdapter(getContext(), model);
+                            final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
+                            if (finalModel != null) {
+                                // Cache the data for future use
+                                ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("rna", finalModel);
+                                
+                                // Set up UI
+                                Map<String, FirestoreModel.Section> sections = finalModel.getSections();
+                                setupClickListeners(sections);
+                                adapter = new ExpandableAdapter(getContext(), sections);
                                 recyclerView.setAdapter(adapter);
+                                
+                                // Hide shimmer and show content
+                                shimmerContainer.stopShimmer();
+                                shimmerContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
                             } else {
                                 Toast.makeText(getContext(), "Failed to parse Firestore data", Toast.LENGTH_SHORT).show();
                             }
@@ -95,8 +150,7 @@ public class RNA extends Fragment {
                 });
     }
 
-    private void setupClickListeners(FirestoreModel model) {
-        Map<String, FirestoreModel.Section> sections = model.getSections();
+    private void setupClickListeners(Map<String, FirestoreModel.Section> sections) {
         for (FirestoreModel.Section section : sections.values()) {
             if (section.getClickableWords() != null) {
                 for (FirestoreModel.ClickableWord cw : section.getClickableWords()) {
@@ -108,16 +162,12 @@ public class RNA extends Fragment {
 
     private void handleClickableWordAction(String actionType, String actionValue) {
         switch (actionType) {
-            case "download":
-                FileUtils.copyFileFromAssets(getContext(), actionValue);
+            case "file":
+                FileUtils.showDownloadNotification(getContext(), Uri.parse(actionValue));
                 break;
-            case "map":
-                String[] coords = actionValue.split(",");
-                if (coords.length == 2) {
-                    double lat = Double.parseDouble(coords[0]);
-                    double lng = Double.parseDouble(coords[1]);
-                    FileUtils.openGoogleMaps(getContext(), lat, lng, "");
-                }
+            case "fragment":
+                NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
+                navController.navigate(Integer.parseInt(actionValue));
                 break;
         }
     }

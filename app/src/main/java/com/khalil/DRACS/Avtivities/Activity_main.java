@@ -34,6 +34,7 @@ import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.khalil.DRACS.R;
+import com.khalil.DRACS.Utils.DataPreFetcher;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
@@ -44,6 +45,7 @@ public class Activity_main extends AppCompatActivity {
     NavController navController;
     ImageView info;
     private AppUpdateManager appUpdateManager;
+    private DataPreFetcher dataPreFetcher;
     InstallStateUpdatedListener listener = state -> {
         if (state.installStatus() == InstallStatus.DOWNLOADED) {
             popupSnackbarForCompleteUpdate();
@@ -51,10 +53,20 @@ public class Activity_main extends AppCompatActivity {
     };
     private ActivityResultLauncher<IntentSenderRequest> activityResultLauncher;
 
+    public DataPreFetcher getDataPreFetcher() {
+        return dataPreFetcher;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
+
+        // Initialize AppUpdateManager
+        appUpdateManager = AppUpdateManagerFactory.create(this);
+        
+        // Initialize DataPreFetcher
+        dataPreFetcher = new DataPreFetcher(this);
 
         // Define the views
         smoothBottomBar = findViewById(R.id.bottomBar);
@@ -132,7 +144,15 @@ public class Activity_main extends AppCompatActivity {
             return false;
         });
 
-        checkForAppUpdate();
+        // Move app update check to a background thread
+        new Thread(() -> {
+            try {
+                Thread.sleep(1000); // Small delay to ensure UI is fully initialized
+                runOnUiThread(this::checkForAppUpdate);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }).start();
     }
 
     private void shareApp() {
@@ -184,12 +204,14 @@ public class Activity_main extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-        appUpdateManager.getAppUpdateInfo()
-                .addOnSuccessListener(appUpdateInfo -> {
-                    if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
-                        popupSnackbarForCompleteUpdate();
-                    }
-                });
+        if (appUpdateManager != null) {
+            appUpdateManager.getAppUpdateInfo()
+                    .addOnSuccessListener(appUpdateInfo -> {
+                        if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                            popupSnackbarForCompleteUpdate();
+                        }
+                    });
+        }
     }
 
     private void popupSnackbarForCompleteUpdate() {

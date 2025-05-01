@@ -1,5 +1,6 @@
 package com.khalil.DRACS.Fragments;
 
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -64,24 +65,33 @@ public class JE extends Fragment {
     }
 
     private void fetchDataFromFirestore() {
+        // Try to get data from pre-fetcher first
+        FirestoreModel model = ((Activity_main) requireActivity()).getDataPreFetcher().getCachedData("je");
+        if (model != null) {
+            // Use pre-fetched data
+            Map<String, FirestoreModel.Section> sections = model.getSections();
+            setupClickListeners(sections);
+            adapter = new ExpandableAdapter(getContext(), sections);
+            recyclerView.setAdapter(adapter);
+            return;
+        }
+
+        // Fallback to direct Firestore fetch if pre-fetched data is not available
         db.collection("pages").document("je")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            FirestoreModel model = document.toObject(FirestoreModel.class);
-                            if (model != null) {
-                                // Debug logging for Firestore data
-                                Map<String, FirestoreModel.Section> sections = model.getSections();
-                                for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
-                                    String sectionName = entry.getKey();
-                                    FirestoreModel.Section section = entry.getValue();
-                                }
-
-                                // Set up click listeners for clickable words
-                                setupClickListeners(model);
-                                adapter = new ExpandableAdapter(getContext(), model);
+                            final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
+                            if (finalModel != null) {
+                                // Cache the data for future use
+                                ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("je", finalModel);
+                                
+                                // Set up UI
+                                Map<String, FirestoreModel.Section> sections = finalModel.getSections();
+                                setupClickListeners(sections);
+                                adapter = new ExpandableAdapter(getContext(), sections);
                                 recyclerView.setAdapter(adapter);
                             } else {
                                 Toast.makeText(getContext(), "Failed to parse Firestore data", Toast.LENGTH_SHORT).show();
@@ -95,12 +105,21 @@ public class JE extends Fragment {
                 });
     }
 
-    private void setupClickListeners(FirestoreModel model) {
-        Map<String, FirestoreModel.Section> sections = model.getSections();
+    private void setupClickListeners(Map<String, FirestoreModel.Section> sections) {
         for (FirestoreModel.Section section : sections.values()) {
             if (section.getClickableWords() != null) {
                 for (FirestoreModel.ClickableWord cw : section.getClickableWords()) {
-                    cw.setOnClickListener(v -> handleClickableWordAction(cw.getActionType(), cw.getActionValue()));
+                    if (cw.getActionType().equals("file")) {
+                        cw.setOnClickListener(v -> {
+                            String filePath = cw.getActionValue();
+                            FileUtils.showDownloadNotification(getContext(), Uri.parse(filePath));
+                        });
+                    } else if (cw.getActionType().equals("fragment")) {
+                        cw.setOnClickListener(v -> {
+                            NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
+                            navController.navigate(Integer.parseInt(cw.getActionValue()));
+                        });
+                    }
                 }
             }
         }

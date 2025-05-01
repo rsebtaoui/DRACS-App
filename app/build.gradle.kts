@@ -79,4 +79,6 @@ dependencies {
 
     //notification of the app update
     implementation("com.google.android.play:app-update:2.1.0")
+
+    implementation("com.facebook.shimmer:shimmer:0.5.0")
 }
