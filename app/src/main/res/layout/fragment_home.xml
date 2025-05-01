@@ -99,7 +99,7 @@
                 android:background="@drawable/rounded_corners_disabled"
                 android:gravity="center"
                 android:padding="30dp"
-                android:text="@string/صندوق_التنمية_الزراعية"
+                android:text="@string/صندوق_التنمية_الفلاحية"
                 android:textColor="?attr/colorPrimary"
                 android:textSize="23sp"
                 android:textStyle="bold"

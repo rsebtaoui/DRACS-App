@@ -6,8 +6,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.NavController;
+import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -42,6 +47,18 @@ public class PS extends Fragment {
 
         // Fetch data from Firestore
         fetchDataFromFirestore();
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(
+                getViewLifecycleOwner(),
+                new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        // Navigate back to HomeFragment using Navigation Component
+                        NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
+                        navController.navigate(R.id.action_PS_to_home);
+                    }
+                }
+        );
 
         return view;
     }

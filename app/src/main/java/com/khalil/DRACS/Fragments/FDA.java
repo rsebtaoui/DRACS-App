@@ -28,7 +28,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-public class RNA extends Fragment {
+public class FDA extends Fragment {
     private RecyclerView recyclerView;
     private ExpandableAdapter adapter;
     private FirebaseFirestore db;
@@ -36,13 +36,13 @@ public class RNA extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_r_n_a, container, false);
-    
+        View view = inflater.inflate(R.layout.fragment_f_d_a, container, false);
+
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
         // Set up RecyclerView
-        recyclerView = view.findViewById(R.id.rnarecyclerView);
+        recyclerView = view.findViewById(R.id.fdarecyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
 
         // Fetch data from Firestore
@@ -55,7 +55,7 @@ public class RNA extends Fragment {
                     public void handleOnBackPressed() {
                         // Navigate back to HomeFragment using Navigation Component
                         NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
-                        navController.navigate(R.id.action_RNA_to_home);
+                        navController.navigate(R.id.action_PS_to_home);
                     }
                 }
         );
@@ -64,7 +64,7 @@ public class RNA extends Fragment {
     }
 
     private void fetchDataFromFirestore() {
-        db.collection("pages").document("rna")
+        db.collection("pages").document("fda")
                 .get()
                 .addOnCompleteListener(task -> {
                     if (task.isSuccessful()) {

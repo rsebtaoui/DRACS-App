@@ -1,13 +1,14 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    tools:context=".Fragments.RNA">
+    tools:context=".Fragments.FDA">
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rnarecyclerView"
+        android:id="@+id/fdarecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp" />
-</LinearLayout>
+
+</FrameLayout>
