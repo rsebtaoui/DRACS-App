@@ -67,7 +67,6 @@ jobs:
       - name: Verify APK files exist
         run: ls -l ./app/build/outputs/apk/androidTest/debug/
 
-      # Firebase Test Lab integration
       - name: Set up Firebase CLI
         run: |
           curl -sL https://firebase.tools | bash
@@ -82,4 +81,5 @@ jobs:
         run: |
           gcloud firebase test android run \
             --app=./app/build/outputs/apk/debug/app-debug.apk \
-            --device model=Pixel2,version=30
+            --device model=Pixel4,version=30,locale=en,orientation=portrait \
+            --timeout 5m
