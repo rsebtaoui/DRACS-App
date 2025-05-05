@@ -5,11 +5,21 @@ public class SearchResult {
     private String snippet;
     private Class<?> targetFragment;
     private String targetSection;
+    private int sectionPosition;
 
     public SearchResult(String title, String snippet, Class<?> targetFragment) {
         this.title = title;
         this.snippet = snippet;
         this.targetFragment = targetFragment;
+        this.sectionPosition = -1;
+    }
+
+    public void setSectionPosition(int position) {
+        this.sectionPosition = position;
+    }
+
+    public int getSectionPosition() {
+        return sectionPosition;
     }
 
     public String getTitle() {

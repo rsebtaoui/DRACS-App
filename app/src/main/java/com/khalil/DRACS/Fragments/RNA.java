@@ -24,6 +24,7 @@ import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.khalil.DRACS.Adapters.ExpandableAdapter;
@@ -42,6 +43,17 @@ public class RNA extends Fragment {
     private ExpandableAdapter adapter;
     private FirebaseFirestore db;
     private ShimmerFrameLayout shimmerContainer;
+    private String targetSectionId = null;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        // Get section ID from arguments
+        if (getArguments() != null) {
+            targetSectionId = getArguments().getString("target_section_id");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -64,13 +76,12 @@ public class RNA extends Fragment {
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
-        // Set up RecyclerViews
+        // Set up RecyclerView
         recyclerView = view.findViewById(R.id.rnarecyclerView);
-        shimmerRecyclerView = view.findViewById(R.id.shimmerRecyclerView);
-        shimmerContainer = view.findViewById(R.id.shimmerContainer);
-
-        // Set up layouts
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        shimmerRecyclerView = view.findViewById(R.id.shimmerRecyclerView);
+        shimmerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        shimmerContainer = view.findViewById(R.id.shimmerContainer);
         shimmerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         
         // Set up shimmer adapter
@@ -92,6 +103,10 @@ public class RNA extends Fragment {
                         // Navigate back to HomeFragment using Navigation Component
                         NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
                         navController.navigate(R.id.action_RNA_to_home);
+                        
+                        // Update bottom app bar selection
+                        Activity_main mainActivity = (Activity_main) requireActivity();
+                        mainActivity.updateBottomBarSelection(R.id.home);
                     }
                 }
         );
@@ -138,6 +153,22 @@ public class RNA extends Fragment {
                                 shimmerContainer.stopShimmer();
                                 shimmerContainer.setVisibility(View.GONE);
                                 recyclerView.setVisibility(View.VISIBLE);
+
+                                // If we have a target section ID from search, expand that section after UI is ready
+                                if (targetSectionId != null) {
+                                    recyclerView.post(() -> {
+                                        adapter.expandSection(targetSectionId);
+                                        // Find the position of the section to scroll to it
+                                        int position = 0;
+                                        for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
+                                            if (entry.getKey().equals(targetSectionId)) {
+                                                recyclerView.scrollToPosition(position);
+                                                break;
+                                            }
+                                            position++;
+                                        }
+                                    });
+                                }
                             } else {
                                 Toast.makeText(getContext(), "Failed to parse Firestore data", Toast.LENGTH_SHORT).show();
                             }

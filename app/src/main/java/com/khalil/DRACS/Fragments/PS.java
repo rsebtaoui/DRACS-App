@@ -45,6 +45,17 @@ public class PS extends Fragment {
     private ExpandableAdapter adapter;
     private FirebaseFirestore db;
     private ShimmerFrameLayout shimmerContainer;
+    private String targetSectionId = null;
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        
+        // Get section ID from arguments
+        if (getArguments() != null) {
+            targetSectionId = getArguments().getString("target_section_id");
+        }
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -67,15 +78,18 @@ public class PS extends Fragment {
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
 
-        // Set up RecyclerViews
+        // Set up RecyclerView
         recyclerView = view.findViewById(R.id.psrecyclerView);
+        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         shimmerRecyclerView = view.findViewById(R.id.shimmerRecyclerView);
+        shimmerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         shimmerContainer = view.findViewById(R.id.shimmerContainer);
 
-        // Set up layouts
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        shimmerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        
+        // Get target section ID from arguments if available
+        if (getArguments() != null) {
+            targetSectionId = getArguments().getString("target_section_id");
+        }
+
         // Set up shimmer adapter
         shimmerRecyclerView.setAdapter(new ShimmerAdapter());
 
@@ -95,6 +109,10 @@ public class PS extends Fragment {
                         // Navigate back to HomeFragment using Navigation Component
                         NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
                         navController.navigate(R.id.action_PS_to_home);
+                        
+                        // Update bottom app bar selection
+                        Activity_main mainActivity = (Activity_main) requireActivity();
+                        mainActivity.updateBottomBarSelection(R.id.home);
                     }
                 }
         );
@@ -116,6 +134,22 @@ public class PS extends Fragment {
             shimmerContainer.stopShimmer();
             shimmerContainer.setVisibility(View.GONE);
             recyclerView.setVisibility(View.VISIBLE);
+
+            // Expand target section if we have one
+            if (targetSectionId != null) {
+                recyclerView.post(() -> {
+                    adapter.expandSection(targetSectionId);
+                    // Find the position of the section to scroll to it
+                    int position = 0;
+                    for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
+                        if (entry.getKey().equals(targetSectionId)) {
+                            recyclerView.scrollToPosition(position);
+                            break;
+                        }
+                        position++;
+                    }
+                });
+            }
             return;
         }
 
@@ -141,6 +175,22 @@ public class PS extends Fragment {
                                 shimmerContainer.stopShimmer();
                                 shimmerContainer.setVisibility(View.GONE);
                                 recyclerView.setVisibility(View.VISIBLE);
+
+                                // If we have a target section ID from search, expand that section after UI is ready
+                                if (targetSectionId != null) {
+                                    recyclerView.post(() -> {
+                                        adapter.expandSection(targetSectionId);
+                                        // Find the position of the section to scroll to it
+                                        int position = 0;
+                                        for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
+                                            if (entry.getKey().equals(targetSectionId)) {
+                                                recyclerView.scrollToPosition(position);
+                                                break;
+                                            }
+                                            position++;
+                                        }
+                                    });
+                                }
 
                                 // Mark that we have persistent data
                                 PersistentDataUtils.setHasPersistentData(getContext(), true);

@@ -37,4 +37,7 @@
     <string name="app_version">إصدار التطبيق: 1.1</string>
     <string name="developed_by">تم التطوير بواسطة: المديرية الجهوية للفلاحة لجهة الدارالبيضاء-سطات</string>
     <string name="settings_not_available">الإعدادات غير متوفرة حالياً</string>
+    <string name="بحث">بحث...</string>
+    <string name="البحث">البحث</string>
+    <string name="معلومات">معلومات</string>
 </resources>

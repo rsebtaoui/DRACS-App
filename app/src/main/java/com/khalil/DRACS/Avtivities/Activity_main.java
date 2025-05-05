@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -60,10 +61,25 @@ public class Activity_main extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        
+        // Set window soft input mode to adjust resize
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        
         setContentView(R.layout.activity_home);
 
-        // Initialize AppUpdateManager
-        appUpdateManager = AppUpdateManagerFactory.create(this);
+        // Initialize AppUpdateManager with package name verification
+        try {
+            String packageName = getPackageName();
+            if (packageName.equals("com.khalil.DRACS")) {
+                appUpdateManager = AppUpdateManagerFactory.create(this);
+            } else {
+                Log.e("AppUpdate", "Package name mismatch: " + packageName);
+                return;
+            }
+        } catch (Exception e) {
+            Log.e("AppUpdate", "Error initializing AppUpdateManager: " + e.getMessage());
+            return;
+        }
         
         // Initialize DataPreFetcher
         dataPreFetcher = new DataPreFetcher(this);
@@ -98,9 +114,6 @@ public class Activity_main extends AppCompatActivity {
                 int itemId = item.getItemId();
                 if (itemId == R.id.share_app) {
                     shareApp();
-                    return true;
-                } else if (itemId == R.id.visit_website) {
-                    visitWebsite();
                     return true;
                 } else if (itemId == R.id.exite) {
                     exitApp();
@@ -138,6 +151,9 @@ public class Activity_main extends AppCompatActivity {
                     navController.navigate(R.id.setting);
                     break;
                 case 2:
+                    navController.navigate(R.id.Search);
+                    break;
+                case 3:
                     navController.navigate(R.id.About);
                     break;
             }
@@ -183,45 +199,90 @@ public class Activity_main extends AppCompatActivity {
     }
 
     private void checkForAppUpdate() {
-        appUpdateManager = AppUpdateManagerFactory.create(this);
+        if (appUpdateManager == null) {
+            Log.e("AppUpdate", "AppUpdateManager is null");
+            return;
+        }
 
-        Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
+        try {
+            Task<AppUpdateInfo> appUpdateInfoTask = appUpdateManager.getAppUpdateInfo();
 
-        appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
-            if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
-                appUpdateManager.startUpdateFlowForResult(
-                        appUpdateInfo,
-                        activityResultLauncher,
-                        AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build());
+            appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
+                try {
+                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
+                            && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
+                        try {
+                            appUpdateManager.startUpdateFlowForResult(
+                                    appUpdateInfo,
+                                    activityResultLauncher,
+                                    AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build());
+                        } catch (Exception e) {
+                            Log.e("AppUpdate", "Error starting update flow: " + e.getMessage());
+                        }
+                    }
+                } catch (Exception e) {
+                    Log.e("AppUpdate", "Error checking update availability: " + e.getMessage());
+                }
+            }).addOnFailureListener(e -> {
+                Log.e("AppUpdate", "Failed to get update info: " + e.getMessage());
+            });
+
+            try {
+                appUpdateManager.registerListener(listener);
+            } catch (Exception e) {
+                Log.e("AppUpdate", "Error registering update listener: " + e.getMessage());
             }
-        });
-
-        appUpdateManager.registerListener(listener);
+        } catch (Exception e) {
+            Log.e("AppUpdate", "Error in checkForAppUpdate: " + e.getMessage());
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        if (appUpdateManager != null) {
+        if (appUpdateManager == null) {
+            Log.e("AppUpdate", "AppUpdateManager is null in onResume");
+            return;
+        }
+
+        try {
             appUpdateManager.getAppUpdateInfo()
                     .addOnSuccessListener(appUpdateInfo -> {
-                        if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
-                            popupSnackbarForCompleteUpdate();
+                        try {
+                            if (appUpdateInfo.installStatus() == InstallStatus.DOWNLOADED) {
+                                popupSnackbarForCompleteUpdate();
+                            }
+                        } catch (Exception e) {
+                            Log.e("AppUpdate", "Error checking install status: " + e.getMessage());
                         }
+                    })
+                    .addOnFailureListener(e -> {
+                        Log.e("AppUpdate", "Failed to get update info in onResume: " + e.getMessage());
                     });
+        } catch (Exception e) {
+            Log.e("AppUpdate", "Error in onResume: " + e.getMessage());
         }
     }
 
     private void popupSnackbarForCompleteUpdate() {
-        Snackbar snackbar = Snackbar.make(
-                findViewById(android.R.id.content),
-                "An update has just been downloaded.",
-                Snackbar.LENGTH_INDEFINITE);
-        snackbar.setAction("INSTALL", view -> appUpdateManager.completeUpdate());
-        snackbar.setActionTextColor(getResources().getColor(R.color.Emerald_Green_700));
-        snackbar.show();
+        try {
+            Snackbar snackbar = Snackbar.make(
+                    findViewById(android.R.id.content),
+                    "An update has just been downloaded.",
+                    Snackbar.LENGTH_INDEFINITE);
+            snackbar.setAction("INSTALL", view -> {
+                try {
+                    appUpdateManager.completeUpdate();
+                } catch (Exception e) {
+                    Log.e("AppUpdate", "Error completing update: " + e.getMessage());
+                }
+            });
+            snackbar.setActionTextColor(getResources().getColor(R.color.Emerald_Green_700));
+            snackbar.show();
+        } catch (Exception e) {
+            Log.e("AppUpdate", "Error showing update snackbar: " + e.getMessage());
+        }
     }
 
     public void hideBottomAppBar() {
@@ -238,5 +299,21 @@ public class Activity_main extends AppCompatActivity {
 
         // Hide the bottom app bar
         bottomAppBar.setVisibility(View.VISIBLE);
+    }
+
+    public void updateBottomBarSelection(int itemId) {
+        // Access your bottom app bar view
+        SmoothBottomBar bottomAppBar = findViewById(R.id.bottomBar);
+        
+        // Update the selection
+        if (itemId == R.id.home) {
+            bottomAppBar.setItemActiveIndex(0);
+        } else if (itemId == R.id.setting) {
+            bottomAppBar.setItemActiveIndex(1);
+        } else if (itemId == R.id.Search) {
+            bottomAppBar.setItemActiveIndex(2);
+        } else if (itemId == R.id.About) {
+            bottomAppBar.setItemActiveIndex(3);
+        }
     }
 }

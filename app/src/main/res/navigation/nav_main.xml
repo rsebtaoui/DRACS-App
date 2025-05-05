@@ -41,10 +41,71 @@
     </fragment>
 
     <fragment
+        android:id="@+id/FDA"
+        android:name="com.khalil.DRACS.Fragments.FDA"
+        android:label="الحماية الاجتماعية"
+        tools:layout="@layout/fragment_p_s" >
+        <action
+            android:id="@+id/action_FDA_to_home"
+            app:destination="@id/home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/JE"
+        android:name="com.khalil.DRACS.Fragments.JE"
+        android:label="الحماية الاجتماعية"
+        tools:layout="@layout/fragment_p_s" >
+        <action
+            android:id="@+id/action_JE_to_home"
+            app:destination="@id/home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/FP"
+        android:name="com.khalil.DRACS.Fragments.FP"
+        android:label="الحماية الاجتماعية"
+        tools:layout="@layout/fragment_p_s">
+        <action
+            android:id="@+id/action_FP_to_home"
+            app:destination="@id/home" />
+    </fragment>
+
+    <fragment
         android:id="@+id/setting"
         android:name="com.khalil.DRACS.Fragments.settings"
         android:label="الإعدادات"
         tools:layout="@layout/fragment_settings" >
+        <action
+            android:id="@+id/action_setting_to_home"
+            app:destination="@id/home" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/Search"
+        android:name="com.khalil.DRACS.Fragments.SearchFragment"
+        android:label="البحث"
+        tools:layout="@layout/fragment_search">
+        <action
+            android:id="@+id/action_Search_to_home"
+            app:destination="@id/home" />
+        <action
+            android:id="@+id/action_Search_to_PS"
+            app:destination="@id/PS" />
+        <action
+            android:id="@+id/action_Search_to_RNA"
+            app:destination="@id/RNA" />
+        <action
+            android:id="@+id/action_Search_to_FDA"
+            app:destination="@id/FDA" />
+        <action
+            android:id="@+id/action_Search_to_JE"
+            app:destination="@id/JE" />
+        <action
+            android:id="@+id/action_Search_to_FP"
+            app:destination="@id/FP" />
+        <action
+            android:id="@+id/action_Search_to_About"
+            app:destination="@id/About" />
     </fragment>
 
     <fragment
@@ -52,6 +113,9 @@
         android:name="com.khalil.DRACS.Fragments.About"
         android:label="معلومات"
         tools:layout="@layout/fragment_about" >
+        <action
+            android:id="@+id/action_About_to_home"
+            app:destination="@id/home" />
     </fragment>
 
 </navigation>

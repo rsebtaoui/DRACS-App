@@ -9,13 +9,14 @@
         android:id="@+id/search_input"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:hint="Search..."
+        android:hint="@string/بحث"
         android:background="@drawable/search_background"
         android:padding="16dp"
-        android:drawableStart="@drawable/ic_search"
+        android:drawableStart="@drawable/baseline_search_24"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        android:maxLines="1"/>
 
     <ListView
         android:id="@+id/search_results_list"

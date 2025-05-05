@@ -12,8 +12,13 @@
         android:title="@string/إعدادات" />
 
     <item
+        android:id="@+id/Search"
+        android:icon="@drawable/baseline_search_24"
+        android:title="@string/البحث" />
+
+    <item
         android:id="@+id/About"
         android:icon="@drawable/info"
-        android:title="معلومات" />
+        android:title="@string/معلومات" />
 
 </menu>

@@ -7,11 +7,6 @@
         android:title="شارك التطبيق"
         app:iconTint="?attr/colorOnPrimary"/>
     <item
-        android:id="@+id/visit_website"
-        android:icon="@drawable/link"
-        android:title="زر موقعنا"
-        app:iconTint="?attr/colorOnPrimary"/>
-    <item
         android:id="@+id/exite"
         android:icon="@drawable/exit_left"
         android:title="خروج"
