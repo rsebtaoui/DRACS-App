@@ -20,6 +20,10 @@ jobs:
         distribution: 'temurin'
         cache: gradle
 
+    - name: Create google-services.json
+      run: |
+        echo '${{ secrets.GOOGLE_SERVICES_JSON }}' > app/google-services.json
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
@@ -53,4 +57,8 @@ jobs:
           --device model=Pixel_4,version=30,orientation=portrait,locale=en_US \
           --timeout 30m \
           --type instrumentation \
-          --results-dir=test-results 
+          --results-dir=test-results
+
+    - name: Clean up google-services.json
+      if: always()
+      run: rm -f app/google-services.json 
