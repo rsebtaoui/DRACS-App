@@ -2,10 +2,10 @@ name: Android CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
-    
+    branches: ["master"]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -25,7 +25,8 @@ jobs:
 
       - name: Create google-services.json
         run: |
-          echo '{
+          cat << 'EOF' > app/google-services.json
+          {
             "project_info": {
               "project_number": "${{ secrets.FIREBASE_PROJECT_NUMBER }}",
               "project_id": "${{ secrets.FIREBASE_PROJECT_ID }}",
@@ -53,7 +54,13 @@ jobs:
               }
             ],
             "configuration_version": "1"
-          }' > app/google-services.json
+          }
+          EOF
+
+      - name: Verify google-services.json
+        run: |
+          cat app/google-services.json
+          jq '.' app/google-services.json # Validate JSON syntax
 
       - name: Build with Gradle
         run: ./gradlew build
@@ -67,19 +74,26 @@ jobs:
       - name: Verify APK files exist
         run: ls -l ./app/build/outputs/apk/androidTest/debug/
 
-      # Firebase Test Lab integration
-      - name: Set up Firebase CLI
+      - name: Set up Google Cloud SDK
+        run: |
+          # Write service account JSON with proper formatting
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > service-account.json
+          
+          # Validate JSON syntax
+          jq '.' service-account.json || (echo "Invalid JSON in service account" && exit 1)
+          
+          # Authenticate
+          gcloud auth activate-service-account --key-file=service-account.json
+          gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
+
+      - name: Install Firebase CLI
         run: |
           curl -sL https://firebase.tools | bash
-          export PATH="$HOME/.firebase/tools:$PATH"
+          firebase --version
 
-      - name: Authenticate with Firebase
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
-
-      - name: Run tests on Firebase Test Lab (Robo Test)
+      - name: Run Firebase Test Lab tests
         run: |
           gcloud firebase test android run \
-            --app=./app/build/outputs/apk/debug/app-debug.apk \
-            --device model=Pixel2,version=30
+            --app ./app/build/outputs/apk/debug/app-debug.apk \
+            --type robo \
+            --timeout 5m

@@ -3,6 +3,7 @@ package com.khalil.DRACS.Avtivities;
 import static androidx.navigation.Navigation.findNavController;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,6 +21,7 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatDelegate;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -41,6 +43,10 @@ import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
 
 public class Activity_main extends AppCompatActivity {
+
+    private static final String PREFS_NAME = "DRACS_Prefs";
+    private static final String KEY_DARK_MODE = "dark_mode";
+    private static final String KEY_LAST_NAV_ITEM = "last_nav_item";
 
     SmoothBottomBar smoothBottomBar;
     NavController navController;
@@ -64,6 +70,15 @@ public class Activity_main extends AppCompatActivity {
         
         // Set window soft input mode to adjust resize
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        
+        // Apply saved theme
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        boolean isDarkMode = prefs.getBoolean(KEY_DARK_MODE, false);
+        if (isDarkMode) {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
+        }
         
         setContentView(R.layout.activity_home);
 
@@ -143,6 +158,11 @@ public class Activity_main extends AppCompatActivity {
 
         // Handling bottom nav bar navigation
         smoothBottomBar.setOnItemSelectedListener((OnItemSelectedListener) i -> {
+            // Save the selected item index
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putInt(KEY_LAST_NAV_ITEM, i);
+            editor.apply();
+
             switch (i) {
                 case 0:
                     navController.navigate(R.id.home);
@@ -153,12 +173,13 @@ public class Activity_main extends AppCompatActivity {
                 case 2:
                     navController.navigate(R.id.Search);
                     break;
-                case 3:
-                    navController.navigate(R.id.About);
-                    break;
             }
             return false;
         });
+
+        // Restore the last selected navigation item
+        int lastNavItem = prefs.getInt(KEY_LAST_NAV_ITEM, 0);
+        smoothBottomBar.setItemActiveIndex(lastNavItem);
 
         // Move app update check to a background thread
         new Thread(() -> {
@@ -308,12 +329,20 @@ public class Activity_main extends AppCompatActivity {
         // Update the selection
         if (itemId == R.id.home) {
             bottomAppBar.setItemActiveIndex(0);
+            saveLastNavItem(0);
         } else if (itemId == R.id.setting) {
             bottomAppBar.setItemActiveIndex(1);
+            saveLastNavItem(1);
         } else if (itemId == R.id.Search) {
             bottomAppBar.setItemActiveIndex(2);
-        } else if (itemId == R.id.About) {
-            bottomAppBar.setItemActiveIndex(3);
+            saveLastNavItem(2);
         }
+    }
+
+    private void saveLastNavItem(int index) {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        SharedPreferences.Editor editor = prefs.edit();
+        editor.putInt(KEY_LAST_NAV_ITEM, index);
+        editor.apply();
     }
 }

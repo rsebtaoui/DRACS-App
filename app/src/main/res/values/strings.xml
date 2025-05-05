@@ -40,4 +40,12 @@
     <string name="بحث">بحث...</string>
     <string name="البحث">البحث</string>
     <string name="معلومات">معلومات</string>
+    <string name="contact_us">اتصل بنا</string>
+    <string name="contact_numbers">أرقام الهاتف</string>
+    <string name="division_protection_sociale">قسم الحماية الاجتماعية</string>
+    <string name="division_protection_sociale_number">+212 522-123456</string>
+    <string name="division_exploitations">قسم الاستغلالات</string>
+    <string name="division_exploitations_number">+212 522-234567</string>
+    <string name="division_services_communs">قسم الخدمات المشتركة</string>
+    <string name="division_services_communs_number">+212 522-345678</string>
 </resources>

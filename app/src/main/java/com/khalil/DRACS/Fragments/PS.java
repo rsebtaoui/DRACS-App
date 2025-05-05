@@ -89,7 +89,7 @@ public class PS extends Fragment {
         if (getArguments() != null) {
             targetSectionId = getArguments().getString("target_section_id");
         }
-
+        
         // Set up shimmer adapter
         shimmerRecyclerView.setAdapter(new ShimmerAdapter());
 

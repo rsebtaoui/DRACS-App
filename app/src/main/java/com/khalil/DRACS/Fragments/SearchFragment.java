@@ -8,6 +8,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -39,6 +40,7 @@ public class SearchFragment extends Fragment {
     private SearchAdapter searchAdapter;
     private List<SearchResult> searchResults;
     private NavController navController;
+    private View loadingView;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -51,9 +53,39 @@ public class SearchFragment extends Fragment {
 
         searchInput = view.findViewById(R.id.search_input);
         searchResultsList = view.findViewById(R.id.search_results_list);
+        loadingView = view.findViewById(R.id.loading_view);
         searchResults = new ArrayList<>();
         searchAdapter = new SearchAdapter(requireContext(), searchResults, this::onSearchResultClick);
         searchResultsList.setAdapter(searchAdapter);
+
+        // Show loading state initially
+        loadingView.setVisibility(View.VISIBLE);
+        searchResultsList.setVisibility(View.GONE);
+
+        // Ensure data is loaded before allowing search
+        DataPreFetcher dataPreFetcher = ((Activity_main) requireActivity()).getDataPreFetcher();
+        if (!isDataLoaded(dataPreFetcher)) {
+            dataPreFetcher.startPreFetching(success -> {
+                if (success) {
+                    requireActivity().runOnUiThread(() -> {
+                        loadingView.setVisibility(View.GONE);
+                        searchResultsList.setVisibility(View.VISIBLE);
+                        // If there's text in the search input, perform the search
+                        if (searchInput.getText().length() >= 2) {
+                            performSearch(searchInput.getText().toString());
+                        }
+                    });
+                } else {
+                    requireActivity().runOnUiThread(() -> {
+                        loadingView.setVisibility(View.GONE);
+                        Toast.makeText(requireContext(), "Failed to load data. Please try again.", Toast.LENGTH_SHORT).show();
+                    });
+                }
+            });
+        } else {
+            loadingView.setVisibility(View.GONE);
+            searchResultsList.setVisibility(View.VISIBLE);
+        }
 
         navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
 
@@ -241,5 +273,14 @@ public class SearchFragment extends Fragment {
         }
         
         navController.navigate(actionId, args);
+    }
+
+    private boolean isDataLoaded(DataPreFetcher dataPreFetcher) {
+        for (String pageId : PAGE_IDS) {
+            if (!dataPreFetcher.hasCachedData(pageId)) {
+                return false;
+            }
+        }
+        return true;
     }
 }

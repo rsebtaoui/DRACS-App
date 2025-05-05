@@ -16,9 +16,4 @@
         android:icon="@drawable/baseline_search_24"
         android:title="@string/البحث" />
 
-    <item
-        android:id="@+id/About"
-        android:icon="@drawable/info"
-        android:title="@string/معلومات" />
-
 </menu>
