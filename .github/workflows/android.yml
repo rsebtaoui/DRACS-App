@@ -81,5 +81,5 @@ jobs:
         run: |
           gcloud firebase test android run \
             --app=./app/build/outputs/apk/debug/app-debug.apk \
-            --device model=Pixel4,version=30,locale=en,orientation=portrait \
+            --device model=walleye,version=30,locale=en,orientation=portrait \
             --timeout 5m
