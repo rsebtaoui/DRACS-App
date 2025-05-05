@@ -19,4 +19,5 @@
     <color name="dark_status_bar">#000000</color>
     <color name="dark_on_background">#E6E6E6</color>
     <color name="dark_on_surface">#FFFFFF</color>
+    <color name="search_border">#CCCCCC</color>
 </resources>
