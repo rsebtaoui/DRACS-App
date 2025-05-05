@@ -25,10 +25,40 @@ jobs:
 
       - name: Create google-services.json
         run: |
-          echo '{
-            "project_info": { ... }, # Ensure secrets are valid
+          cat <<EOF > app/google-services.json
+          {
+            "project_info": {
+              "project_number": "${{ secrets.FIREBASE_PROJECT_NUMBER }}",
+              "project_id": "${{ secrets.FIREBASE_PROJECT_ID }}",
+              "storage_bucket": "${{ secrets.FIREBASE_STORAGE_BUCKET }}"
+            },
+            "client": [
+              {
+                "client_info": {
+                  "mobilesdk_app_id": "${{ secrets.FIREBASE_MOBILE_SDK_APP_ID }}",
+                  "android_client_info": {
+                    "package_name": "com.khalil.DRACS"
+                  }
+                },
+                "oauth_client": [],
+                "api_key": [
+                  {
+                    "current_key": "${{ secrets.FIREBASE_API_KEY }}"
+                  }
+                ],
+                "services": {
+                  "appinvite_service": {
+                    "other_platform_oauth_client": []
+                  }
+                }
+              }
+            ],
             "configuration_version": "1"
-          }' > app/google-services.json
+          }
+          EOF
+
+      - name: Verify google-services.json
+        run: cat app/google-services.json
 
       - name: Build with Gradle
         run: ./gradlew build
@@ -53,16 +83,9 @@ jobs:
           curl -sL https://firebase.tools | bash
           firebase --version
 
-      - name: List available test devices
-        run: |
-          gcloud firebase test android models list \
-            --format="table[box](model_id,form_factor,version,supported_abis)" \
-            --filter="version=30"
-
       - name: Run Firebase Test Lab tests
         run: |
           gcloud firebase test android run \
             --app ./app/build/outputs/apk/debug/app-debug.apk \
             --type robo \
-            --device model=redfin,version=30,locale=en,orientation=portrait \
-            --timeout 10m
+            --timeout 5m
