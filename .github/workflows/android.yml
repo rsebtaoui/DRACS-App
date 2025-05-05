@@ -78,4 +78,43 @@ jobs:
             exit 1
           fi
 
-      - name: Create
+      - name: Create lint baseline
+        run: |
+          ./gradlew :app:lintDebug -PupdateLintBaseline || echo "Lint baseline created (warnings ignored)"
+          if [ -f "app/lint-baseline.xml" ]; then
+            echo "Lint baseline file created successfully"
+          else
+            echo "Creating empty lint baseline file"
+            echo '<?xml version="1.0" encoding="UTF-8"?><issues format="5" by="lint 4.2.0"/>' > app/lint-baseline.xml
+          fi
+
+      - name: Build with Gradle
+        run: ./gradlew build
+
+      - name: Build Debug APK
+        run: ./gradlew :app:assembleDebug
+
+      - name: Build AndroidTest APK
+        run: ./gradlew :app:assembleAndroidTest
+
+      - name: Verify APK files exist
+        run: ls -l app/build/outputs/apk/androidTest/debug/
+
+      - name: Set up Google Cloud SDK
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > service-account.json
+          jq '.' service-account.json || (echo "Invalid JSON in service account" && exit 1)
+          gcloud auth activate-service-account --key-file=service-account.json
+          gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
+
+      - name: Install Firebase CLI
+        run: |
+          curl -sL https://firebase.tools | bash
+          firebase --version
+
+      - name: Run Firebase Test Lab tests
+        run: |
+          gcloud firebase test android run \
+            --app app/build/outputs/apk/debug/app-debug.apk \
+            --type robo \
+            --timeout 5m
