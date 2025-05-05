@@ -57,19 +57,31 @@ jobs:
           }
           EOF
 
-      - name: Add lint baseline configuration
+      - name: Update build.gradle for lint baseline
         run: |
-          cat << 'EOF' >> app/build.gradle
-          android {
-              lint {
-                  baseline = file("lint-baseline.xml")
-                  abortOnError false
-              }
-          }
-          EOF
+          # Find the correct place to insert lint configuration
+          if grep -q "android {" app/build.gradle; then
+            # Insert lint configuration inside existing android block
+            sed -i '/android {/a \    lint {\n        baseline = file("lint-baseline.xml")\n        abortOnError false\n    }' app/build.gradle
+          else
+            # Add full android block if not present
+            echo "android {" >> app/build.gradle
+            echo "    lint {" >> app/build.gradle
+            echo "        baseline = file(\"lint-baseline.xml\")" >> app/build.gradle
+            echo "        abortOnError false" >> app/build.gradle
+            echo "    }" >> app/build.gradle
+            echo "}" >> app/build.gradle
+          fi
 
       - name: Create lint baseline
-        run: ./gradlew lintDebug -PupdateLintBaseline || echo "Lint baseline created"
+        run: |
+          ./gradlew lintDebug -PupdateLintBaseline || echo "Lint baseline created (warnings ignored)"
+          # Verify baseline was created
+          if [ -f "app/lint-baseline.xml" ]; then
+            echo "Lint baseline file created successfully"
+          else
+            echo "Warning: Lint baseline file was not created"
+          fi
 
       - name: Build with Gradle
         run: ./gradlew build
