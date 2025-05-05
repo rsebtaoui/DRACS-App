@@ -77,6 +77,25 @@ jobs:
         with:
           credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
 
+      - name: List available Firebase Test Lab devices
+        run: |
+          echo "### Available Firebase Test Lab Devices ###"
+          gcloud firebase test android models list \
+            --format="table[box](
+              model_id:label=DEVICE_ID,
+              form_factor:label=TYPE,
+              manufacturer:label=MAKER,
+              version:label=API,
+              supported_abis:label=ARCH,
+              tags:label=FEATURES
+            )"
+          
+          echo -e "\n### Example Usage ###"
+          echo "To use one of these devices in your test command:"
+          echo 'gcloud firebase test android run \'
+          echo '  --app app/build/outputs/apk/debug/app-debug.apk \'
+          echo '  --device model=DEVICE_ID_FROM_LIST,version=API_LEVEL'
+          
       - name: Run Firebase Test Lab tests
         run: |
           gcloud firebase test android run \
