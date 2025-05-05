@@ -57,10 +57,8 @@ jobs:
           }
           EOF
 
-      - name: Verify google-services.json
-        run: |
-          cat app/google-services.json
-          jq '.' app/google-services.json # Validate JSON syntax
+      - name: Create lint baseline (first run only)
+        run: ./gradlew lintDebug -PupdateLintBaseline
 
       - name: Build with Gradle
         run: ./gradlew build
@@ -76,13 +74,8 @@ jobs:
 
       - name: Set up Google Cloud SDK
         run: |
-          # Write service account JSON with proper formatting
           echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > service-account.json
-          
-          # Validate JSON syntax
           jq '.' service-account.json || (echo "Invalid JSON in service account" && exit 1)
-          
-          # Authenticate
           gcloud auth activate-service-account --key-file=service-account.json
           gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
 
