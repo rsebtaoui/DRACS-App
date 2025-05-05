@@ -2,10 +2,10 @@ name: Android CI
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
-    branches: [ "master" ]
-    
+    branches: ["master"]
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -67,20 +67,19 @@ jobs:
       - name: Verify APK files exist
         run: ls -l ./app/build/outputs/apk/androidTest/debug/
 
-      - name: Set up Firebase Test Lab
-        run: |
-          # Install required tools
-          curl -sL https://firebase.tools | bash
-          sudo apt-get -y install google-cloud-sdk
-          
-          # Authenticate with service account
-          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}" > service-account.json
-          gcloud auth activate-service-account --key-file=service-account.json
-          
-          # Configure project
-          gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
+      - name: Set up Google Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          project_id: ${{ secrets.FIREBASE_PROJECT_ID }}
+          service_account_key: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+          export_default_credentials: true
 
-      - name: List available devices
+      - name: Install Firebase CLI
+        run: |
+          curl -sL https://firebase.tools | bash
+          firebase --version
+
+      - name: List available test devices
         run: |
           gcloud firebase test android models list \
             --format="table[box](model_id,form_factor,version,supported_abis)" \
@@ -88,13 +87,13 @@ jobs:
 
       - name: Run Firebase Test Lab tests
         run: |
-          # First try with Pixel device
+          # Try with Pixel 5 first
           gcloud firebase test android run \
             --app ./app/build/outputs/apk/debug/app-debug.apk \
             --type robo \
             --device model=redfin,version=30,locale=en,orientation=portrait \
             --timeout 5m || \
-          # Fallback to default device if Pixel fails
+          # Fallback to default device if specific device fails
           gcloud firebase test android run \
             --app ./app/build/outputs/apk/debug/app-debug.apk \
             --type robo \
