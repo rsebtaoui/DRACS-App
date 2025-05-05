@@ -67,27 +67,26 @@ jobs:
       - name: Verify APK files exist
         run: ls -l ./app/build/outputs/apk/androidTest/debug/
 
-      - name: Set up Firebase CLI
+      - name: Setup Firebase Test Lab
         run: |
+          # Install Firebase CLI
           curl -sL https://firebase.tools | bash
-          export PATH="$HOME/.firebase/tools:$PATH"
-
-      - name: Authenticate with Firebase
-        uses: google-github-actions/auth@v1
-        with:
-          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
-
-      - name: List available Firebase Test Lab devices
-        run: |
-          run: |
-            echo "### Valid Devices ###"
-            gcloud firebase test android models list \
-              --format="value(model_id,version)" \
-              --filter="form_factor=PHONE AND version=30"
           
-      - name: Run Firebase Test Lab tests
-        run: |
-         gcloud firebase test android run \
-          --app ./app/build/outputs/apk/debug/app-debug.apk \
-          --device model=redfin,version=30 \  # Pixel 5
-          --timeout 5m
+          # Authenticate with Firebase
+          firebase login:ci --no-localhost
+          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}" > service-account.json
+          gcloud auth activate-service-account --key-file=service-account.json
+          
+          # List available devices with proper filtering
+          echo "=== Available Test Devices ==="
+          gcloud firebase test android models list \
+            --format="table[box](model_id,form_factor,version,supported_abis)" \
+            --filter="form_factor=PHONE"
+          
+          # Run test on confirmed working device
+          echo "=== Running Test ==="
+          gcloud firebase test android run \
+            --app ./app/build/outputs/apk/debug/app-debug.apk \
+            --type robo \
+            --device model=redfin,version=30,locale=en,orientation=portrait \
+            --timeout 5m
