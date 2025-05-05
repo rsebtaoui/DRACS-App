@@ -13,6 +13,16 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Verify project structure
+        run: |
+          ls -la
+          if [ ! -f "app/build.gradle" ]; then
+            echo "Error: app/build.gradle not found!"
+            echo "Current directory structure:"
+            find . -type f -name "build.gradle" || echo "No build.gradle files found"
+            exit 1
+          fi
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
@@ -25,6 +35,7 @@ jobs:
 
       - name: Create google-services.json
         run: |
+          mkdir -p app
           cat << 'EOF' > app/google-services.json
           {
             "project_info": {
@@ -59,41 +70,46 @@ jobs:
 
       - name: Update build.gradle for lint baseline
         run: |
-          # Find the correct place to insert lint configuration
-          if grep -q "android {" app/build.gradle; then
-            # Insert lint configuration inside existing android block
-            sed -i '/android {/a \    lint {\n        baseline = file("lint-baseline.xml")\n        abortOnError false\n    }' app/build.gradle
+          if [ -f "app/build.gradle" ]; then
+            if grep -q "android {" app/build.gradle; then
+              # Insert lint configuration inside existing android block
+              sed -i '/android {/a \    lint {\n        baseline = file("lint-baseline.xml")\n        abortOnError false\n    }' app/build.gradle
+            else
+              # Add full android block if not present
+              echo "android {" >> app/build.gradle
+              echo "    lint {" >> app/build.gradle
+              echo "        baseline = file(\"lint-baseline.xml\")" >> app/build.gradle
+              echo "        abortOnError false" >> app/build.gradle
+              echo "    }" >> app/build.gradle
+              echo "}" >> app/build.gradle
+            fi
           else
-            # Add full android block if not present
-            echo "android {" >> app/build.gradle
-            echo "    lint {" >> app/build.gradle
-            echo "        baseline = file(\"lint-baseline.xml\")" >> app/build.gradle
-            echo "        abortOnError false" >> app/build.gradle
-            echo "    }" >> app/build.gradle
-            echo "}" >> app/build.gradle
+            echo "Error: app/build.gradle not found!"
+            exit 1
           fi
 
       - name: Create lint baseline
         run: |
-          ./gradlew lintDebug -PupdateLintBaseline || echo "Lint baseline created (warnings ignored)"
-          # Verify baseline was created
+          ./gradlew :app:lintDebug -PupdateLintBaseline || echo "Lint baseline created (warnings ignored)"
           if [ -f "app/lint-baseline.xml" ]; then
             echo "Lint baseline file created successfully"
           else
             echo "Warning: Lint baseline file was not created"
+            # Try creating empty baseline as fallback
+            echo '<?xml version="1.0" encoding="UTF-8"?><issues format="5" by="lint 4.2.0"/>' > app/lint-baseline.xml
           fi
 
       - name: Build with Gradle
         run: ./gradlew build
 
       - name: Build Debug APK
-        run: ./gradlew assembleDebug
+        run: ./gradlew :app:assembleDebug
 
       - name: Build AndroidTest APK
-        run: ./gradlew assembleAndroidTest
+        run: ./gradlew :app:assembleAndroidTest
 
       - name: Verify APK files exist
-        run: ls -l ./app/build/outputs/apk/androidTest/debug/
+        run: ls -l app/build/outputs/apk/androidTest/debug/
 
       - name: Set up Google Cloud SDK
         run: |
@@ -110,6 +126,6 @@ jobs:
       - name: Run Firebase Test Lab tests
         run: |
           gcloud firebase test android run \
-            --app ./app/build/outputs/apk/debug/app-debug.apk \
+            --app app/build/outputs/apk/debug/app-debug.apk \
             --type robo \
             --timeout 5m
