@@ -51,4 +51,6 @@ jobs:
           --app app/build/outputs/apk/debug/app-debug.apk \
           --test app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk \
           --device model=Pixel_4,version=30,orientation=portrait,locale=en_US \
-          --timeout 30m 
+          --timeout 30m \
+          --type instrumentation \
+          --results-dir=test-results 
