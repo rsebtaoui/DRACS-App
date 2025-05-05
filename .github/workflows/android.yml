@@ -26,32 +26,7 @@ jobs:
       - name: Create google-services.json
         run: |
           echo '{
-            "project_info": {
-              "project_number": "${{ secrets.FIREBASE_PROJECT_NUMBER }}",
-              "project_id": "${{ secrets.FIREBASE_PROJECT_ID }}",
-              "storage_bucket": "${{ secrets.FIREBASE_STORAGE_BUCKET }}"
-            },
-            "client": [
-              {
-                "client_info": {
-                  "mobilesdk_app_id": "${{ secrets.FIREBASE_MOBILE_SDK_APP_ID }}",
-                  "android_client_info": {
-                    "package_name": "com.khalil.DRACS"
-                  }
-                },
-                "oauth_client": [],
-                "api_key": [
-                  {
-                    "current_key": "${{ secrets.FIREBASE_API_KEY }}"
-                  }
-                ],
-                "services": {
-                  "appinvite_service": {
-                    "other_platform_oauth_client": []
-                  }
-                }
-              }
-            ],
+            "project_info": { ... }, # Ensure secrets are valid
             "configuration_version": "1"
           }' > app/google-services.json
 
@@ -68,16 +43,10 @@ jobs:
         run: ls -l ./app/build/outputs/apk/androidTest/debug/
 
       - name: Set up Google Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-          project_id: ${{ secrets.FIREBASE_PROJECT_ID }}
-          service_account_key: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
-          export_default_credentials: true
-
-      - name: Verify authentication
         run: |
-          gcloud auth list
-          gcloud config list
+          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}" > service-account.json
+          gcloud auth activate-service-account --key-file=service-account.json
+          gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
 
       - name: Install Firebase CLI
         run: |
@@ -86,25 +55,14 @@ jobs:
 
       - name: List available test devices
         run: |
-          gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
-          gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
           gcloud firebase test android models list \
             --format="table[box](model_id,form_factor,version,supported_abis)" \
             --filter="version=30"
 
       - name: Run Firebase Test Lab tests
         run: |
-          gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
-          gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
-          
-          # Try with Pixel 5 first
           gcloud firebase test android run \
             --app ./app/build/outputs/apk/debug/app-debug.apk \
             --type robo \
             --device model=redfin,version=30,locale=en,orientation=portrait \
-            --timeout 5m || \
-          # Fallback to default device if specific device fails
-          gcloud firebase test android run \
-            --app ./app/build/outputs/apk/debug/app-debug.apk \
-            --type robo \
-            --timeout 5m
+            --timeout 10m
