@@ -39,6 +39,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
+
 public class PS extends Fragment {
     private RecyclerView recyclerView;
     private RecyclerView shimmerRecyclerView;
@@ -46,6 +48,7 @@ public class PS extends Fragment {
     private FirebaseFirestore db;
     private ShimmerFrameLayout shimmerContainer;
     private String targetSectionId = null;
+    private SwipeRefreshLayout swipeRefreshLayout;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -66,7 +69,6 @@ public class PS extends Fragment {
 
         // If no persistent data and no internet connection, show error and stay in home
         if (!hasPersistentData && !ConnectionUtils.isNetworkAvailable(requireContext())) {
-            Toast.makeText(requireContext(), "أولاً، تحتاج إلى اتصال بالإنترنت", Toast.LENGTH_LONG).show();
             // Navigate back to home
             NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
             navController.navigate(R.id.action_PS_to_home);
@@ -74,6 +76,10 @@ public class PS extends Fragment {
         }
 
         View view = inflater.inflate(R.layout.fragment_p_s, container, false);
+
+        // Initialize SwipeRefreshLayout
+        swipeRefreshLayout = view.findViewById(R.id.swipeRefreshLayout);
+        swipeRefreshLayout.setOnRefreshListener(this::refreshContent);
 
         // Initialize Firestore
         db = FirebaseFirestore.getInstance();
@@ -109,10 +115,6 @@ public class PS extends Fragment {
                         // Navigate back to HomeFragment using Navigation Component
                         NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
                         navController.navigate(R.id.action_PS_to_home);
-                        
-                        // Update bottom app bar selection
-                        Activity_main mainActivity = (Activity_main) requireActivity();
-                        mainActivity.updateBottomBarSelection(R.id.home);
                     }
                 }
         );
@@ -195,13 +197,13 @@ public class PS extends Fragment {
                                 // Mark that we have persistent data
                                 PersistentDataUtils.setHasPersistentData(getContext(), true);
                             } else {
-                                Toast.makeText(getContext(), "Failed to parse Firestore data", Toast.LENGTH_SHORT).show();
+                                // No need to show Toast here
                             }
                         } else {
-                            Toast.makeText(getContext(), "Document does not exist", Toast.LENGTH_SHORT).show();
+                            // No need to show Toast here
                         }
                     } else {
-                        Toast.makeText(getContext(), "Error getting document: " + task.getException(), Toast.LENGTH_SHORT).show();
+                        // No need to show Toast here
                     }
                 });
     }
@@ -210,10 +212,19 @@ public class PS extends Fragment {
         for (FirestoreModel.Section section : sections.values()) {
             if (section.getClickableWords() != null) {
                 for (FirestoreModel.ClickableWord cw : section.getClickableWords()) {
-                    if (cw.getActionType().equals("file")) {
+                    if (cw.getActionType().equals("download")) {
                         cw.setOnClickListener(v -> {
                             String filePath = cw.getActionValue();
                             FileUtils.showDownloadNotification(getContext(), Uri.parse(filePath));
+                        });
+                    } else if (cw.getActionType().equals("map")) {
+                        cw.setOnClickListener(v -> {
+                            String[] coords = cw.getActionValue().split(",");
+                            if (coords.length == 2) {
+                                double lat = Double.parseDouble(coords[0]);
+                                double lng = Double.parseDouble(coords[1]);
+                                FileUtils.openGoogleMaps(getContext(), lat, lng, "");
+                            }
                         });
                     } else if (cw.getActionType().equals("fragment")) {
                         cw.setOnClickListener(v -> {
@@ -226,23 +237,95 @@ public class PS extends Fragment {
         }
     }
 
+    private void handleClickableWordAction(String actionType, String actionValue) {
+        switch (actionType) {
+            case "download":
+                FileUtils.copyFileFromAssets(getContext(), actionValue);
+                break;
+            case "map":
+                String[] coords = actionValue.split(",");
+                if (coords.length == 2) {
+                    double lat = Double.parseDouble(coords[0]);
+                    double lng = Double.parseDouble(coords[1]);
+                    FileUtils.openGoogleMaps(getContext(), lat, lng, "");
+                }
+                break;
+        }
+    }
 
     @Override
     public void onStart() {
         super.onStart();
-        // Access the MainActivity
+        // Access the MainActivity and hide the bottom app bar
         Activity_main mainActivity = (Activity_main) requireActivity();
-        // Hide the bottom app bar
         mainActivity.hideBottomAppBar();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        // Access the MainActivity
+        // Access the MainActivity and show the bottom app bar
         Activity_main mainActivity = (Activity_main) requireActivity();
-        // Show the bottom app bar
         mainActivity.showBottomAppBar();
+    }
+
+    private void refreshContent() {
+        // Show shimmer effect while refreshing
+        shimmerContainer.startShimmer();
+        shimmerContainer.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+
+        // Clear the cached data
+        ((Activity_main) requireActivity()).getDataPreFetcher().clearCache("ps");
+
+        // Fetch fresh data from Firestore
+        db.collection("pages").document("ps")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
+                            if (finalModel != null) {
+                                // Cache the new data
+                                ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("ps", finalModel);
+                                
+                                // Set up UI with new data
+                                Map<String, FirestoreModel.Section> sections = finalModel.getSections();
+                                setupClickListeners(sections);
+                                adapter = new ExpandableAdapter(getContext(), sections);
+                                recyclerView.setAdapter(adapter);
+                                
+                                // Hide shimmer and show content
+                                shimmerContainer.stopShimmer();
+                                shimmerContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+
+                                // If we have a target section ID, expand it
+                                if (targetSectionId != null) {
+                                    recyclerView.post(() -> {
+                                        adapter.expandSection(targetSectionId);
+                                        // Find the position of the section to scroll to it
+                                        int position = 0;
+                                        for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
+                                            if (entry.getKey().equals(targetSectionId)) {
+                                                recyclerView.scrollToPosition(position);
+                                                break;
+                                            }
+                                            position++;
+                                        }
+                                    });
+                                }
+                            }
+                        }
+                    } else {
+                        // Show error toast if refresh fails
+                        Toast.makeText(getContext(), "Failed to refresh content", Toast.LENGTH_SHORT).show();
+                    }
+                    
+                    // Stop the refresh animation
+                    swipeRefreshLayout.setRefreshing(false);
+                });
     }
 
 }

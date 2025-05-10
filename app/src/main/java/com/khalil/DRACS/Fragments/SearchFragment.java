@@ -49,7 +49,7 @@ public class SearchFragment extends Fragment {
         
         // Hide bottom app bar when search is active
         Activity_main mainActivity = (Activity_main) requireActivity();
-//        mainActivity.hideBottomAppBar();
+        mainActivity.hideBottomAppBar();
 
         searchInput = view.findViewById(R.id.search_input);
         searchResultsList = view.findViewById(R.id.search_results_list);
@@ -253,26 +253,63 @@ public class SearchFragment extends Fragment {
         Bundle args = new Bundle();
         args.putString("target_section_id", targetSectionId);
         
-        // Navigate to the target fragment with the correct action ID
+        // Get the NavController and MainActivity
         NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
+        Activity_main mainActivity = (Activity_main) requireActivity();
+        
+        // Force hide bottom app bar
+        mainActivity.hideBottomAppBar();
         
         // Map the fragment class to the correct action ID
         int actionId;
+        final int destinationId;
+        
         if (targetFragmentClass == PS.class) {
             actionId = R.id.action_Search_to_PS;
+            destinationId = R.id.PS;
         } else if (targetFragmentClass == FDA.class) {
             actionId = R.id.action_Search_to_FDA;
+            destinationId = R.id.FDA;
         } else if (targetFragmentClass == FP.class) {
             actionId = R.id.action_Search_to_FP;
+            destinationId = R.id.FP;
         } else if (targetFragmentClass == JE.class) {
             actionId = R.id.action_Search_to_JE;
+            destinationId = R.id.JE;
         } else if (targetFragmentClass == RNA.class) {
             actionId = R.id.action_Search_to_RNA;
+            destinationId = R.id.RNA;
         } else {
             return; // Invalid fragment class
         }
         
+        // Ensure correct bottom bar visibility for target destination
+        mainActivity.updateBottomBarVisibilityForDestination(destinationId);
+        
+        // Navigate
         navController.navigate(actionId, args);
+        
+        // Post additional visibility updates with delays to ensure it applies after navigation
+        final View view = requireView(); // Capture view in final variable
+        view.postDelayed(() -> mainActivity.updateBottomBarVisibilityForDestination(destinationId), 100);
+        view.postDelayed(() -> mainActivity.updateBottomBarVisibilityForDestination(destinationId), 300);
+        view.postDelayed(() -> mainActivity.updateBottomBarVisibilityForDestination(destinationId), 500);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        // Show bottom app bar when returning to search
+        Activity_main mainActivity = (Activity_main) requireActivity();
+        mainActivity.showBottomAppBar();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        // Hide bottom app bar when leaving search
+        Activity_main mainActivity = (Activity_main) requireActivity();
+        mainActivity.hideBottomAppBar();
     }
 
     private boolean isDataLoaded(DataPreFetcher dataPreFetcher) {

@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".Fragments.home">
 
-    <ImageView
+    <com.khalil.DRACS.Views.InteractiveMapView
         android:id="@+id/cart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -65,10 +65,11 @@
                 app:layout_rowWeight="1" />
 
             <TextView
+                android:id="@+id/JE"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@drawable/rounded_corners_disabled"
+                android:background="@drawable/rounded_corners"
                 android:gravity="center"
                 android:padding="30dp"
                 android:text="@string/المقاولين_الشباب"
@@ -79,10 +80,11 @@
                 app:layout_rowWeight="1" />
 
             <TextView
+                android:id="@+id/FP"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@drawable/rounded_corners_disabled"
+                android:background="@drawable/rounded_corners"
                 android:gravity="center"
                 android:padding="30dp"
                 android:text="@string/التكوين_المهني"
@@ -93,10 +95,11 @@
                 app:layout_rowWeight="1" />
 
             <TextView
+                android:id="@+id/FDA"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="5dp"
-                android:background="@drawable/rounded_corners_disabled"
+                android:background="@drawable/rounded_corners"
                 android:gravity="center"
                 android:padding="30dp"
                 android:text="@string/صندوق_التنمية_الفلاحية"

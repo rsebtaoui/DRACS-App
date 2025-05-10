@@ -6,14 +6,12 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
@@ -88,11 +86,9 @@ public class Activity_main extends AppCompatActivity {
             if (packageName.equals("com.khalil.DRACS")) {
                 appUpdateManager = AppUpdateManagerFactory.create(this);
             } else {
-                Log.e("AppUpdate", "Package name mismatch: " + packageName);
                 return;
             }
         } catch (Exception e) {
-            Log.e("AppUpdate", "Error initializing AppUpdateManager: " + e.getMessage());
             return;
         }
         
@@ -145,16 +141,17 @@ public class Activity_main extends AppCompatActivity {
                 new ActivityResultContracts.StartIntentSenderForResult(),
                 result -> {
                     if (result.getResultCode() != RESULT_OK) {
-                        Log.w("Activity_main", "Update flow failed! Result code: " + result.getResultCode());
-                        Toast.makeText(this, "Update failed, try again later", Toast.LENGTH_SHORT).show();
+                        return;
                     }
                 });
 
         // Handling navigation
         navController = findNavController(this, R.id.navHostFragment);
         TextView textTitle = findViewById(R.id.title);
-        navController.addOnDestinationChangedListener((controller, destination, arguments) ->
-                textTitle.setText(destination.getLabel()));
+        navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
+            textTitle.setText(destination.getLabel());
+            handleDestinationChange(destination.getId());
+        });
 
         // Handling bottom nav bar navigation
         smoothBottomBar.setOnItemSelectedListener((OnItemSelectedListener) i -> {
@@ -177,9 +174,10 @@ public class Activity_main extends AppCompatActivity {
             return false;
         });
 
-        // Restore the last selected navigation item
-        int lastNavItem = prefs.getInt(KEY_LAST_NAV_ITEM, 0);
-        smoothBottomBar.setItemActiveIndex(lastNavItem);
+        // Initial visibility check
+        if (navController.getCurrentDestination() != null) {
+            handleDestinationChange(navController.getCurrentDestination().getId());
+        }
 
         // Move app update check to a background thread
         new Thread(() -> {
@@ -221,7 +219,6 @@ public class Activity_main extends AppCompatActivity {
 
     private void checkForAppUpdate() {
         if (appUpdateManager == null) {
-            Log.e("AppUpdate", "AppUpdateManager is null");
             return;
         }
 
@@ -238,23 +235,23 @@ public class Activity_main extends AppCompatActivity {
                                     activityResultLauncher,
                                     AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build());
                         } catch (Exception e) {
-                            Log.e("AppUpdate", "Error starting update flow: " + e.getMessage());
+                            return;
                         }
                     }
                 } catch (Exception e) {
-                    Log.e("AppUpdate", "Error checking update availability: " + e.getMessage());
+                    return;
                 }
             }).addOnFailureListener(e -> {
-                Log.e("AppUpdate", "Failed to get update info: " + e.getMessage());
+                return;
             });
 
             try {
                 appUpdateManager.registerListener(listener);
             } catch (Exception e) {
-                Log.e("AppUpdate", "Error registering update listener: " + e.getMessage());
+                return;
             }
         } catch (Exception e) {
-            Log.e("AppUpdate", "Error in checkForAppUpdate: " + e.getMessage());
+            return;
         }
     }
 
@@ -263,7 +260,6 @@ public class Activity_main extends AppCompatActivity {
         super.onResume();
 
         if (appUpdateManager == null) {
-            Log.e("AppUpdate", "AppUpdateManager is null in onResume");
             return;
         }
 
@@ -275,14 +271,14 @@ public class Activity_main extends AppCompatActivity {
                                 popupSnackbarForCompleteUpdate();
                             }
                         } catch (Exception e) {
-                            Log.e("AppUpdate", "Error checking install status: " + e.getMessage());
+                            return;
                         }
                     })
                     .addOnFailureListener(e -> {
-                        Log.e("AppUpdate", "Failed to get update info in onResume: " + e.getMessage());
+                        return;
                     });
         } catch (Exception e) {
-            Log.e("AppUpdate", "Error in onResume: " + e.getMessage());
+            return;
         }
     }
 
@@ -296,47 +292,76 @@ public class Activity_main extends AppCompatActivity {
                 try {
                     appUpdateManager.completeUpdate();
                 } catch (Exception e) {
-                    Log.e("AppUpdate", "Error completing update: " + e.getMessage());
+                    return;
                 }
             });
             snackbar.setActionTextColor(getResources().getColor(R.color.Emerald_Green_700));
             snackbar.show();
         } catch (Exception e) {
-            Log.e("AppUpdate", "Error showing update snackbar: " + e.getMessage());
+            return;
         }
     }
 
     public void hideBottomAppBar() {
-        // Access your bottom app bar view
-        SmoothBottomBar bottomAppBar = findViewById(R.id.bottomBar);
-
-        // Hide the bottom app bar
-        bottomAppBar.setVisibility(View.GONE);
+        if (smoothBottomBar != null) {
+            runOnUiThread(() -> {
+                smoothBottomBar.setVisibility(View.GONE);
+                smoothBottomBar.postInvalidate();
+            });
+        }
     }
 
     public void showBottomAppBar() {
-        // Access your bottom app bar view
-        SmoothBottomBar bottomAppBar = findViewById(R.id.bottomBar);
+        if (smoothBottomBar != null) {
+            runOnUiThread(() -> {
+                smoothBottomBar.setVisibility(View.VISIBLE);
+                smoothBottomBar.postInvalidate();
+            });
+        }
+    }
 
-        // Hide the bottom app bar
-        bottomAppBar.setVisibility(View.VISIBLE);
+    private void syncBottomBarWithFragment(int fragmentId) {
+        if (fragmentId == R.id.home) {
+            smoothBottomBar.setItemActiveIndex(0);
+            saveLastNavItem(0);
+            showBottomAppBar();
+        } else if (fragmentId == R.id.setting) {
+            smoothBottomBar.setItemActiveIndex(1);
+            saveLastNavItem(1);
+            showBottomAppBar();
+        } else if (fragmentId == R.id.Search) {
+            smoothBottomBar.setItemActiveIndex(2);
+            saveLastNavItem(2);
+            showBottomAppBar();
+        } else {
+            hideBottomAppBar();
+        }
+    }
+
+    private void handleDestinationChange(int destinationId) {
+        updateBottomBarVisibilityForDestination(destinationId);
+        
+        // Only sync bottom bar selection for main navigation destinations
+        if (destinationId == R.id.home || destinationId == R.id.setting || destinationId == R.id.Search) {
+            syncBottomBarWithFragment(destinationId);
+        }
     }
 
     public void updateBottomBarSelection(int itemId) {
-        // Access your bottom app bar view
-        SmoothBottomBar bottomAppBar = findViewById(R.id.bottomBar);
-        
-        // Update the selection
-        if (itemId == R.id.home) {
-            bottomAppBar.setItemActiveIndex(0);
-            saveLastNavItem(0);
-        } else if (itemId == R.id.setting) {
-            bottomAppBar.setItemActiveIndex(1);
-            saveLastNavItem(1);
-        } else if (itemId == R.id.Search) {
-            bottomAppBar.setItemActiveIndex(2);
-            saveLastNavItem(2);
-        }
+        runOnUiThread(() -> {
+            if (smoothBottomBar != null) {
+                if (itemId == R.id.home) {
+                    smoothBottomBar.setItemActiveIndex(0);
+                    saveLastNavItem(0);
+                } else if (itemId == R.id.setting) {
+                    smoothBottomBar.setItemActiveIndex(1);
+                    saveLastNavItem(1);
+                } else if (itemId == R.id.Search) {
+                    smoothBottomBar.setItemActiveIndex(2);
+                    saveLastNavItem(2);
+                }
+            }
+        });
     }
 
     private void saveLastNavItem(int index) {
@@ -344,5 +369,15 @@ public class Activity_main extends AppCompatActivity {
         SharedPreferences.Editor editor = prefs.edit();
         editor.putInt(KEY_LAST_NAV_ITEM, index);
         editor.apply();
+    }
+
+    // Method to manually set bottom app bar visibility 
+    // based on destination ID for search results navigation
+    public void updateBottomBarVisibilityForDestination(int destinationId) {
+        if (destinationId == R.id.home || destinationId == R.id.setting || destinationId == R.id.Search) {
+            showBottomAppBar();
+        } else {
+            hideBottomAppBar();
+        }
     }
 }

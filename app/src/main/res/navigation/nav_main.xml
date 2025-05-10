@@ -18,6 +18,15 @@
         <action
             android:id="@+id/action_home_to_PS"
             app:destination="@+id/PS" />
+        <action
+            android:id="@+id/action_home_to_FDA"
+            app:destination="@+id/FDA" />
+        <action
+            android:id="@+id/action_home_to_JE"
+            app:destination="@+id/JE" />
+        <action
+            android:id="@+id/action_home_to_FP"
+            app:destination="@+id/FP" />
     </fragment>
 
     <fragment
@@ -43,7 +52,7 @@
     <fragment
         android:id="@+id/FDA"
         android:name="com.khalil.DRACS.Fragments.FDA"
-        android:label="الحماية الاجتماعية"
+        android:label="صندوق التنمية الفلاحية"
         tools:layout="@layout/fragment_p_s" >
         <action
             android:id="@+id/action_FDA_to_home"
@@ -53,7 +62,7 @@
     <fragment
         android:id="@+id/JE"
         android:name="com.khalil.DRACS.Fragments.JE"
-        android:label="الحماية الاجتماعية"
+        android:label="المقاولين الشباب"
         tools:layout="@layout/fragment_p_s" >
         <action
             android:id="@+id/action_JE_to_home"
@@ -63,7 +72,7 @@
     <fragment
         android:id="@+id/FP"
         android:name="com.khalil.DRACS.Fragments.FP"
-        android:label="الحماية الاجتماعية"
+        android:label="التكوين المهني"
         tools:layout="@layout/fragment_p_s">
         <action
             android:id="@+id/action_FP_to_home"

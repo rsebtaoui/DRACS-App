@@ -32,10 +32,6 @@ public class SplashActivity extends AppCompatActivity {
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         boolean hasPersistentData = prefs.getBoolean(KEY_HAS_PERSISTENT_DATA, false);
 
-        if (hasPersistentData) {
-            Toast.makeText(this, "تم العثور على بيانات مستمرة", Toast.LENGTH_LONG).show();
-        }
-
         // Initialize data pre-fetcher
         dataPreFetcher = new DataPreFetcher(this);
         

@@ -1,19 +1,27 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".Fragments.RNA">
+    android:layout_height="match_parent">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
     <com.facebook.shimmer.ShimmerFrameLayout
         android:id="@+id/shimmerContainer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+            android:visibility="gone">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/shimmerRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent" />
+                android:layout_height="match_parent"
+                android:clipToPadding="false"
+                android:paddingTop="8dp"
+                android:paddingBottom="8dp" />
 
     </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -21,7 +29,10 @@
         android:id="@+id/rnarecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp"
-        android:visibility="gone" />
+            android:clipToPadding="false"
+            android:paddingTop="8dp"
+            android:paddingBottom="8dp" />
 
 </FrameLayout>
+
+</androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

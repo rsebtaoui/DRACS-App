@@ -167,6 +167,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/division_protection_sociale_number"
                             android:textSize="14sp"
+                            android:textColor="?attr/colorOnSurface"
                             android:autoLink="phone"
                             android:padding="8dp"/>
                     </LinearLayout>
@@ -190,6 +191,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/division_exploitations_number"
                             android:textSize="14sp"
+                            android:textColor="?attr/colorOnSurface"
                             android:autoLink="phone"
                             android:padding="8dp"/>
                     </LinearLayout>
@@ -213,6 +215,7 @@
                             android:layout_height="wrap_content"
                             android:text="@string/division_services_communs_number"
                             android:textSize="14sp"
+                            android:textColor="?attr/colorOnSurface"
                             android:autoLink="phone"
                             android:padding="8dp"/>
                     </LinearLayout>

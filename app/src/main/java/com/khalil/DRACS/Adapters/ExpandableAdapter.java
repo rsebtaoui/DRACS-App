@@ -7,6 +7,7 @@ import android.text.Spanned;
 import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.text.style.ClickableSpan;
+import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -80,15 +81,69 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
             fullContentBuilder.append(section.getConclusion());
         }
 
-        // 2. Create SpannableString for clickable words
+        // 2. Create SpannableString for all content
         SpannableString spannableString = new SpannableString(fullContentBuilder.toString());
-        int startIndex = 0;
+        String content = spannableString.toString();
 
-        // 3. Add clickable spans for clickable words
+        // 3. Process colored lines first (they should be under clickable words)
+        if (section.getColoredLines() != null) {
+            for (FirestoreModel.ColoredLine cl : section.getColoredLines()) {
+                String lineText = cl.getText();
+                if (lineText == null || lineText.isEmpty()) continue;
+
+                int startIndex = 0;
+                while (true) {
+                    int index = content.indexOf(lineText, startIndex);
+                    if (index == -1) break;
+
+                    try {
+                        String colorStr = cl.getColor();
+                        int color;
+                        if (colorStr == null || colorStr.isEmpty() || colorStr.equals("#000000") || colorStr.equalsIgnoreCase("#FF000000")) {
+                            color = ContextCompat.getColor(context, R.color.Emerald_Green_800);
+                        } else {
+                            color = Color.parseColor(colorStr);
+                        }
+                        spannableString.setSpan(
+                            new ForegroundColorSpan(color),
+                            index,
+                            index + lineText.length(),
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        );
+                    } catch (Exception e) {
+                        // Use default Emerald Green if color parsing fails
+                        spannableString.setSpan(
+                            new ForegroundColorSpan(ContextCompat.getColor(context, R.color.Emerald_Green_800)),
+                            index,
+                            index + lineText.length(),
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE
+                        );
+                    }
+                    startIndex = index + lineText.length();
+                }
+            }
+        }
+
+        // 4. Add clickable spans for clickable words (they should be on top of colored lines)
         if (section.getClickableWords() != null) {
-            for (FirestoreModel.ClickableWord cw : section.getClickableWords()) {
-                int endIndex = spannableString.toString().indexOf(cw.getText(), startIndex);
-                if (endIndex != -1) {
+            // Sort clickable words by their position in the text
+            List<FirestoreModel.ClickableWord> sortedWords = new ArrayList<>(section.getClickableWords());
+            sortedWords.sort((w1, w2) -> {
+                int pos1 = content.indexOf(w1.getText());
+                int pos2 = content.indexOf(w2.getText());
+                return Integer.compare(pos1, pos2);
+            });
+
+            // Process each word
+            for (FirestoreModel.ClickableWord cw : sortedWords) {
+                String word = cw.getText();
+                int startIndex = 0;
+                
+                // Find all occurrences of the word
+                while (true) {
+                    int index = content.indexOf(word, startIndex);
+                    if (index == -1) break;
+
                     ClickableSpan clickableSpan = new ClickableSpan() {
                         @Override
                         public void onClick(@NonNull View widget) {
@@ -101,21 +156,26 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
                         public void updateDrawState(@NonNull TextPaint ds) {
                             super.updateDrawState(ds);
                             try {
-                                int color = Color.parseColor(cw.getColor());
-                                ds.setColor(color);
+                                String colorStr = cw.getColor();
+                                if (colorStr == null || colorStr.isEmpty() || colorStr.equals("#000000") || colorStr.equalsIgnoreCase("#FF000000")) {
+                                    ds.setColor(ContextCompat.getColor(context, R.color.Emerald_Green_800));
+                                } else {
+                                    ds.setColor(Color.parseColor(colorStr));
+                                }
                             } catch (Exception e) {
                                 ds.setColor(ContextCompat.getColor(context, R.color.Emerald_Green_800));
                             }
                             ds.setUnderlineText(true);
                         }
                     };
-                    spannableString.setSpan(clickableSpan, endIndex, endIndex + cw.getText().length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-                    startIndex = endIndex + cw.getText().length();
+                    
+                    spannableString.setSpan(clickableSpan, index, index + word.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                    startIndex = index + word.length();
                 }
             }
         }
 
-        // 4. Set final content
+        // 5. Set final content
         holder.lists.setText(spannableString);
         holder.lists.setMovementMethod(LinkMovementMethod.getInstance());
 

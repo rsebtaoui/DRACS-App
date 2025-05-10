@@ -9,7 +9,6 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
@@ -76,10 +75,6 @@ public class settings extends Fragment {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("has_persistent_data", false);
             editor.apply();
-
-            Toast.makeText(requireContext(), 
-                "تم مسح ذاكرة التخزين المؤقت", 
-                Toast.LENGTH_SHORT).show();
         });
 
         // Set up contact section expansion

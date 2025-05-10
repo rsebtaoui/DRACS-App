@@ -34,8 +34,8 @@ public class FileUtils {
     // Create Notification Channel
     public static void createNotificationChannel(Context context) {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "Download Channel", NotificationManager.IMPORTANCE_DEFAULT);
-            channel.setDescription("Channel for download notifications");
+            NotificationChannel channel = new NotificationChannel(CHANNEL_ID, "قناة التحميل", NotificationManager.IMPORTANCE_DEFAULT);
+            channel.setDescription("قناة إشعارات التحميل");
             NotificationManager notificationManager = context.getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
@@ -48,9 +48,9 @@ public class FileUtils {
         // Check if we need to ask for notification permission (API level 33+)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             if (!NotificationManagerCompat.from(context).areNotificationsEnabled()) {
-                Toast.makeText(context, "enable the notification to receive the file path", Toast.LENGTH_SHORT).show();
                 // Request notification permission if it's not enabled
                 requestNotificationPermission(context);
+                Toast.makeText(context, "يرجى تفعيل الإشعارات للاستمرار", Toast.LENGTH_LONG).show();
                 return;  // Exit if permission is not granted
             }
         }
@@ -64,14 +64,17 @@ public class FileUtils {
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(android.R.drawable.stat_sys_download_done)
-                .setContentTitle("Download Complete")
-                .setContentText("File saved to: " + fileUri.getPath())
+                .setContentTitle("اكتمل التحميل")
+                .setContentText("تم حفظ الملف في: " + fileUri.getPath())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true);
 
         NotificationManager notificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         notificationManager.notify(NOTIFICATION_ID, builder.build());
+
+        // Add toast message
+        Toast.makeText(context, "تم تحميل الملف بنجاح!", Toast.LENGTH_SHORT).show();
     }
 
     // Request Notification Permission (API level 33+)
@@ -81,16 +84,21 @@ public class FileUtils {
         intent.putExtra(Settings.EXTRA_APP_PACKAGE, context.getPackageName());
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(intent);
+        Toast.makeText(context, "يرجى تفعيل الإشعارات للاستمرار", Toast.LENGTH_LONG).show();
     }
 
     // Copy file from assets to external storage (MediaStore)
     public static void copyFileFromAssets(Context context, String fileName) {
         if (Build.VERSION.SDK_INT <= Build.VERSION_CODES.O_MR1 && !hasRequiredPermissions(context)) {
             requestPermissions(context);
+            Toast.makeText(context, "يرجى منح أذونات التخزين للاستمرار", Toast.LENGTH_LONG).show();
             return; // Exit if permissions are not granted
         }
 
         createNotificationChannel(context);
+
+        // Show starting toast
+        Toast.makeText(context, "جاري بدء التحميل...", Toast.LENGTH_SHORT).show();
 
         // Generate a unique file name
         String uniqueFileName = System.currentTimeMillis() + "_" + fileName;
@@ -113,13 +121,14 @@ public class FileUtils {
                     outputStream.write(buffer, 0, length);
                 }
 
-                Toast.makeText(context, "File saved to Downloads!", Toast.LENGTH_SHORT).show();
                 showDownloadNotification(context, uri);
 
             } catch (IOException e) {
+                Toast.makeText(context, "حدث خطأ أثناء التحميل", Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
-                Toast.makeText(context, "Failed to save the file.", Toast.LENGTH_SHORT).show();
             }
+        } else {
+            Toast.makeText(context, "فشل في إنشاء الملف", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -160,7 +169,6 @@ public class FileUtils {
                 openYouTube(context, actionValue);
                 break;
             default:
-                Toast.makeText(context, "Action not supported", Toast.LENGTH_SHORT).show();
         }
     }
 
