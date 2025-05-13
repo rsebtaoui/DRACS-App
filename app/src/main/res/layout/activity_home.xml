@@ -20,13 +20,13 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/title"
-            android:layout_above="@+id/bottomBar"
+            android:layout_above="@+id/adContainer"
             android:layout_alignParentStart="true"
             android:layout_alignParentEnd="true"
             app:navGraph="@navigation/nav_main" />
 
         <ImageView
-            android:id="@+id/drawer_icon"
+            android:id="@+id/dracs"
             android:layout_width="40dp"
             android:layout_height="40dp"
             android:layout_alignParentStart="true"
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
             android:layout_toStartOf="@+id/notif_icon"
-            android:layout_toEndOf="@+id/drawer_icon"
+            android:layout_toEndOf="@+id/dracs"
             android:layoutDirection="rtl"
             android:text="@string/title"
             android:textAlignment="center"
@@ -66,6 +66,23 @@
             android:textDirection="rtl"
             android:textSize="22sp"
             android:textStyle="bold" />
+
+        <FrameLayout
+            android:id="@+id/adContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_above="@+id/bottomBar"
+            android:minHeight="50dp">
+
+            <com.google.android.gms.ads.AdView
+                android:id="@+id/adView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                app:adSize="BANNER"
+                app:adUnitId="ca-app-pub-4915614459591600/8541061303"/>
+
+        </FrameLayout>
 
         <me.ibrahimsn.lib.SmoothBottomBar
             android:id="@+id/bottomBar"

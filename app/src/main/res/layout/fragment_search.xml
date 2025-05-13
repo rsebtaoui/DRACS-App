@@ -13,6 +13,8 @@
         android:background="@drawable/search_background"
         android:padding="16dp"
         android:drawableStart="@drawable/baseline_search_24"
+        android:textColor="?android:attr/textColorPrimary"
+        android:textColorHint="?android:attr/textColorSecondary"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

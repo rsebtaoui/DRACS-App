@@ -2,6 +2,7 @@ plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
     id("org.jetbrains.kotlin.android")
+    id("com.google.firebase.crashlytics")
 }
 
 android {
@@ -69,14 +70,20 @@ dependencies {
     implementation("com.google.firebase:firebase-firestore-ktx")
     implementation("com.google.firebase:firebase-auth-ktx")
     
+    // Firebase Crashlytics
+    implementation("com.google.firebase:firebase-crashlytics")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
+    
     // Google Play Services - using the latest stable versions
     implementation("com.google.android.gms:play-services-base:18.7.0")
     implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.google.android.gms:play-services-tasks:18.3.0")
     implementation("com.google.android.gms:play-services-basement:18.7.0")
-
+    // AdMob
+    implementation("com.google.android.gms:play-services-ads:22.6.0")
+    // Gson for JSON parsing
+    implementation("com.google.code.gson:gson:2.10.1")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
-
     // AndroidX Core
     implementation("androidx.appcompat:appcompat:1.7.0")
     implementation("com.google.android.material:material:1.12.0")

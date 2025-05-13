@@ -12,6 +12,7 @@ import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
@@ -36,6 +37,9 @@ import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.DataPreFetcher;
+import com.google.android.gms.ads.MobileAds;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
@@ -48,6 +52,7 @@ public class Activity_main extends AppCompatActivity {
 
     SmoothBottomBar smoothBottomBar;
     NavController navController;
+    ImageView dracsicon;
     ImageView info;
     private AppUpdateManager appUpdateManager;
     private DataPreFetcher dataPreFetcher;
@@ -57,6 +62,7 @@ public class Activity_main extends AppCompatActivity {
         }
     };
     private ActivityResultLauncher<IntentSenderRequest> activityResultLauncher;
+    private AdView adView;
 
     public DataPreFetcher getDataPreFetcher() {
         return dataPreFetcher;
@@ -69,14 +75,10 @@ public class Activity_main extends AppCompatActivity {
         // Set window soft input mode to adjust resize
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         
-        // Apply saved theme
-        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        boolean isDarkMode = prefs.getBoolean(KEY_DARK_MODE, false);
-        if (isDarkMode) {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-        } else {
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-        }
+        // Initialize AdMob
+        MobileAds.initialize(this, initializationStatus -> {
+            // Initialization complete
+        });
         
         setContentView(R.layout.activity_home);
 
@@ -94,6 +96,11 @@ public class Activity_main extends AppCompatActivity {
         
         // Initialize DataPreFetcher
         dataPreFetcher = new DataPreFetcher(this);
+
+        dracsicon=findViewById(R.id.dracs);
+        dracsicon.setOnClickListener(v -> {
+            navController.navigate(R.id.about);
+        });
 
         // Define the views
         smoothBottomBar = findViewById(R.id.bottomBar);
@@ -123,7 +130,13 @@ public class Activity_main extends AppCompatActivity {
 
             popup.setOnMenuItemClickListener(item -> {
                 int itemId = item.getItemId();
-                if (itemId == R.id.share_app) {
+                if (itemId == R.id.visit_website) {
+                    visitWebsite();
+                    return true;
+                } else if (itemId == R.id.send_feedback) {
+                    sendFeedback();
+                    return true;
+                } else if (itemId == R.id.share_app) {
                     shareApp();
                     return true;
                 } else if (itemId == R.id.exite) {
@@ -156,7 +169,7 @@ public class Activity_main extends AppCompatActivity {
         // Handling bottom nav bar navigation
         smoothBottomBar.setOnItemSelectedListener((OnItemSelectedListener) i -> {
             // Save the selected item index
-            SharedPreferences.Editor editor = prefs.edit();
+            SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
             editor.putInt(KEY_LAST_NAV_ITEM, i);
             editor.apply();
 
@@ -165,10 +178,10 @@ public class Activity_main extends AppCompatActivity {
                     navController.navigate(R.id.home);
                     break;
                 case 1:
-                    navController.navigate(R.id.setting);
+                    navController.navigate(R.id.Search);
                     break;
                 case 2:
-                    navController.navigate(R.id.Search);
+                    navController.navigate(R.id.setting);
                     break;
             }
             return false;
@@ -188,6 +201,11 @@ public class Activity_main extends AppCompatActivity {
                 e.printStackTrace();
             }
         }).start();
+
+        // Initialize the AdView
+        adView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        adView.loadAd(adRequest);
     }
 
     private void shareApp() {
@@ -200,10 +218,22 @@ public class Activity_main extends AppCompatActivity {
     }
 
     private void visitWebsite() {
-        String url = "https://www.agriculture.gov.ma/"; // Replace with your actual website URL
+        String url = "https://www.agriculture.gov.ma/";
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         startActivity(intent);
+    }
+
+    private void sendFeedback() {
+        Intent intent = new Intent(Intent.ACTION_SENDTO);
+        intent.setData(Uri.parse("mailto:r.sebtaoui@agriculture.gov.ma"));
+        intent.putExtra(Intent.EXTRA_SUBJECT, "تقييم تطبيق المديرية الجهوية للفلاحة");
+        intent.putExtra(Intent.EXTRA_TEXT, "مرحباً،\n\nأود مشاركة رأيي حول التطبيق:\n\n");
+        try {
+            startActivity(Intent.createChooser(intent, "إرسال البريد الإلكتروني"));
+        } catch (android.content.ActivityNotFoundException ex) {
+            Toast.makeText(this, "لا يوجد تطبيق بريد إلكتروني مثبت", Toast.LENGTH_SHORT).show();
+        }
     }
 
     public void exitApp() {
@@ -256,8 +286,19 @@ public class Activity_main extends AppCompatActivity {
     }
 
     @Override
+    protected void onPause() {
+        if (adView != null) {
+            adView.pause();
+        }
+        super.onPause();
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
+        if (adView != null) {
+            adView.resume();
+        }
 
         if (appUpdateManager == null) {
             return;
@@ -325,11 +366,11 @@ public class Activity_main extends AppCompatActivity {
             smoothBottomBar.setItemActiveIndex(0);
             saveLastNavItem(0);
             showBottomAppBar();
-        } else if (fragmentId == R.id.setting) {
+        } else if (fragmentId == R.id.Search) {
             smoothBottomBar.setItemActiveIndex(1);
             saveLastNavItem(1);
             showBottomAppBar();
-        } else if (fragmentId == R.id.Search) {
+        } else if (fragmentId == R.id.setting) {
             smoothBottomBar.setItemActiveIndex(2);
             saveLastNavItem(2);
             showBottomAppBar();
@@ -353,10 +394,10 @@ public class Activity_main extends AppCompatActivity {
                 if (itemId == R.id.home) {
                     smoothBottomBar.setItemActiveIndex(0);
                     saveLastNavItem(0);
-                } else if (itemId == R.id.setting) {
+                } else if (itemId == R.id.Search) {
                     smoothBottomBar.setItemActiveIndex(1);
                     saveLastNavItem(1);
-                } else if (itemId == R.id.Search) {
+                } else if (itemId == R.id.setting) {
                     smoothBottomBar.setItemActiveIndex(2);
                     saveLastNavItem(2);
                 }
@@ -379,5 +420,13 @@ public class Activity_main extends AppCompatActivity {
         } else {
             hideBottomAppBar();
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        if (adView != null) {
+            adView.destroy();
+        }
+        super.onDestroy();
     }
 }

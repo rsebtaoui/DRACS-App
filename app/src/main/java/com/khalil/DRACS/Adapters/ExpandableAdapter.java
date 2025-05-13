@@ -158,7 +158,14 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
                             try {
                                 String colorStr = cw.getColor();
                                 if (colorStr == null || colorStr.isEmpty() || colorStr.equals("#000000") || colorStr.equalsIgnoreCase("#FF000000")) {
-                                    ds.setColor(ContextCompat.getColor(context, R.color.Emerald_Green_800));
+                                    // Use theme-aware color
+                                    ds.setColor(ContextCompat.getColor(context, R.color.Emerald_Green_700));
+                                    // Add alpha to make it more visible in dark mode
+                                    if (context.getResources().getConfiguration().uiMode == android.content.res.Configuration.UI_MODE_NIGHT_YES) {
+                                        ds.setAlpha(255); // Full opacity in dark mode
+                                    } else {
+                                        ds.setAlpha(230); // Slightly transparent in light mode
+                                    }
                                 } else {
                                     ds.setColor(Color.parseColor(colorStr));
                                 }

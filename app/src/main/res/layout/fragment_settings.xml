@@ -74,19 +74,13 @@
                 android:padding="16dp"
                 android:gravity="center_vertical">
 
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/clear_cache"
-                    android:textSize="16sp"/>
 
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/clear_cache_button"
-                    android:layout_width="wrap_content"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/clear_cache"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"/>
+                    android:text="@string/clear_cache" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
@@ -145,150 +139,49 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
-                    android:visibility="gone"
-                    android:layout_marginTop="16dp">
+                    android:visibility="gone">
 
-                    <!-- Division de la Protection Sociale -->
-                    <LinearLayout
+                    <!-- Responsible Person -->
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginBottom="16dp">
+                        android:text="المسؤول عن التطبيق"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="4dp"/>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/division_protection_sociale"
-                            android:textStyle="bold"
-                            android:textSize="16sp"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/division_protection_sociale_number"
-                            android:textSize="14sp"
-                            android:textColor="?attr/colorOnSurface"
-                            android:autoLink="phone"
-                            android:padding="8dp"/>
-                    </LinearLayout>
-
-                    <!-- Division des Exploitations -->
-                    <LinearLayout
+                    <!-- Phone Number -->
+                    <TextView
+                        android:id="@+id/phone_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginBottom="16dp">
+                        android:text="+212522346789"
+                        android:textSize="16sp"
+                        android:padding="8dp"
+                        android:layout_marginBottom="16dp"/>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/division_exploitations"
-                            android:textStyle="bold"
-                            android:textSize="16sp"/>
-
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/division_exploitations_number"
-                            android:textSize="14sp"
-                            android:textColor="?attr/colorOnSurface"
-                            android:autoLink="phone"
-                            android:padding="8dp"/>
-                    </LinearLayout>
-
-                    <!-- Division des Services Communs -->
-                    <LinearLayout
+                    <!-- Developer Info -->
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_marginBottom="16dp">
+                        android:text="مطور التطبيق"
+                        android:textSize="14sp"
+                        android:textStyle="bold"
+                        android:layout_marginBottom="4dp"/>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/division_services_communs"
-                            android:textStyle="bold"
-                            android:textSize="16sp"/>
+                    <!-- Developer Email -->
+                    <TextView
+                        android:id="@+id/developer_email"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="kamily.khalil@ucd.ma"
+                        android:textSize="16sp"
+                        android:padding="8dp"
+                        android:clickable="true"
+                        android:focusable="true"/>
 
-                        <TextView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:text="@string/division_services_communs_number"
-                            android:textSize="14sp"
-                            android:textColor="?attr/colorOnSurface"
-                            android:autoLink="phone"
-                            android:padding="8dp"/>
-                    </LinearLayout>
                 </LinearLayout>
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
-
-        <!-- About Section -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/about"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="16dp"/>
-
-        <!-- App Version -->
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            app:cardElevation="2dp"
-            app:cardCornerRadius="8dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:padding="16dp">
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/app_version"
-                    android:textSize="16sp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/مرحبا_بكم"
-                    android:textSize="14sp"
-                    android:layout_marginTop="8dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/تم_إنجاز_هذا_التطبيق"
-                    android:textSize="14sp"
-                    android:layout_marginTop="8dp" />
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/تم_تطوير_هذا"
-                    android:textSize="14sp"
-                    android:layout_marginTop="8dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/تم_تصميمه_من_طرف"
-                    android:textSize="14sp"
-                    android:layout_marginTop="8dp"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="@string/نتقدم_بالشكر_إلى"
-                    android:textSize="14sp"
-                    android:layout_marginTop="8dp"/>
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
     </LinearLayout>
 </ScrollView>

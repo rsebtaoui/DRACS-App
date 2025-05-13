@@ -1,6 +1,12 @@
 package com.khalil.DRACS.Fragments;
 
+import android.content.ActivityNotFoundException;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.content.SharedPreferences;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +15,8 @@ import android.view.animation.Animation;
 import android.view.animation.RotateAnimation;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
 import androidx.fragment.app.Fragment;
@@ -31,11 +39,17 @@ public class settings extends Fragment {
     private ImageView contactExpandIcon;
     private LinearLayout contactDetails;
     private boolean isContactExpanded = false;
+    private TextView phoneNumber;
+    private TextView developerEmail;
+    private ClipboardManager clipboard;
+    private Context context;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
+        context = requireContext();
+        clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
 
         // Initialize views
         darkModeSwitch = view.findViewById(R.id.dark_mode_switch);
@@ -43,6 +57,27 @@ public class settings extends Fragment {
         contactHeader = view.findViewById(R.id.contact_header);
         contactExpandIcon = view.findViewById(R.id.contact_expand_icon);
         contactDetails = view.findViewById(R.id.contact_details);
+        phoneNumber = view.findViewById(R.id.phone_number);
+        developerEmail = view.findViewById(R.id.developer_email);
+
+        // Set up phone number click listener
+        phoneNumber.setOnClickListener(v -> {
+            ClipData clip = ClipData.newPlainText("Phone Number", phoneNumber.getText().toString());
+            clipboard.setPrimaryClip(clip);
+            Toast.makeText(context, "تم نسخ رقم الهاتف", Toast.LENGTH_SHORT).show();
+        });
+
+        // Set up developer email click listener
+        developerEmail.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("mailto:" + developerEmail.getText().toString()));
+            intent.putExtra(Intent.EXTRA_SUBJECT, "تطبيق DRACS");
+            try {
+                startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(getContext(), "لا يوجد تطبيق بريد إلكتروني مثبت", Toast.LENGTH_SHORT).show();
+            }
+        });
 
         // Load saved preferences
         SharedPreferences prefs = requireActivity().getSharedPreferences(PREFS_NAME, 0);

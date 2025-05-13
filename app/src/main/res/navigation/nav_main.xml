@@ -87,6 +87,19 @@
         <action
             android:id="@+id/action_setting_to_home"
             app:destination="@id/home" />
+        <action
+            android:id="@+id/action_setting_to_about"
+            app:destination="@id/about" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/about"
+        android:name="com.khalil.DRACS.Fragments.About"
+        android:label="حول التطبيق"
+        tools:layout="@layout/fragment_about">
+        <action
+            android:id="@+id/action_about_to_home"
+            app:destination="@id/home" />
     </fragment>
 
     <fragment
@@ -112,19 +125,6 @@
         <action
             android:id="@+id/action_Search_to_FP"
             app:destination="@id/FP" />
-        <action
-            android:id="@+id/action_Search_to_About"
-            app:destination="@id/About" />
-    </fragment>
-
-    <fragment
-        android:id="@+id/About"
-        android:name="com.khalil.DRACS.Fragments.About"
-        android:label="معلومات"
-        tools:layout="@layout/fragment_about" >
-        <action
-            android:id="@+id/action_About_to_home"
-            app:destination="@id/home" />
     </fragment>
 
 </navigation>

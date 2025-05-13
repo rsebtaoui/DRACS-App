@@ -6,11 +6,12 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.Navigation;
 
-import com.khalil.DRACS.Avtivities.Activity_main;
+import com.google.android.material.button.MaterialButton;
 import com.khalil.DRACS.R;
 
 public class About extends Fragment {
@@ -31,23 +32,31 @@ public class About extends Fragment {
         super.onCreate(savedInstanceState);
     }
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+                           Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_about, container, false);
-        Button Update = view.findViewById(R.id.Update);
+        
+        MaterialButton updateButton = view.findViewById(R.id.Update);
+        updateButton.setOnClickListener(v -> openAppInPlayStore());
 
-        Update.setOnClickListener(v -> openAppInPlayStore());
+        // Set up back press handling
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Navigate back to settings
+                Navigation.findNavController(requireView()).navigate(R.id.action_about_to_home);
+            }
+        });
 
         return view;
     }
 
     // for the button of the update
     private void openAppInPlayStore() {
-        String testUrl = "https://play.google.com/store/apps/details?id=com.khalil.DRACS";
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(testUrl));
+        String appUrl = "https://play.google.com/store/apps/details?id=com.khalil.DRACS";
+        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(appUrl));
         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
     }

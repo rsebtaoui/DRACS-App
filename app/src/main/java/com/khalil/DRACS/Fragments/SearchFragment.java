@@ -194,7 +194,7 @@ public class SearchFragment extends Fragment {
         
         // Check introduction
         if (matchesQuery(section.getIntroduction(), query)) {
-            snippet.append("في المقدمة: ").append(getHighlightedText(section.getIntroduction(), query));
+            snippet.append(" ").append(getHighlightedText(section.getIntroduction(), query));
         }
         
         // Check dashes
@@ -202,7 +202,7 @@ public class SearchFragment extends Fragment {
             for (String dash : section.getDashes()) {
                 if (matchesQuery(dash, query)) {
                     if (snippet.length() > 0) snippet.append("\n");
-                    snippet.append("في العرض: ").append(getHighlightedText(dash, query));
+                    snippet.append(" ").append(getHighlightedText(dash, query));
                 }
             }
         }
@@ -210,12 +210,12 @@ public class SearchFragment extends Fragment {
         // Check conclusion
         if (matchesQuery(section.getConclusion(), query)) {
             if (snippet.length() > 0) snippet.append("\n");
-            snippet.append("في الخاتمة: ").append(getHighlightedText(section.getConclusion(), query));
+            snippet.append(" ").append(getHighlightedText(section.getConclusion(), query));
         }
         
         // If no match in intro, dashes, or conclusion, check title
         if (snippet.length() == 0 && matchesQuery(section.getTitle(), query)) {
-            snippet.append("في العنوان: ").append(getHighlightedText(section.getTitle(), query));
+            snippet.append(" ").append(getHighlightedText(section.getTitle(), query));
         }
         
         return snippet.toString();

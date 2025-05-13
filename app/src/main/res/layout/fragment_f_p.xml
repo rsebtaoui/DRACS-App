@@ -9,30 +9,30 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <com.facebook.shimmer.ShimmerFrameLayout
-            android:id="@+id/shimmerContainer"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+    <com.facebook.shimmer.ShimmerFrameLayout
+        android:id="@+id/shimmerContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
             android:visibility="gone">
 
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/shimmerRecyclerView"
-                android:layout_width="match_parent"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/shimmerRecyclerView"
+            android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
                 android:paddingTop="8dp"
                 android:paddingBottom="8dp" />
 
-        </com.facebook.shimmer.ShimmerFrameLayout>
+    </com.facebook.shimmer.ShimmerFrameLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/fprecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/fprecyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
             android:clipToPadding="false"
             android:paddingTop="8dp"
             android:paddingBottom="8dp" />
 
-    </FrameLayout>
+</FrameLayout>
 
 </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

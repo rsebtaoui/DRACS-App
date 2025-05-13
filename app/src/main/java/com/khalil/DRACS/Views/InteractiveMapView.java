@@ -18,23 +18,24 @@ import com.khalil.DRACS.R;
 
 public class InteractiveMapView extends AppCompatImageView {
     private OnMapRegionClickListener listener;
-    private Drawable pinDrawable;
+    private Drawable redPinDrawable;
+    private Drawable bluePinDrawable;
 
     private static final Region[] REGIONS = {
         // Sidi Bennour (centered pin)
         new Region(new PointF(0.28f, 0.83f), 0.07f, "Sidi Bennour", 33.6090340,-7.1259160),
-        // El Jadida
-        new Region(new PointF(0.22f, 0.59f), 0.07f, "El Jadida", 33.247973, -8.502161),
+        // El Jadida (red pin)
+        new Region(new PointF(0.22f, 0.59f), 0.07f, "El Jadida", 33.2481510, -8.5023600, true),
+        // El Jadida (blue pin)
+        new Region(new PointF(0.22f, 0.59f), 0.07f, "El Jadida", 33.2481510, -8.5023600, false),
         // Casablanca
-        new Region(new PointF(0.605f, 0.395f), 0.07f, "Casablanca", 33.594278, -7.601056),
-        // Mohammedia
-        new Region(new PointF(0.60f, 0.28f), 0.07f, "Mohammedia", 33.6866, -7.38298),
+        new Region(new PointF(0.605f, 0.395f), 0.07f, "Casablanca", 33.5835140, -7.6108030),
         // Berrechid
         new Region(new PointF(0.52f, 0.42f), 0.07f, "Berrechid", 33.264458, -7.581894),
         // Settat
         new Region(new PointF(0.71f, 0.76f), 0.07f, "Settat", 33.0100280, -7.6162690),
         // Ben Slimane
-        new Region(new PointF(0.79f, 0.23f), 0.07f, "Ben Slimane", 33.6151, -7.1306)
+        new Region(new PointF(0.79f, 0.23f), 0.07f, "Ben Slimane", 33.6090340, -7.1259160)
     };
 
     public InteractiveMapView(Context context) {
@@ -55,10 +56,14 @@ public class InteractiveMapView extends AppCompatImageView {
     private void init() {
         setClickable(true);
         setFocusable(true);
-        // Load the pin icon
-        pinDrawable = ContextCompat.getDrawable(getContext(), R.drawable.map_pin);
-        if (pinDrawable != null) {
-            pinDrawable.setBounds(0, 0, pinDrawable.getIntrinsicWidth(), pinDrawable.getIntrinsicHeight());
+        // Load the pin icons
+        redPinDrawable = ContextCompat.getDrawable(getContext(), R.drawable.map_pin);
+        bluePinDrawable = ContextCompat.getDrawable(getContext(), R.drawable.map_pin_blue);
+        if (redPinDrawable != null) {
+            redPinDrawable.setBounds(0, 0, redPinDrawable.getIntrinsicWidth(), redPinDrawable.getIntrinsicHeight());
+        }
+        if (bluePinDrawable != null) {
+            bluePinDrawable.setBounds(0, 0, bluePinDrawable.getIntrinsicWidth(), bluePinDrawable.getIntrinsicHeight());
         }
     }
 
@@ -66,26 +71,33 @@ public class InteractiveMapView extends AppCompatImageView {
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         
-        if (pinDrawable != null) {
-            // Draw pins for each region
-            for (Region region : REGIONS) {
-                // Calculate pixel position for the pin center
-                float centerX = region.center.x * getWidth();
-                float centerY = region.center.y * getHeight();
-                
-                // Save canvas state
-                canvas.save();
-                
-                // Translate to pin position (adjust for pin height)
-                canvas.translate(centerX - pinDrawable.getIntrinsicWidth() / 2,
-                              centerY - pinDrawable.getIntrinsicHeight());
-                
-                // Draw the pin
-                pinDrawable.draw(canvas);
-                
-                // Restore canvas state
-                canvas.restore();
+        // Draw pins for each region
+        for (Region region : REGIONS) {
+            // Calculate pixel position for the pin center
+            float centerX = region.center.x * getWidth();
+            float centerY = region.center.y * getHeight();
+            
+            // Save canvas state
+            canvas.save();
+            
+            // Get the appropriate pin drawable
+            Drawable pinDrawable = region.isRedPin ? redPinDrawable : bluePinDrawable;
+            
+            // For El Jadida region, adjust the position of the red pin to be slightly offset
+            if (region.name.equals("El Jadida") && region.isRedPin) {
+                // Offset the red pin slightly to the right
+                centerX += 20;
             }
+            
+            // Translate to pin position (adjust for pin height)
+            canvas.translate(centerX - pinDrawable.getIntrinsicWidth() / 2,
+                          centerY - pinDrawable.getIntrinsicHeight());
+            
+            // Draw the pin
+            pinDrawable.draw(canvas);
+            
+            // Restore canvas state
+            canvas.restore();
         }
     }
 
@@ -141,13 +153,19 @@ public class InteractiveMapView extends AppCompatImageView {
         String name;
         double latitude;
         double longitude;
+        boolean isRedPin;
 
         Region(PointF center, float radius, String name, double latitude, double longitude) {
+            this(center, radius, name, latitude, longitude, true);
+        }
+
+        Region(PointF center, float radius, String name, double latitude, double longitude, boolean isRedPin) {
             this.center = center;
             this.radius = radius;
             this.name = name;
             this.latitude = latitude;
             this.longitude = longitude;
+            this.isRedPin = isRedPin;
         }
 
         // Check if (x, y) is within the circle (x, y are relative 0.0-1.0, width is in px)

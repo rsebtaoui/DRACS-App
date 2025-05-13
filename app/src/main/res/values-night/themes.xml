@@ -8,7 +8,7 @@
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/Emerald_Green_200</item>
         <item name="colorSecondaryVariant">@color/Emerald_Green_500</item>
-        <item name="colorOnSecondary">@color/dark_surface</item>
+        <item name="colorOnSecondary">@color/white</item>
         <!-- Background colors -->
         <item name="android:colorBackground">@color/dark_background</item>
         <item name="colorSurface">@color/dark_surface</item>

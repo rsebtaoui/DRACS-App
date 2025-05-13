@@ -34,6 +34,7 @@ import com.khalil.DRACS.Models.FirestoreModel;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.FileUtils;
 import com.khalil.DRACS.Utils.PersistentDataUtils;
+import com.khalil.DRACS.Utils.CrashlyticsUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -156,6 +157,7 @@ public class PS extends Fragment {
         }
 
         // Fallback to direct Firestore fetch if pre-fetched data is not available
+        try {
         db.collection("pages").document("ps")
                 .get()
                 .addOnCompleteListener(task -> {
@@ -197,15 +199,23 @@ public class PS extends Fragment {
                                 // Mark that we have persistent data
                                 PersistentDataUtils.setHasPersistentData(getContext(), true);
                             } else {
-                                // No need to show Toast here
+                                    CrashlyticsUtils.logError(new Exception("FirestoreModel is null"), "Failed to parse PS data");
+                                    Toast.makeText(getContext(), "Error loading content", Toast.LENGTH_SHORT).show();
+                                }
+                            } else {
+                                CrashlyticsUtils.logError(new Exception("Document does not exist"), "PS document not found in Firestore");
+                                Toast.makeText(getContext(), "Content not found", Toast.LENGTH_SHORT).show();
                             }
                         } else {
-                            // No need to show Toast here
+                            Exception e = task.getException();
+                            if (e != null) {
+                                CrashlyticsUtils.handleNetworkException(e, getContext(), "fetching PS data");
+                            }
                         }
-                    } else {
-                        // No need to show Toast here
+                    });
+        } catch (Exception e) {
+            CrashlyticsUtils.handleNetworkException(e, getContext(), "initializing PS data fetch");
                     }
-                });
     }
 
     private void setupClickListeners(Map<String, FirestoreModel.Section> sections) {
@@ -278,54 +288,67 @@ public class PS extends Fragment {
         // Clear the cached data
         ((Activity_main) requireActivity()).getDataPreFetcher().clearCache("ps");
 
-        // Fetch fresh data from Firestore
-        db.collection("pages").document("ps")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
-                            if (finalModel != null) {
-                                // Cache the new data
-                                ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("ps", finalModel);
-                                
-                                // Set up UI with new data
-                                Map<String, FirestoreModel.Section> sections = finalModel.getSections();
-                                setupClickListeners(sections);
-                                adapter = new ExpandableAdapter(getContext(), sections);
-                                recyclerView.setAdapter(adapter);
-                                
-                                // Hide shimmer and show content
-                                shimmerContainer.stopShimmer();
-                                shimmerContainer.setVisibility(View.GONE);
-                                recyclerView.setVisibility(View.VISIBLE);
+        try {
+            // Fetch fresh data from Firestore
+            db.collection("pages").document("ps")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
+                                if (finalModel != null) {
+                                    // Cache the new data
+                                    ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("ps", finalModel);
+                                    
+                                    // Set up UI with new data
+                                    Map<String, FirestoreModel.Section> sections = finalModel.getSections();
+                                    setupClickListeners(sections);
+                                    adapter = new ExpandableAdapter(getContext(), sections);
+                                    recyclerView.setAdapter(adapter);
+                                    
+                                    // Hide shimmer and show content
+                                    shimmerContainer.stopShimmer();
+                                    shimmerContainer.setVisibility(View.GONE);
+                                    recyclerView.setVisibility(View.VISIBLE);
 
-                                // If we have a target section ID, expand it
-                                if (targetSectionId != null) {
-                                    recyclerView.post(() -> {
-                                        adapter.expandSection(targetSectionId);
-                                        // Find the position of the section to scroll to it
-                                        int position = 0;
-                                        for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
-                                            if (entry.getKey().equals(targetSectionId)) {
-                                                recyclerView.scrollToPosition(position);
-                                                break;
+                                    // If we have a target section ID, expand it
+                                    if (targetSectionId != null) {
+                                        recyclerView.post(() -> {
+                                            adapter.expandSection(targetSectionId);
+                                            // Find the position of the section to scroll to it
+                                            int position = 0;
+                                            for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
+                                                if (entry.getKey().equals(targetSectionId)) {
+                                                    recyclerView.scrollToPosition(position);
+                                                    break;
+                                                }
+                                                position++;
                                             }
-                                            position++;
-                                        }
-                                    });
+                                        });
+                                    }
+                                } else {
+                                    CrashlyticsUtils.logError(new Exception("FirestoreModel is null"), "Failed to parse PS data during refresh");
+                                    Toast.makeText(getContext(), "Error refreshing content", Toast.LENGTH_SHORT).show();
                                 }
+                            } else {
+                                CrashlyticsUtils.logError(new Exception("Document does not exist"), "PS document not found in Firestore during refresh");
+                                Toast.makeText(getContext(), "Content not found", Toast.LENGTH_SHORT).show();
+                            }
+                        } else {
+                            Exception e = task.getException();
+                            if (e != null) {
+                                CrashlyticsUtils.handleNetworkException(e, getContext(), "refreshing PS data");
                             }
                         }
-                    } else {
-                        // Show error toast if refresh fails
-                        Toast.makeText(getContext(), "Failed to refresh content", Toast.LENGTH_SHORT).show();
-                    }
-                    
-                    // Stop the refresh animation
-                    swipeRefreshLayout.setRefreshing(false);
-                });
+                        
+                        // Stop the refresh animation
+                        swipeRefreshLayout.setRefreshing(false);
+                    });
+        } catch (Exception e) {
+            CrashlyticsUtils.handleNetworkException(e, getContext(), "initializing PS data refresh");
+            swipeRefreshLayout.setRefreshing(false);
+        }
     }
 
 }
