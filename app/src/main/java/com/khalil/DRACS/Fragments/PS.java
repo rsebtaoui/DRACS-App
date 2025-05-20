@@ -140,65 +140,43 @@ public class PS extends Fragment {
 
             // Expand target section if we have one
             if (targetSectionId != null) {
-                recyclerView.post(() -> {
-                    adapter.expandSection(targetSectionId);
-                    // Find the position of the section to scroll to it
-                    int position = 0;
-                    for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
-                        if (entry.getKey().equals(targetSectionId)) {
-                            recyclerView.scrollToPosition(position);
-                            break;
-                        }
-                        position++;
-                    }
-                });
+                expandTargetSection(sections);
             }
             return;
         }
 
         // Fallback to direct Firestore fetch if pre-fetched data is not available
         try {
-        db.collection("pages").document("ps")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
-                            if (finalModel != null) {
-                                // Cache the data for future use
-                                ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("ps", finalModel);
-                                
-                                // Set up UI
-                                Map<String, FirestoreModel.Section> sections = finalModel.getSections();
-                                setupClickListeners(sections);
-                                adapter = new ExpandableAdapter(getContext(), sections);
-                                recyclerView.setAdapter(adapter);
-                                
-                                // Hide shimmer and show content
-                                shimmerContainer.stopShimmer();
-                                shimmerContainer.setVisibility(View.GONE);
-                                recyclerView.setVisibility(View.VISIBLE);
+            db.collection("pages").document("ps")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
+                                if (finalModel != null) {
+                                    // Cache the data for future use
+                                    ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("ps", finalModel);
+                                    
+                                    // Set up UI
+                                    Map<String, FirestoreModel.Section> sections = finalModel.getSections();
+                                    setupClickListeners(sections);
+                                    adapter = new ExpandableAdapter(getContext(), sections);
+                                    recyclerView.setAdapter(adapter);
+                                    
+                                    // Hide shimmer and show content
+                                    shimmerContainer.stopShimmer();
+                                    shimmerContainer.setVisibility(View.GONE);
+                                    recyclerView.setVisibility(View.VISIBLE);
 
-                                // If we have a target section ID from search, expand that section after UI is ready
-                                if (targetSectionId != null) {
-                                    recyclerView.post(() -> {
-                                        adapter.expandSection(targetSectionId);
-                                        // Find the position of the section to scroll to it
-                                        int position = 0;
-                                        for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
-                                            if (entry.getKey().equals(targetSectionId)) {
-                                                recyclerView.scrollToPosition(position);
-                                                break;
-                                            }
-                                            position++;
-                                        }
-                                    });
-                                }
+                                    // If we have a target section ID from search, expand that section after UI is ready
+                                    if (targetSectionId != null) {
+                                        expandTargetSection(sections);
+                                    }
 
-                                // Mark that we have persistent data
-                                PersistentDataUtils.setHasPersistentData(getContext(), true);
-                            } else {
+                                    // Mark that we have persistent data
+                                    PersistentDataUtils.setHasPersistentData(getContext(), true);
+                                } else {
                                     CrashlyticsUtils.logError(new Exception("FirestoreModel is null"), "Failed to parse PS data");
                                     Toast.makeText(getContext(), "Error loading content", Toast.LENGTH_SHORT).show();
                                 }
@@ -209,13 +187,13 @@ public class PS extends Fragment {
                         } else {
                             Exception e = task.getException();
                             if (e != null) {
-                                CrashlyticsUtils.handleNetworkException(e, getContext(), "fetching PS data");
+                                CrashlyticsUtils.handleNetworkException(e, getContext(), "initializing PS data fetch");
                             }
                         }
                     });
         } catch (Exception e) {
             CrashlyticsUtils.handleNetworkException(e, getContext(), "initializing PS data fetch");
-                    }
+        }
     }
 
     private void setupClickListeners(Map<String, FirestoreModel.Section> sections) {
@@ -348,6 +326,37 @@ public class PS extends Fragment {
         } catch (Exception e) {
             CrashlyticsUtils.handleNetworkException(e, getContext(), "initializing PS data refresh");
             swipeRefreshLayout.setRefreshing(false);
+        }
+    }
+
+    private void expandTargetSection(Map<String, FirestoreModel.Section> sections) {
+        // First attempt - immediate
+        tryExpandSection(sections, 0);
+
+        // Second attempt - after a short delay
+        recyclerView.postDelayed(() -> tryExpandSection(sections, 1), 300);
+
+        // Third attempt - after a longer delay
+        recyclerView.postDelayed(() -> tryExpandSection(sections, 2), 800);
+    }
+
+    private void tryExpandSection(Map<String, FirestoreModel.Section> sections, int attempt) {
+        try {
+            if (adapter != null && targetSectionId != null) {
+                adapter.expandSection(targetSectionId);
+                // Find the position of the section to scroll to it
+                int position = 0;
+                for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
+                    if (entry.getKey().equals(targetSectionId)) {
+                        recyclerView.scrollToPosition(position);
+                        break;
+                    }
+                    position++;
+                }
+            }
+        } catch (Exception e) {
+            // Log error but don't crash
+            e.printStackTrace();
         }
     }
 
