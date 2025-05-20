@@ -212,7 +212,7 @@ public class RNA extends Fragment {
                     if (cw.getActionType().equals("download")) {
                         cw.setOnClickListener(v -> {
                             String filePath = cw.getActionValue();
-                            FileUtils.showDownloadNotification(getContext(), Uri.parse(filePath));
+                            FileUtils.copyFileFromAssets(getContext(), filePath);
                         });
                     } else if (cw.getActionType().equals("map")) {
                         cw.setOnClickListener(v -> {
@@ -232,7 +232,7 @@ public class RNA extends Fragment {
     private void handleClickableWordAction(String actionType, String actionValue) {
         switch (actionType) {
             case "download":
-                FileUtils.showDownloadNotification(getContext(), Uri.parse(actionValue));
+                FileUtils.copyFileFromAssets(getContext(), actionValue);
                 break;
             case "map":
                 String[] coords = actionValue.split(",");

@@ -18,7 +18,10 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        android:maxLines="1"/>
+        android:singleLine="true"
+        android:maxLines="1"
+        android:inputType="text"
+        android:imeOptions="actionSearch"/>
 
     <ListView
         android:id="@+id/search_results_list"
