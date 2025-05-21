@@ -55,7 +55,7 @@ public class settings extends Fragment {
         darkModeSwitch = view.findViewById(R.id.dark_mode_switch);
         clearCacheButton = view.findViewById(R.id.clear_cache_button);
         contactHeader = view.findViewById(R.id.contact_header);
-        contactExpandIcon = view.findViewById(R.id.contact_expand_icon);
+//        contactExpandIcon = view.findViewById(R.id.contact_expand_icon);
         contactDetails = view.findViewById(R.id.contact_details);
         phoneNumber = view.findViewById(R.id.phone_number);
         developerEmail = view.findViewById(R.id.developer_email);
@@ -119,7 +119,7 @@ public class settings extends Fragment {
         contactHeader.setOnClickListener(v -> toggleContactExpansion());
 
         // Set up back press handling
-        requireActivity().getOnBackPressedDispatcher().addCallback(this, new OnBackPressedCallback(true) {
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 // Navigate back to home

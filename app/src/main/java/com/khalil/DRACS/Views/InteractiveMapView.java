@@ -23,19 +23,19 @@ public class InteractiveMapView extends AppCompatImageView {
 
     private static final Region[] REGIONS = {
         // Sidi Bennour (centered pin)
-        new Region(new PointF(0.28f, 0.83f), 0.07f, "Sidi Bennour", 33.6090340,-7.1259160),
+//        new Region(new PointF(0.28f, 0.83f), 0.07f, "Sidi Bennour", 33.6090340,-7.1259160),
         // El Jadida (red pin)
-        new Region(new PointF(0.22f, 0.59f), 0.07f, "El Jadida", 33.2481510, -8.5023600, true),
+        new Region(new PointF(0.22f, 0.59f), 0.07f, "المديرية الإقليمية للفلاحة للجديدة", 33.24792567109608, -8.502301629715236, true),
         // El Jadida (blue pin)
-        new Region(new PointF(0.22f, 0.59f), 0.07f, "El Jadida", 33.2481510, -8.5023600, false),
+        new Region(new PointF(0.24f, 0.49f), 0.07f, "المديرية الجهوية للفلاحة للدارالبيضاء - سطات ", 33.24382524367248, -8.494241677080327, false),
         // Casablanca
-        new Region(new PointF(0.605f, 0.395f), 0.07f, "Casablanca", 33.5835140, -7.6108030),
+        new Region(new PointF(0.605f, 0.395f), 0.07f, "المديرية الإقليمية للفلاحة للدار البيضاء", 33.5941745 ,-7.6009861),
         // Berrechid
-        new Region(new PointF(0.52f, 0.42f), 0.07f, "Berrechid", 33.264458, -7.581894),
+        new Region(new PointF(0.52f, 0.42f), 0.07f, "المديرية الإقليمية للفلاحة لبرشيد", 33.264458, -7.581894),
         // Settat
-        new Region(new PointF(0.71f, 0.76f), 0.07f, "Settat", 33.0100280, -7.6162690),
+        new Region(new PointF(0.71f, 0.76f), 0.07f, "المديرية الإقليمية للفلاحة سطات", 33.0100280, -7.6162690),
         // Ben Slimane
-        new Region(new PointF(0.79f, 0.23f), 0.07f, "Ben Slimane", 33.6090340, -7.1259160)
+        new Region(new PointF(0.79f, 0.23f), 0.07f, "المديرية الإقليمية للفلاحة بن سليمان", 33.60829239870801, -7.125387907097919)
     };
 
     public InteractiveMapView(Context context) {

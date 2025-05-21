@@ -29,45 +29,39 @@
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/app_version"
-                    android:textSize="18sp"
-                    android:textStyle="bold"
-                    android:gravity="center"/>
-
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
                     android:text="@string/مرحبا_بكم"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:layout_marginTop="16dp"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/تم_إنجاز_هذا_التطبيق"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:layout_marginTop="8dp"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/تم_تطوير_هذا"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:layout_marginTop="8dp"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:text="@string/تم_تصميمه_من_طرف"
-                    android:textSize="16sp"
+                    android:textSize="20sp"
                     android:layout_marginTop="8dp"/>
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@string/نتقدم_بالشكر_إلى"
-                    android:textSize="16sp"
-                    android:layout_marginTop="8dp"/>
+                    android:text="@string/app_version"
+                    android:layout_marginTop="20dp"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:gravity="center"/>
 
                 <!-- Update Button -->
                 <com.google.android.material.button.MaterialButton

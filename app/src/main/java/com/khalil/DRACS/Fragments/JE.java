@@ -139,7 +139,7 @@ public class JE extends Fragment {
 
     private void fetchDataFromFirestore() {
         // Try to get data from pre-fetcher first
-        final FirestoreModel model = ((Activity_main) requireActivity()).getDataPreFetcher().getCachedData("je");
+        FirestoreModel model = ((Activity_main) requireActivity()).getDataPreFetcher().getCachedData("je");
         if (model != null) {
             // Use pre-fetched data
             Map<String, FirestoreModel.Section> sections = model.getSections();
@@ -155,18 +155,7 @@ public class JE extends Fragment {
 
             // Expand target section if we have one
             if (targetSectionId != null) {
-                recyclerView.post(() -> {
-                    adapter.expandSection(targetSectionId);
-                    // Find the position of the section to scroll to it
-                    int position = 0;
-                    for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
-                        if (entry.getKey().equals(targetSectionId)) {
-                            recyclerView.scrollToPosition(position);
-                            break;
-                        }
-                        position++;
-                    }
-                });
+                expandTargetSection(sections);
             }
             return;
         }
@@ -197,18 +186,7 @@ public class JE extends Fragment {
 
                                 // If we have a target section ID from search, expand that section after UI is ready
                                 if (targetSectionId != null) {
-                                    recyclerView.post(() -> {
-                                        adapter.expandSection(targetSectionId);
-                                        // Find the position of the section to scroll to it
-                                        int position = 0;
-                                        for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
-                                            if (entry.getKey().equals(targetSectionId)) {
-                                                recyclerView.scrollToPosition(position);
-                                                break;
-                                            }
-                                            position++;
-                                        }
-                                    });
+                                    expandTargetSection(sections);
                                 }
 
                                 // Mark that we have persistent data
@@ -225,6 +203,37 @@ public class JE extends Fragment {
                 });
     }
 
+    private void expandTargetSection(Map<String, FirestoreModel.Section> sections) {
+        // First attempt - immediate
+        tryExpandSection(sections, 0);
+
+        // Second attempt - after a short delay
+        recyclerView.postDelayed(() -> tryExpandSection(sections, 1), 300);
+
+        // Third attempt - after a longer delay
+        recyclerView.postDelayed(() -> tryExpandSection(sections, 2), 800);
+    }
+
+    private void tryExpandSection(Map<String, FirestoreModel.Section> sections, int attempt) {
+        try {
+            if (adapter != null && targetSectionId != null) {
+                adapter.expandSection(targetSectionId);
+                // Find the position of the section to scroll to it
+                int position = 0;
+                for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
+                    if (entry.getKey().equals(targetSectionId)) {
+                        recyclerView.scrollToPosition(position);
+                        break;
+                    }
+                    position++;
+                }
+            }
+        } catch (Exception e) {
+            // Log error but don't crash
+            e.printStackTrace();
+        }
+    }
+
     private void showError(String message) {
         if (getView() != null) {
             Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
@@ -238,10 +247,19 @@ public class JE extends Fragment {
         for (FirestoreModel.Section section : sections.values()) {
             if (section.getClickableWords() != null) {
                 for (FirestoreModel.ClickableWord cw : section.getClickableWords()) {
-                    if (cw.getActionType().equals("file")) {
+                    if (cw.getActionType().equals("download")) {
                         cw.setOnClickListener(v -> {
                             String filePath = cw.getActionValue();
                             FileUtils.showDownloadNotification(getContext(), Uri.parse(filePath));
+                        });
+                    } else if (cw.getActionType().equals("map")) {
+                        cw.setOnClickListener(v -> {
+                            String[] coords = cw.getActionValue().split(",");
+                            if (coords.length == 2) {
+                                double lat = Double.parseDouble(coords[0]);
+                                double lng = Double.parseDouble(coords[1]);
+                                FileUtils.openGoogleMaps(getContext(), lat, lng, "");
+                            }
                         });
                     } else if (cw.getActionType().equals("fragment")) {
                         cw.setOnClickListener(v -> {

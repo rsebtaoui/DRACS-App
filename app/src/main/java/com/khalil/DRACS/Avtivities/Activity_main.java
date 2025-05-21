@@ -124,14 +124,14 @@ public class Activity_main extends AppCompatActivity {
 
             popup.setOnMenuItemClickListener(item -> {
                 int itemId = item.getItemId();
-                if (itemId == R.id.visit_website) {
-                    visitWebsite();
+                if (itemId == R.id.share_app) {
+                    shareApp();
                     return true;
                 } else if (itemId == R.id.send_feedback) {
                     sendFeedback();
                     return true;
-                } else if (itemId == R.id.share_app) {
-                    shareApp();
+                } else if (itemId == R.id.visit_website) {
+                    visitWebsite();
                     return true;
                 } else if (itemId == R.id.exite) {
                     exitApp();
@@ -225,7 +225,7 @@ public class Activity_main extends AppCompatActivity {
     }
 
     private void visitWebsite() {
-        String url = "https://www.agriculture.gov.ma/";
+        String url = "https://www.dracs.gov.ma/";
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
         try {

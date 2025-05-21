@@ -12,13 +12,13 @@
         android:padding="16dp">
 
         <!-- App Settings Section -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/app_settings"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginBottom="16dp"/>
+<!--        <TextView-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="@string/app_settings"-->
+<!--            android:textSize="20sp"-->
+<!--            android:textStyle="bold"-->
+<!--            android:layout_marginBottom="16dp"/>-->
 
         <!-- Dark Mode Switch -->
         <com.google.android.material.card.MaterialCardView
@@ -38,9 +38,10 @@
                 <TextView
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
+                    android:textSize="20sp"
+                    android:textStyle="bold"
                     android:layout_weight="1"
-                    android:text="@string/dark_theme"
-                    android:textSize="16sp"/>
+                    android:text="@string/dark_theme"/>
 
                 <com.google.android.material.switchmaterial.SwitchMaterial
                     android:id="@+id/dark_mode_switch"
@@ -49,15 +50,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Storage Section -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/storage"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:layout_marginTop="24dp"
-            android:layout_marginBottom="16dp"/>
 
         <!-- Clear Cache Button -->
         <com.google.android.material.card.MaterialCardView
@@ -66,6 +58,16 @@
             android:layout_marginBottom="8dp"
             app:cardElevation="2dp"
             app:cardCornerRadius="8dp">
+
+            <!-- Storage Section -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/storage"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginTop="24dp"
+                android:layout_marginBottom="16dp"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -114,23 +116,10 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:gravity="center_vertical"
-                    android:clickable="true"
+                    android:clickable="false"
                     android:focusable="true"
                     android:id="@+id/contact_header">
 
-                    <TextView
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:text="@string/contact_numbers"
-                        android:textSize="16sp"/>
-
-                    <ImageView
-                        android:id="@+id/contact_expand_icon"
-                        android:layout_width="24dp"
-                        android:layout_height="24dp"
-                        android:src="@drawable/ic_expand_more"
-                        app:tint="?attr/colorControlNormal"/>
                 </LinearLayout>
 
                 <!-- Contact Details (Initially Hidden) -->
@@ -138,8 +127,7 @@
                     android:id="@+id/contact_details"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:visibility="gone">
+                    android:orientation="vertical">
 
                     <!-- Responsible Person -->
                     <TextView
@@ -155,7 +143,7 @@
                         android:id="@+id/phone_number"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="+212522346789"
+                        android:text="@string/res_number"
                         android:textSize="16sp"
                         android:padding="8dp"
                         android:layout_marginBottom="16dp"/>
@@ -174,7 +162,7 @@
                         android:id="@+id/developer_email"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="kamily.khalil@ucd.ma"
+                        android:text="@string/kamily_khalil_ucd_ma"
                         android:textSize="16sp"
                         android:padding="8dp"
                         android:clickable="true"
