@@ -3,39 +3,31 @@ package com.khalil.DRACS.Fragments;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import com.khalil.DRACS.Utils.ConnectionUtils;
-import com.facebook.shimmer.ShimmerFrameLayout;
-import com.khalil.DRACS.Adapters.ExpandableAdapter;
-import com.khalil.DRACS.Adapters.ShimmerAdapter;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.khalil.DRACS.Adapters.ExpandableAdapter;
+import com.khalil.DRACS.Adapters.ShimmerAdapter;
 import com.khalil.DRACS.Avtivities.Activity_main;
 import com.khalil.DRACS.Models.FirestoreModel;
 import com.khalil.DRACS.R;
+import com.khalil.DRACS.Utils.ConnectionUtils;
 import com.khalil.DRACS.Utils.FileUtils;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class RNA extends Fragment {
@@ -66,6 +58,8 @@ public class RNA extends Fragment {
 
         // If no persistent data and no internet connection, show error and stay in home
         if (!hasPersistentData && !ConnectionUtils.isNetworkAvailable(requireContext())) {
+            // Show error toast
+            Toast.makeText(requireContext(), "تحتاج إلى اتصال بالإنترنت", Toast.LENGTH_LONG).show();
             // Navigate back to home
             NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
             navController.navigate(R.id.action_RNA_to_home);
@@ -262,6 +256,13 @@ public class RNA extends Fragment {
     }
 
     private void refreshContent() {
+        // Check for internet connection first
+        if (!ConnectionUtils.isNetworkAvailable(requireContext())) {
+            Toast.makeText(requireContext(), "تحتاج إلى اتصال بالإنترنت", Toast.LENGTH_LONG).show();
+            swipeRefreshLayout.setRefreshing(false);
+            return;
+        }
+
         // Show shimmer effect while refreshing
         shimmerContainer.startShimmer();
         shimmerContainer.setVisibility(View.VISIBLE);

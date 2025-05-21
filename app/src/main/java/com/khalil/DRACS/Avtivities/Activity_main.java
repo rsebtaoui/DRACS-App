@@ -2,6 +2,7 @@ package com.khalil.DRACS.Avtivities;
 
 import static androidx.navigation.Navigation.findNavController;
 
+import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -227,7 +228,11 @@ public class Activity_main extends AppCompatActivity {
         String url = "https://www.agriculture.gov.ma/";
         Intent intent = new Intent(Intent.ACTION_VIEW);
         intent.setData(Uri.parse(url));
-        startActivity(intent);
+        try {
+            startActivity(intent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(this, "لا يمكن فتح الموقع", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void sendFeedback() {

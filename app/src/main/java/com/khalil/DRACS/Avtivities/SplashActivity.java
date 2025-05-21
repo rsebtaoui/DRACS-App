@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatDelegate;
 
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.DataPreFetcher;
+import com.khalil.DRACS.Utils.ConnectionUtils;
 
 public class SplashActivity extends AppCompatActivity {
     private static final long SPLASH_DELAY = 500; // Reduced to 500ms

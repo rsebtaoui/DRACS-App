@@ -110,6 +110,9 @@ public class settings extends Fragment {
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("has_persistent_data", false);
             editor.apply();
+
+            // Show success toast
+            Toast.makeText(context, "تم مسح ذاكرة التخزين المؤقت بنجاح", Toast.LENGTH_SHORT).show();
         });
 
         // Set up contact section expansion

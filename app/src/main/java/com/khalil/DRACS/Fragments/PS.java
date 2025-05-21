@@ -70,6 +70,8 @@ public class PS extends Fragment {
 
         // If no persistent data and no internet connection, show error and stay in home
         if (!hasPersistentData && !ConnectionUtils.isNetworkAvailable(requireContext())) {
+            // Show error toast
+            Toast.makeText(requireContext(), "تحتاج إلى اتصال بالإنترنت", Toast.LENGTH_LONG).show();
             // Navigate back to home
             NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
             navController.navigate(R.id.action_PS_to_home);
@@ -258,6 +260,13 @@ public class PS extends Fragment {
     }
 
     private void refreshContent() {
+        // Check for internet connection first
+        if (!ConnectionUtils.isNetworkAvailable(requireContext())) {
+            Toast.makeText(requireContext(), "تحتاج إلى اتصال بالإنترنت", Toast.LENGTH_LONG).show();
+            swipeRefreshLayout.setRefreshing(false);
+            return;
+        }
+
         // Show shimmer effect while refreshing
         shimmerContainer.startShimmer();
         shimmerContainer.setVisibility(View.VISIBLE);

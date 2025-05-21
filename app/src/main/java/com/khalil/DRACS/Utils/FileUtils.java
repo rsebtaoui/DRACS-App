@@ -319,10 +319,8 @@ public class FileUtils {
     }
 
     private static void handleLocalFileCopy(Context context, String fileName) {
-        // Original code for copying from assets
         // Check for storage permissions
         if (!hasRequiredPermissions(context)) {
-            // Request permissions and return - the download will be triggered again when permissions are granted
             requestPermissions((Activity) context);
             return;
         }
@@ -331,17 +329,15 @@ public class FileUtils {
             // First check if the file exists in assets
             String[] files = context.getAssets().list("");
             boolean fileFound = false;
-            StringBuilder fileList = new StringBuilder("Available files: ");
             for (String file : files) {
-                fileList.append(file).append(", ");
                 if (file.equals(fileName)) {
                     fileFound = true;
+                    break;
                 }
             }
-            Toast.makeText(context, fileList.toString(), Toast.LENGTH_LONG).show();
 
             if (!fileFound) {
-                Toast.makeText(context, "File not found in assets: " + fileName, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "لم يتم العثور على الملف: " + fileName, Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -349,20 +345,19 @@ public class FileUtils {
             File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             if (!downloadDir.exists()) {
                 if (!downloadDir.mkdirs()) {
-                    Toast.makeText(context, "Cannot create Downloads directory: " + downloadDir.getAbsolutePath(), Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "لا يمكن إنشاء مجلد التنزيلات", Toast.LENGTH_LONG).show();
                     return;
                 }
             }
 
             // Create the output file
             File outputFile = new File(downloadDir, fileName);
-            Toast.makeText(context, "Saving to: " + outputFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
 
             // Try to open the input file first
             try {
                 context.getAssets().open(fileName);
             } catch (IOException e) {
-                Toast.makeText(context, "Cannot open input file: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "لا يمكن فتح الملف: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -380,16 +375,16 @@ public class FileUtils {
 
                 // Verify the file was created
                 if (outputFile.exists() && outputFile.length() > 0) {
-                    Toast.makeText(context, "تم تحميل الملف بنجاح (" + totalBytes + " bytes)", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "تم تحميل الملف بنجاح", Toast.LENGTH_LONG).show();
                 } else {
-                    Toast.makeText(context, "Failed to save file - file is empty or doesn't exist", Toast.LENGTH_LONG).show();
+                    Toast.makeText(context, "فشل حفظ الملف", Toast.LENGTH_LONG).show();
                 }
             } catch (IOException e) {
-                Toast.makeText(context, "Error during copy: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "خطأ أثناء النسخ: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
         } catch (Exception e) {
-            Toast.makeText(context, "Unexpected error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+            Toast.makeText(context, "حدث خطأ غير متوقع: " + e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }
     }
