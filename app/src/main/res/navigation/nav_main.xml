@@ -63,7 +63,7 @@
         android:id="@+id/JE"
         android:name="com.khalil.DRACS.Fragments.JE"
         android:label="المقاولين الشباب"
-        tools:layout="@layout/fragment_p_s" >
+        tools:layout="@layout/fragment_j_e" >
         <action
             android:id="@+id/action_JE_to_home"
             app:destination="@id/home" />

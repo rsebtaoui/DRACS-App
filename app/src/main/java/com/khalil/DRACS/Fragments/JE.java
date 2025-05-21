@@ -3,40 +3,32 @@ package com.khalil.DRACS.Fragments;
 import static android.content.Context.MODE_PRIVATE;
 
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
-import com.khalil.DRACS.Utils.ConnectionUtils;
-import com.facebook.shimmer.ShimmerFrameLayout;
-import com.khalil.DRACS.Adapters.ExpandableAdapter;
-import com.khalil.DRACS.Adapters.ShimmerAdapter;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import com.google.android.material.snackbar.Snackbar;
+import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.khalil.DRACS.Adapters.ExpandableAdapter;
+import com.khalil.DRACS.Adapters.ShimmerAdapter;
 import com.khalil.DRACS.Avtivities.Activity_main;
 import com.khalil.DRACS.Models.FirestoreModel;
 import com.khalil.DRACS.R;
+import com.khalil.DRACS.Utils.ConnectionUtils;
 import com.khalil.DRACS.Utils.FileUtils;
 import com.khalil.DRACS.Utils.PersistentDataUtils;
-import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class JE extends Fragment {
@@ -51,7 +43,7 @@ public class JE extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         // Get section ID from arguments
         if (getArguments() != null) {
             targetSectionId = getArguments().getString("target_section_id");
@@ -91,6 +83,11 @@ public class JE extends Fragment {
         shimmerRecyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         shimmerContainer = view.findViewById(R.id.shimmerContainer);
 
+        // Get target section ID from arguments if available
+        if (getArguments() != null) {
+            targetSectionId = getArguments().getString("target_section_id");
+        }
+
         // Set up shimmer adapter
         shimmerRecyclerView.setAdapter(new ShimmerAdapter());
 
@@ -115,26 +112,6 @@ public class JE extends Fragment {
         );
 
         return view;
-    }
-
-    private void refreshContent() {
-        // Check for internet connection first
-        if (!ConnectionUtils.isNetworkAvailable(requireContext())) {
-            Toast.makeText(requireContext(), "تحتاج إلى اتصال بالإنترنت", Toast.LENGTH_LONG).show();
-            swipeRefreshLayout.setRefreshing(false);
-            return;
-        }
-
-        // Clear the cache for this page
-        ((Activity_main) requireActivity()).getDataPreFetcher().clearCache("je");
-        
-        // Show shimmer effect
-        shimmerContainer.startShimmer();
-        shimmerContainer.setVisibility(View.VISIBLE);
-        recyclerView.setVisibility(View.GONE);
-        
-        // Fetch fresh data
-        fetchDataFromFirestore();
     }
 
     private void fetchDataFromFirestore() {
@@ -234,15 +211,6 @@ public class JE extends Fragment {
         }
     }
 
-    private void showError(String message) {
-        if (getView() != null) {
-            Snackbar.make(getView(), message, Snackbar.LENGTH_LONG).show();
-        }
-        swipeRefreshLayout.setRefreshing(false);
-        shimmerContainer.stopShimmer();
-        shimmerContainer.setVisibility(View.GONE);
-    }
-
     private void setupClickListeners(Map<String, FirestoreModel.Section> sections) {
         for (FirestoreModel.Section section : sections.values()) {
             if (section.getClickableWords() != null) {
@@ -250,7 +218,7 @@ public class JE extends Fragment {
                     if (cw.getActionType().equals("download")) {
                         cw.setOnClickListener(v -> {
                             String filePath = cw.getActionValue();
-                            FileUtils.showDownloadNotification(getContext(), Uri.parse(filePath));
+                            FileUtils.copyFileFromAssets(getContext(), filePath);
                         });
                     } else if (cw.getActionType().equals("map")) {
                         cw.setOnClickListener(v -> {
@@ -261,14 +229,25 @@ public class JE extends Fragment {
                                 FileUtils.openGoogleMaps(getContext(), lat, lng, "");
                             }
                         });
-                    } else if (cw.getActionType().equals("fragment")) {
-                        cw.setOnClickListener(v -> {
-                            NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
-                            navController.navigate(Integer.parseInt(cw.getActionValue()));
-                        });
                     }
                 }
             }
+        }
+    }
+
+    private void handleClickableWordAction(String actionType, String actionValue) {
+        switch (actionType) {
+            case "download":
+                FileUtils.copyFileFromAssets(getContext(), actionValue);
+                break;
+            case "map":
+                String[] coords = actionValue.split(",");
+                if (coords.length == 2) {
+                    double lat = Double.parseDouble(coords[0]);
+                    double lng = Double.parseDouble(coords[1]);
+                    FileUtils.openGoogleMaps(getContext(), lat, lng, "");
+                }
+                break;
         }
     }
 
@@ -287,4 +266,64 @@ public class JE extends Fragment {
         Activity_main mainActivity = (Activity_main) requireActivity();
         mainActivity.showBottomAppBar();
     }
+
+    private void refreshContent() {
+        // Check for internet connection first
+        if (!ConnectionUtils.isNetworkAvailable(requireContext())) {
+            Toast.makeText(requireContext(), "تحتاج إلى اتصال بالإنترنت", Toast.LENGTH_LONG).show();
+            swipeRefreshLayout.setRefreshing(false);
+            return;
+        }
+
+        // Show shimmer effect while refreshing
+        shimmerContainer.startShimmer();
+        shimmerContainer.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+
+        // Clear the cached data
+        ((Activity_main) requireActivity()).getDataPreFetcher().clearCache("je");
+
+        // Fetch fresh data from Firestore
+        db.collection("pages").document("je")
+                .get()
+                .addOnCompleteListener(task -> {
+                    if (task.isSuccessful()) {
+                        DocumentSnapshot document = task.getResult();
+                        if (document.exists()) {
+                            final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
+                            if (finalModel != null) {
+                                // Cache the new data
+                                ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("je", finalModel);
+
+                                // Set up UI with new data
+                                Map<String, FirestoreModel.Section> sections = finalModel.getSections();
+                                setupClickListeners(sections);
+                                adapter = new ExpandableAdapter(getContext(), sections);
+                                recyclerView.setAdapter(adapter);
+
+                                // Hide shimmer and show content
+                                shimmerContainer.stopShimmer();
+                                shimmerContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+
+                                // If we have a target section ID, expand it
+                                if (targetSectionId != null) {
+                                    expandTargetSection(sections);
+                                }
+                            }
+                        }
+                    } else {
+                        // Show error toast if refresh fails
+                        Toast.makeText(getContext(), "Failed to refresh content", Toast.LENGTH_SHORT).show();
+                    }
+
+                    // Stop the refresh animation
+                    swipeRefreshLayout.setRefreshing(false);
+                });
+    }
+
+    private void showError(String message) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
+    }
+
 }
