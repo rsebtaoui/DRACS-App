@@ -157,6 +157,19 @@ public class Activity_main extends AppCompatActivity {
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             textTitle.setText(destination.getLabel());
             handleDestinationChange(destination.getId());
+            
+            // Update the icon based on destination
+            if (destination.getId() == R.id.home) {
+                dracsicon.setImageResource(R.mipmap.ic_dra_3);
+                dracsicon.setOnClickListener(v -> {
+                    navController.navigate(R.id.about);
+                });
+            } else {
+                dracsicon.setImageResource(R.drawable.ic_back);
+                dracsicon.setOnClickListener(v -> {
+                    navController.navigate(R.id.home);
+                });
+            }
         });
 
         // Handling bottom nav bar navigation
