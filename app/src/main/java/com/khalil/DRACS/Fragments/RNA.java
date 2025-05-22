@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.khalil.DRACS.Adapters.ExpandableAdapter;
@@ -162,6 +163,21 @@ public class RNA extends Fragment {
                                 if (targetSectionId != null) {
                                     expandTargetSection(sections);
                                 }
+
+                                // Check if this is the first successful connection
+                                SharedPreferences prefs = requireActivity().getSharedPreferences("DRACS_Prefs", MODE_PRIVATE);
+                                boolean hasPersistentData = prefs.getBoolean("has_persistent_data", false);
+                                if (!hasPersistentData) {
+                                    // This is the first successful connection, trigger full data prefetch
+                                    ((Activity_main) requireActivity()).getDataPreFetcher().startPreFetching(success -> {
+                                        if (success) {
+                                            // Mark that we have persistent data
+                                            SharedPreferences.Editor editor = prefs.edit();
+                                            editor.putBoolean("has_persistent_data", true);
+                                            editor.apply();
+                                        }
+                                    });
+                                }
                             }
                         }
                     }
@@ -182,21 +198,23 @@ public class RNA extends Fragment {
     private void tryExpandSection(Map<String, FirestoreModel.Section> sections, int attempt) {
         try {
             if (adapter != null && targetSectionId != null) {
-                                        adapter.expandSection(targetSectionId);
-                                        // Find the position of the section to scroll to it
-                                        int position = 0;
-                                        for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
-                                            if (entry.getKey().equals(targetSectionId)) {
-                                                recyclerView.scrollToPosition(position);
-                                                break;
-                                            }
-                                            position++;
-                                        }
-                                }
-        } catch (Exception e) {
-            // Log error but don't crash
-            e.printStackTrace();
+                adapter.expandSection(targetSectionId);
+                // Find the position of the section to scroll to it
+                int position = 0;
+                for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
+                    if (entry.getKey().equals(targetSectionId)) {
+                        recyclerView.scrollToPosition(position);
+                        break;
                     }
+                    position++;
+                }
+            }
+        } catch (Exception e) {
+            // Log error to Crashlytics
+            FirebaseCrashlytics.getInstance().recordException(e);
+            FirebaseCrashlytics.getInstance().log("Error expanding section in RNA fragment. Attempt: " + attempt);
+            e.printStackTrace();
+        }
     }
 
     private void setupClickListeners(Map<String, FirestoreModel.Section> sections) {

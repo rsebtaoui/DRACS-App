@@ -83,6 +83,7 @@ dependencies {
     implementation("com.google.android.gms:play-services-ads:22.6.0")
     // Gson for JSON parsing
     implementation("com.google.code.gson:gson:2.10.1")
+    implementation("com.google.firebase:firebase-firestore:25.1.4")
     coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.5")
     // AndroidX Core
     implementation("androidx.appcompat:appcompat:1.7.0")

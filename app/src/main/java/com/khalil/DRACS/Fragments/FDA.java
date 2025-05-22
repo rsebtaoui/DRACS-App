@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.khalil.DRACS.Adapters.ExpandableAdapter;
@@ -143,31 +144,26 @@ public class FDA extends Fragment {
         // Try to get data from pre-fetcher first
         FirestoreModel model = ((Activity_main) requireActivity()).getDataPreFetcher().getCachedData("fda");
         if (model != null) {
-            // Use pre-fetched data
-            Map<String, FirestoreModel.Section> sections = model.getSections();
-            setupClickListeners(sections);
-            adapter = new ExpandableAdapter(getContext(), sections);
-            recyclerView.setAdapter(adapter);
-            
-            // Hide shimmer and show content
-            shimmerContainer.stopShimmer();
-            shimmerContainer.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-            
-            // Expand target section if we have one
-            if (targetSectionId != null) {
-                recyclerView.post(() -> {
-                    adapter.expandSection(targetSectionId);
-                    // Find the position of the section to scroll to it
-                    int position = 0;
-                    for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
-                        if (entry.getKey().equals(targetSectionId)) {
-                            recyclerView.scrollToPosition(position);
-                            break;
-                        }
-                        position++;
-                    }
-                });
+            try {
+                // Use pre-fetched data
+                Map<String, FirestoreModel.Section> sections = model.getSections();
+                setupClickListeners(sections);
+                adapter = new ExpandableAdapter(getContext(), sections);
+                recyclerView.setAdapter(adapter);
+                
+                // Hide shimmer and show content
+                shimmerContainer.stopShimmer();
+                shimmerContainer.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                
+                // Expand target section if we have one
+                if (targetSectionId != null) {
+                    expandTargetSection(sections);
+                }
+            } catch (Exception e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
+                FirebaseCrashlytics.getInstance().log("Error processing pre-fetched data in FDA fragment");
+                showError("Error loading data");
             }
             return;
         }
@@ -179,39 +175,53 @@ public class FDA extends Fragment {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
-                            if (finalModel != null) {
-                                // Cache the data for future use
-                                ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("fda", finalModel);
-                                
-                                // Set up UI
-                                Map<String, FirestoreModel.Section> sections = finalModel.getSections();
-                                setupClickListeners(sections);
-                                adapter = new ExpandableAdapter(getContext(), sections);
-                                recyclerView.setAdapter(adapter);
-                                
-                                // Hide shimmer and show content
-                                shimmerContainer.stopShimmer();
-                                shimmerContainer.setVisibility(View.GONE);
-                                recyclerView.setVisibility(View.VISIBLE);
+                            try {
+                                final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
+                                if (finalModel != null) {
+                                    // Cache the data for future use
+                                    ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("fda", finalModel);
+                                    
+                                    // Set up UI
+                                    Map<String, FirestoreModel.Section> sections = finalModel.getSections();
+                                    setupClickListeners(sections);
+                                    adapter = new ExpandableAdapter(getContext(), sections);
+                                    recyclerView.setAdapter(adapter);
+                                    
+                                    // Hide shimmer and show content
+                                    shimmerContainer.stopShimmer();
+                                    shimmerContainer.setVisibility(View.GONE);
+                                    recyclerView.setVisibility(View.VISIBLE);
 
-                                // If we have a target section ID from search, expand that section after UI is ready
-                                if (targetSectionId != null) {
-                                    recyclerView.post(() -> {
-                                        adapter.expandSection(targetSectionId);
-                                        // Find the position of the section to scroll to it
-                                        int position = 0;
-                                        for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
-                                            if (entry.getKey().equals(targetSectionId)) {
-                                                recyclerView.scrollToPosition(position);
-                                                break;
+                                    // If we have a target section ID from search, expand that section after UI is ready
+                                    if (targetSectionId != null) {
+                                        expandTargetSection(sections);
+                                    }
+
+                                    // Check if this is the first successful connection
+                                    SharedPreferences prefs = requireActivity().getSharedPreferences("DRACS_Prefs", MODE_PRIVATE);
+                                    boolean hasPersistentData = prefs.getBoolean("has_persistent_data", false);
+                                    if (!hasPersistentData) {
+                                        // This is the first successful connection, trigger full data prefetch
+                                        ((Activity_main) requireActivity()).getDataPreFetcher().startPreFetching(success -> {
+                                            if (success) {
+                                                // Mark that we have persistent data
+                                                SharedPreferences.Editor editor = prefs.edit();
+                                                editor.putBoolean("has_persistent_data", true);
+                                                editor.apply();
                                             }
-                                            position++;
-                                        }
-                                    });
+                                        });
+                                    }
                                 }
+                            } catch (Exception e) {
+                                FirebaseCrashlytics.getInstance().recordException(e);
+                                FirebaseCrashlytics.getInstance().log("Error processing Firestore data in FDA fragment");
+                                showError("Error loading data");
                             }
                         }
+                    } else {
+                        FirebaseCrashlytics.getInstance().recordException(task.getException());
+                        FirebaseCrashlytics.getInstance().log("Error fetching data from Firestore in FDA fragment");
+                        showError("Error loading data");
                     }
                 });
     }
@@ -291,42 +301,38 @@ public class FDA extends Fragment {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
-                            if (finalModel != null) {
-                                // Cache the new data
-                                ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("fda", finalModel);
-                                
-                                // Set up UI with new data
-                                Map<String, FirestoreModel.Section> sections = finalModel.getSections();
-                                setupClickListeners(sections);
-                                adapter = new ExpandableAdapter(getContext(), sections);
-                                recyclerView.setAdapter(adapter);
-                                
-                                // Hide shimmer and show content
-                                shimmerContainer.stopShimmer();
-                                shimmerContainer.setVisibility(View.GONE);
-                                recyclerView.setVisibility(View.VISIBLE);
+                            try {
+                                final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
+                                if (finalModel != null) {
+                                    // Cache the new data
+                                    ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("fda", finalModel);
+                                    
+                                    // Set up UI with new data
+                                    Map<String, FirestoreModel.Section> sections = finalModel.getSections();
+                                    setupClickListeners(sections);
+                                    adapter = new ExpandableAdapter(getContext(), sections);
+                                    recyclerView.setAdapter(adapter);
+                                    
+                                    // Hide shimmer and show content
+                                    shimmerContainer.stopShimmer();
+                                    shimmerContainer.setVisibility(View.GONE);
+                                    recyclerView.setVisibility(View.VISIBLE);
 
-                                // If we have a target section ID, expand it
-                                if (targetSectionId != null) {
-                                    recyclerView.post(() -> {
-                                        adapter.expandSection(targetSectionId);
-                                        // Find the position of the section to scroll to it
-                                        int position = 0;
-                                        for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
-                                            if (entry.getKey().equals(targetSectionId)) {
-                                                recyclerView.scrollToPosition(position);
-                                                break;
-                                            }
-                                            position++;
-                                        }
-                                    });
+                                    // If we have a target section ID, expand it
+                                    if (targetSectionId != null) {
+                                        expandTargetSection(sections);
+                                    }
                                 }
+                            } catch (Exception e) {
+                                FirebaseCrashlytics.getInstance().recordException(e);
+                                FirebaseCrashlytics.getInstance().log("Error processing refreshed data in FDA fragment");
+                                showError("Error refreshing content");
                             }
                         }
                     } else {
-                        // Show error toast if refresh fails
-                        Toast.makeText(getContext(), "فشل تحديث المحتوى", Toast.LENGTH_SHORT).show();
+                        FirebaseCrashlytics.getInstance().recordException(task.getException());
+                        FirebaseCrashlytics.getInstance().log("Error refreshing data from Firestore in FDA fragment");
+                        showError("Error refreshing content");
                     }
                     
                     // Stop the refresh animation
@@ -334,4 +340,40 @@ public class FDA extends Fragment {
                 });
     }
 
+    private void expandTargetSection(Map<String, FirestoreModel.Section> sections) {
+        // First attempt - immediate
+        tryExpandSection(sections, 0);
+
+        // Second attempt - after a short delay
+        recyclerView.postDelayed(() -> tryExpandSection(sections, 1), 300);
+
+        // Third attempt - after a longer delay
+        recyclerView.postDelayed(() -> tryExpandSection(sections, 2), 800);
+    }
+
+    private void tryExpandSection(Map<String, FirestoreModel.Section> sections, int attempt) {
+        try {
+            if (adapter != null && targetSectionId != null) {
+                adapter.expandSection(targetSectionId);
+                // Find the position of the section to scroll to it
+                int position = 0;
+                for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
+                    if (entry.getKey().equals(targetSectionId)) {
+                        recyclerView.scrollToPosition(position);
+                        break;
+                    }
+                    position++;
+                }
+            }
+        } catch (Exception e) {
+            // Log error to Crashlytics
+            FirebaseCrashlytics.getInstance().recordException(e);
+            FirebaseCrashlytics.getInstance().log("Error expanding section in FDA fragment. Attempt: " + attempt);
+            e.printStackTrace();
+        }
+    }
+
+    private void showError(String message) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
+    }
 }

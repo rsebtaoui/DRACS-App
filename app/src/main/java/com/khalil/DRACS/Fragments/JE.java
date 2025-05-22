@@ -18,6 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.khalil.DRACS.Adapters.ExpandableAdapter;
@@ -118,21 +119,26 @@ public class JE extends Fragment {
         // Try to get data from pre-fetcher first
         FirestoreModel model = ((Activity_main) requireActivity()).getDataPreFetcher().getCachedData("je");
         if (model != null) {
-            // Use pre-fetched data
-            Map<String, FirestoreModel.Section> sections = model.getSections();
-            setupClickListeners(sections);
-            adapter = new ExpandableAdapter(getContext(), sections);
-            recyclerView.setAdapter(adapter);
-            
-            // Hide shimmer and show content
-            shimmerContainer.stopShimmer();
-            shimmerContainer.setVisibility(View.GONE);
-            recyclerView.setVisibility(View.VISIBLE);
-            swipeRefreshLayout.setRefreshing(false);
-
-            // Expand target section if we have one
-            if (targetSectionId != null) {
-                expandTargetSection(sections);
+            try {
+                // Use pre-fetched data
+                Map<String, FirestoreModel.Section> sections = model.getSections();
+                setupClickListeners(sections);
+                adapter = new ExpandableAdapter(getContext(), sections);
+                recyclerView.setAdapter(adapter);
+                
+                // Hide shimmer and show content
+                shimmerContainer.stopShimmer();
+                shimmerContainer.setVisibility(View.GONE);
+                recyclerView.setVisibility(View.VISIBLE);
+                
+                // Expand target section if we have one
+                if (targetSectionId != null) {
+                    expandTargetSection(sections);
+                }
+            } catch (Exception e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
+                FirebaseCrashlytics.getInstance().log("Error processing pre-fetched data in JE fragment");
+                showError("Error loading data");
             }
             return;
         }
@@ -144,38 +150,53 @@ public class JE extends Fragment {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
-                            if (finalModel != null) {
-                                // Cache the data for future use
-                                ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("je", finalModel);
-                                
-                                // Set up UI
-                                Map<String, FirestoreModel.Section> sections = finalModel.getSections();
-                                setupClickListeners(sections);
-                                adapter = new ExpandableAdapter(getContext(), sections);
-                                recyclerView.setAdapter(adapter);
-                                
-                                // Hide shimmer and show content
-                                shimmerContainer.stopShimmer();
-                                shimmerContainer.setVisibility(View.GONE);
-                                recyclerView.setVisibility(View.VISIBLE);
-                                swipeRefreshLayout.setRefreshing(false);
+                            try {
+                                final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
+                                if (finalModel != null) {
+                                    // Cache the data for future use
+                                    ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("je", finalModel);
+                                    
+                                    // Set up UI
+                                    Map<String, FirestoreModel.Section> sections = finalModel.getSections();
+                                    setupClickListeners(sections);
+                                    adapter = new ExpandableAdapter(getContext(), sections);
+                                    recyclerView.setAdapter(adapter);
+                                    
+                                    // Hide shimmer and show content
+                                    shimmerContainer.stopShimmer();
+                                    shimmerContainer.setVisibility(View.GONE);
+                                    recyclerView.setVisibility(View.VISIBLE);
 
-                                // If we have a target section ID from search, expand that section after UI is ready
-                                if (targetSectionId != null) {
-                                    expandTargetSection(sections);
+                                    // If we have a target section ID from search, expand that section after UI is ready
+                                    if (targetSectionId != null) {
+                                        expandTargetSection(sections);
+                                    }
+
+                                    // Check if this is the first successful connection
+                                    SharedPreferences prefs = requireActivity().getSharedPreferences("DRACS_Prefs", MODE_PRIVATE);
+                                    boolean hasPersistentData = prefs.getBoolean("has_persistent_data", false);
+                                    if (!hasPersistentData) {
+                                        // This is the first successful connection, trigger full data prefetch
+                                        ((Activity_main) requireActivity()).getDataPreFetcher().startPreFetching(success -> {
+                                            if (success) {
+                                                // Mark that we have persistent data
+                                                SharedPreferences.Editor editor = prefs.edit();
+                                                editor.putBoolean("has_persistent_data", true);
+                                                editor.apply();
+                                            }
+                                        });
+                                    }
                                 }
-
-                                // Mark that we have persistent data
-                                PersistentDataUtils.setHasPersistentData(getContext(), true);
-                            } else {
-                                showError("Failed to load data");
+                            } catch (Exception e) {
+                                FirebaseCrashlytics.getInstance().recordException(e);
+                                FirebaseCrashlytics.getInstance().log("Error processing Firestore data in JE fragment");
+                                showError("Error loading data");
                             }
-                        } else {
-                            showError("No data available");
                         }
                     } else {
-                        showError("Error loading data: " + task.getException().getMessage());
+                        FirebaseCrashlytics.getInstance().recordException(task.getException());
+                        FirebaseCrashlytics.getInstance().log("Error fetching data from Firestore in JE fragment");
+                        showError("Error loading data");
                     }
                 });
     }
@@ -206,7 +227,9 @@ public class JE extends Fragment {
                 }
             }
         } catch (Exception e) {
-            // Log error but don't crash
+            // Log error to Crashlytics
+            FirebaseCrashlytics.getInstance().recordException(e);
+            FirebaseCrashlytics.getInstance().log("Error expanding section in JE fragment. Attempt: " + attempt);
             e.printStackTrace();
         }
     }
@@ -290,33 +313,40 @@ public class JE extends Fragment {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
-                            if (finalModel != null) {
-                                // Cache the new data
-                                ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("je", finalModel);
+                            try {
+                                final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
+                                if (finalModel != null) {
+                                    // Cache the new data
+                                    ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("je", finalModel);
+                                    
+                                    // Set up UI with new data
+                                    Map<String, FirestoreModel.Section> sections = finalModel.getSections();
+                                    setupClickListeners(sections);
+                                    adapter = new ExpandableAdapter(getContext(), sections);
+                                    recyclerView.setAdapter(adapter);
+                                    
+                                    // Hide shimmer and show content
+                                    shimmerContainer.stopShimmer();
+                                    shimmerContainer.setVisibility(View.GONE);
+                                    recyclerView.setVisibility(View.VISIBLE);
 
-                                // Set up UI with new data
-                                Map<String, FirestoreModel.Section> sections = finalModel.getSections();
-                                setupClickListeners(sections);
-                                adapter = new ExpandableAdapter(getContext(), sections);
-                                recyclerView.setAdapter(adapter);
-
-                                // Hide shimmer and show content
-                                shimmerContainer.stopShimmer();
-                                shimmerContainer.setVisibility(View.GONE);
-                                recyclerView.setVisibility(View.VISIBLE);
-
-                                // If we have a target section ID, expand it
-                                if (targetSectionId != null) {
-                                    expandTargetSection(sections);
+                                    // If we have a target section ID, expand it
+                                    if (targetSectionId != null) {
+                                        expandTargetSection(sections);
+                                    }
                                 }
+                            } catch (Exception e) {
+                                FirebaseCrashlytics.getInstance().recordException(e);
+                                FirebaseCrashlytics.getInstance().log("Error processing refreshed data in JE fragment");
+                                showError("Error refreshing content");
                             }
                         }
                     } else {
-                        // Show error toast if refresh fails
-                        Toast.makeText(getContext(), "Failed to refresh content", Toast.LENGTH_SHORT).show();
+                        FirebaseCrashlytics.getInstance().recordException(task.getException());
+                        FirebaseCrashlytics.getInstance().log("Error refreshing data from Firestore in JE fragment");
+                        showError("Error refreshing content");
                     }
-
+                    
                     // Stop the refresh animation
                     swipeRefreshLayout.setRefreshing(false);
                 });

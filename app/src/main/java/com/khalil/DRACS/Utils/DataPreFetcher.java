@@ -3,6 +3,7 @@ package com.khalil.DRACS.Utils;
 import android.content.Context;
 import android.util.Log;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
@@ -32,6 +33,8 @@ public class DataPreFetcher {
         try {
             this.db = FirebaseFirestore.getInstance();
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
+            FirebaseCrashlytics.getInstance().log("Failed to initialize Firebase in DataPreFetcher");
             Log.e(TAG, "Failed to initialize Firebase: " + e.getMessage());
             throw new RuntimeException("Failed to initialize Firebase", e);
         }
@@ -51,6 +54,7 @@ public class DataPreFetcher {
 
     private void fetchPageData(String pageId) {
         if (pageId == null || pageId.isEmpty()) {
+            FirebaseCrashlytics.getInstance().log("Invalid pageId provided to fetchPageData");
             Log.e(TAG, "Invalid pageId provided");
             checkCompletion();
             return;
@@ -68,19 +72,27 @@ public class DataPreFetcher {
                                     cachedData.put(pageId, model);
                                     Log.d(TAG, "Successfully cached page: " + pageId);
                                 } else {
+                                    FirebaseCrashlytics.getInstance().log("Failed to convert document to FirestoreModel for page: " + pageId);
                                     Log.e(TAG, "Failed to convert document to FirestoreModel for page: " + pageId);
                                 }
                             } catch (Exception e) {
+                                FirebaseCrashlytics.getInstance().recordException(e);
+                                FirebaseCrashlytics.getInstance().log("Error converting document for page " + pageId);
                                 Log.e(TAG, "Error converting document for page " + pageId + ": " + e.getMessage());
                             }
                         } else {
+                            FirebaseCrashlytics.getInstance().log("Document does not exist for page: " + pageId);
                             Log.e(TAG, "Document does not exist for page: " + pageId);
                         }
                     } else {
                         Exception exception = task.getException();
                         if (exception instanceof FirebaseFirestoreException) {
+                            FirebaseCrashlytics.getInstance().recordException(exception);
+                            FirebaseCrashlytics.getInstance().log("Firestore error fetching page " + pageId);
                             Log.e(TAG, "Firestore error fetching page " + pageId + ": " + exception.getMessage());
                         } else {
+                            FirebaseCrashlytics.getInstance().recordException(exception);
+                            FirebaseCrashlytics.getInstance().log("Error fetching page " + pageId);
                             Log.e(TAG, "Error fetching page " + pageId + ": " + exception.getMessage());
                         }
                     }

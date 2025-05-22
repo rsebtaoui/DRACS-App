@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.facebook.shimmer.ShimmerFrameLayout;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.khalil.DRACS.Adapters.ExpandableAdapter;
@@ -248,6 +249,37 @@ public class FP extends Fragment {
         mainActivity.showBottomAppBar();
     }
 
+    private void expandTargetSection(Map<String, FirestoreModel.Section> sections) {
+        // First attempt - immediate
+        tryExpandSection(sections, 0);
+        // Second attempt - after a short delay
+        recyclerView.postDelayed(() -> tryExpandSection(sections, 1), 300);
+        // Third attempt - after a longer delay
+        recyclerView.postDelayed(() -> tryExpandSection(sections, 2), 800);
+    }
+
+    private void tryExpandSection(Map<String, FirestoreModel.Section> sections, int attempt) {
+        try {
+            if (adapter != null && targetSectionId != null) {
+                adapter.expandSection(targetSectionId);
+                // Find the position of the section to scroll to it
+                int position = 0;
+                for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
+                    if (entry.getKey().equals(targetSectionId)) {
+                        recyclerView.scrollToPosition(position);
+                        break;
+                    }
+                    position++;
+                }
+            }
+        } catch (Exception e) {
+            // Log error to Crashlytics
+            FirebaseCrashlytics.getInstance().recordException(e);
+            FirebaseCrashlytics.getInstance().log("Error expanding section in FP fragment. Attempt: " + attempt);
+            e.printStackTrace();
+        }
+    }
+
     private void refreshContent() {
         // Check for internet connection first
         if (!ConnectionUtils.isNetworkAvailable(requireContext())) {
@@ -271,47 +303,47 @@ public class FP extends Fragment {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
-                            if (finalModel != null) {
-                                // Cache the new data
-                                ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("fp", finalModel);
-                                
-                                // Set up UI with new data
-                                Map<String, FirestoreModel.Section> sections = finalModel.getSections();
-                                setupClickListeners(sections);
-                                adapter = new ExpandableAdapter(getContext(), sections);
-                                recyclerView.setAdapter(adapter);
-                                
-                                // Hide shimmer and show content
-                                shimmerContainer.stopShimmer();
-                                shimmerContainer.setVisibility(View.GONE);
-                                recyclerView.setVisibility(View.VISIBLE);
+                            try {
+                                final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
+                                if (finalModel != null) {
+                                    // Cache the new data
+                                    ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("fp", finalModel);
+                                    
+                                    // Set up UI with new data
+                                    Map<String, FirestoreModel.Section> sections = finalModel.getSections();
+                                    setupClickListeners(sections);
+                                    adapter = new ExpandableAdapter(getContext(), sections);
+                                    recyclerView.setAdapter(adapter);
+                                    
+                                    // Hide shimmer and show content
+                                    shimmerContainer.stopShimmer();
+                                    shimmerContainer.setVisibility(View.GONE);
+                                    recyclerView.setVisibility(View.VISIBLE);
 
-                                // If we have a target section ID, expand it
-                                if (targetSectionId != null) {
-                                    recyclerView.post(() -> {
-                                        adapter.expandSection(targetSectionId);
-                                        // Find the position of the section to scroll to it
-                                        int position = 0;
-                                        for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
-                                            if (entry.getKey().equals(targetSectionId)) {
-                                                recyclerView.scrollToPosition(position);
-                                                break;
-                                            }
-                                            position++;
-                                        }
-                                    });
+                                    // If we have a target section ID, expand it
+                                    if (targetSectionId != null) {
+                                        expandTargetSection(sections);
+                                    }
                                 }
+                            } catch (Exception e) {
+                                FirebaseCrashlytics.getInstance().recordException(e);
+                                FirebaseCrashlytics.getInstance().log("Error processing refreshed data in FP fragment");
+                                showError("Error refreshing content");
                             }
                         }
                     } else {
-                        // Show error toast if refresh fails
-                        Toast.makeText(getContext(), "فشل تحديث المحتوى", Toast.LENGTH_SHORT).show();
+                        FirebaseCrashlytics.getInstance().recordException(task.getException());
+                        FirebaseCrashlytics.getInstance().log("Error refreshing data from Firestore in FP fragment");
+                        showError("Error refreshing content");
                     }
                     
                     // Stop the refresh animation
                     swipeRefreshLayout.setRefreshing(false);
                 });
+    }
+
+    private void showError(String message) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
     }
 
 }

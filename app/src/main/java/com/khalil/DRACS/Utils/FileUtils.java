@@ -21,6 +21,8 @@ import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.core.content.ContextCompat;
 
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
+
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -160,6 +162,12 @@ public class FileUtils {
     }
 
     private static void downloadAndOpenFile(Context context, String fileId, File outputFile) {
+        // Check network connectivity first
+        if (!ConnectionUtils.isNetworkAvailable(context)) {
+            Toast.makeText(context, "تحتاج إلى اتصال بالإنترنت", Toast.LENGTH_LONG).show();
+            return;
+        }
+
         // Show downloading toast
         ((Activity) context).runOnUiThread(() -> {
             Toast.makeText(context, "جاري التحميل...", Toast.LENGTH_SHORT).show();
@@ -179,6 +187,8 @@ public class FileUtils {
                     showErrorOnMainThread(context, "فشل تحميل الملف");
                 }
             } catch (Exception e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
+                FirebaseCrashlytics.getInstance().log("Error downloading file: " + fileId);
                 showErrorOnMainThread(context, "حدث خطأ أثناء التحميل");
                 e.printStackTrace();
             }
@@ -196,6 +206,8 @@ public class FileUtils {
             connection.connect();
             return connection;
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
+            FirebaseCrashlytics.getInstance().log("Error setting up connection for file: " + fileId);
             e.printStackTrace();
             return null;
         }
@@ -211,6 +223,8 @@ public class FileUtils {
             }
             return outputFile.exists() && outputFile.length() > 0;
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
+            FirebaseCrashlytics.getInstance().log("Error downloading file to: " + outputFile.getAbsolutePath());
             e.printStackTrace();
             return false;
         }
@@ -337,6 +351,7 @@ public class FileUtils {
             }
 
             if (!fileFound) {
+                FirebaseCrashlytics.getInstance().log("File not found in assets: " + fileName);
                 Toast.makeText(context, "لم يتم العثور على الملف: " + fileName, Toast.LENGTH_LONG).show();
                 return;
             }
@@ -345,6 +360,7 @@ public class FileUtils {
             File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
             if (!downloadDir.exists()) {
                 if (!downloadDir.mkdirs()) {
+                    FirebaseCrashlytics.getInstance().log("Failed to create downloads directory");
                     Toast.makeText(context, "لا يمكن إنشاء مجلد التنزيلات", Toast.LENGTH_LONG).show();
                     return;
                 }
@@ -357,6 +373,8 @@ public class FileUtils {
             try {
                 context.getAssets().open(fileName);
             } catch (IOException e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
+                FirebaseCrashlytics.getInstance().log("Error opening asset file: " + fileName);
                 Toast.makeText(context, "لا يمكن فتح الملف: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 return;
             }
@@ -377,13 +395,18 @@ public class FileUtils {
                 if (outputFile.exists() && outputFile.length() > 0) {
                     Toast.makeText(context, "تم تحميل الملف بنجاح", Toast.LENGTH_LONG).show();
                 } else {
+                    FirebaseCrashlytics.getInstance().log("File copy failed - file not created or empty: " + fileName);
                     Toast.makeText(context, "فشل حفظ الملف", Toast.LENGTH_LONG).show();
                 }
             } catch (IOException e) {
+                FirebaseCrashlytics.getInstance().recordException(e);
+                FirebaseCrashlytics.getInstance().log("Error copying file: " + fileName);
                 Toast.makeText(context, "خطأ أثناء النسخ: " + e.getMessage(), Toast.LENGTH_LONG).show();
                 e.printStackTrace();
             }
         } catch (Exception e) {
+            FirebaseCrashlytics.getInstance().recordException(e);
+            FirebaseCrashlytics.getInstance().log("Unexpected error in handleLocalFileCopy: " + fileName);
             Toast.makeText(context, "حدث خطأ غير متوقع: " + e.getMessage(), Toast.LENGTH_LONG).show();
             e.printStackTrace();
         }

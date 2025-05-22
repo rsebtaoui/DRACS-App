@@ -149,36 +149,48 @@ public class PS extends Fragment {
 
         // Fallback to direct Firestore fetch if pre-fetched data is not available
         try {
-        db.collection("pages").document("ps")
-                .get()
-                .addOnCompleteListener(task -> {
-                    if (task.isSuccessful()) {
-                        DocumentSnapshot document = task.getResult();
-                        if (document.exists()) {
-                            final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
-                            if (finalModel != null) {
-                                // Cache the data for future use
-                                ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("ps", finalModel);
-                                
-                                // Set up UI
-                                Map<String, FirestoreModel.Section> sections = finalModel.getSections();
-                                setupClickListeners(sections);
-                                adapter = new ExpandableAdapter(getContext(), sections);
-                                recyclerView.setAdapter(adapter);
-                                
-                                // Hide shimmer and show content
-                                shimmerContainer.stopShimmer();
-                                shimmerContainer.setVisibility(View.GONE);
-                                recyclerView.setVisibility(View.VISIBLE);
+            db.collection("pages").document("ps")
+                    .get()
+                    .addOnCompleteListener(task -> {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot document = task.getResult();
+                            if (document.exists()) {
+                                final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
+                                if (finalModel != null) {
+                                    // Cache the data for future use
+                                    ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("ps", finalModel);
+                                    
+                                    // Set up UI
+                                    Map<String, FirestoreModel.Section> sections = finalModel.getSections();
+                                    setupClickListeners(sections);
+                                    adapter = new ExpandableAdapter(getContext(), sections);
+                                    recyclerView.setAdapter(adapter);
+                                    
+                                    // Hide shimmer and show content
+                                    shimmerContainer.stopShimmer();
+                                    shimmerContainer.setVisibility(View.GONE);
+                                    recyclerView.setVisibility(View.VISIBLE);
 
-                                // If we have a target section ID from search, expand that section after UI is ready
-                                if (targetSectionId != null) {
+                                    // If we have a target section ID from search, expand that section after UI is ready
+                                    if (targetSectionId != null) {
                                         expandTargetSection(sections);
-                                }
+                                    }
 
-                                // Mark that we have persistent data
-                                PersistentDataUtils.setHasPersistentData(getContext(), true);
-                            } else {
+                                    // Check if this is the first successful connection
+                                    SharedPreferences prefs = requireActivity().getSharedPreferences("DRACS_Prefs", MODE_PRIVATE);
+                                    boolean hasPersistentData = prefs.getBoolean("has_persistent_data", false);
+                                    if (!hasPersistentData) {
+                                        // This is the first successful connection, trigger full data prefetch
+                                        ((Activity_main) requireActivity()).getDataPreFetcher().startPreFetching(success -> {
+                                            if (success) {
+                                                // Mark that we have persistent data
+                                                SharedPreferences.Editor editor = prefs.edit();
+                                                editor.putBoolean("has_persistent_data", true);
+                                                editor.apply();
+                                            }
+                                        });
+                                    }
+                                } else {
                                     CrashlyticsUtils.logError(new Exception("FirestoreModel is null"), "Failed to parse PS data");
                                     Toast.makeText(getContext(), "Error loading content", Toast.LENGTH_SHORT).show();
                                 }
@@ -195,7 +207,8 @@ public class PS extends Fragment {
                     });
         } catch (Exception e) {
             CrashlyticsUtils.handleNetworkException(e, getContext(), "initializing PS data fetch");
-                    }
+            Toast.makeText(getContext(), "Error loading content", Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void setupClickListeners(Map<String, FirestoreModel.Section> sections) {
