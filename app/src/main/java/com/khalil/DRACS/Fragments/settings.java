@@ -27,7 +27,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.button.MaterialButton;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.DataPreFetcher;
-import com.khalil.DRACS.Avtivities.Activity_main;
+import com.khalil.DRACS.Activities.Activity_main;
 
 public class settings extends Fragment {
     private static final String PREFS_NAME = "DRACS_Prefs";

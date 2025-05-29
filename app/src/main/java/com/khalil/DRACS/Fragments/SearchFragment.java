@@ -17,7 +17,7 @@ import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.activity.OnBackPressedCallback;
 
-import com.khalil.DRACS.Avtivities.Activity_main;
+import com.khalil.DRACS.Activities.Activity_main;
 import com.khalil.DRACS.Models.FirestoreModel;
 import com.khalil.DRACS.Models.SearchResult;
 import com.khalil.DRACS.R;
@@ -25,11 +25,8 @@ import com.khalil.DRACS.Adapters.SearchAdapter;
 import com.khalil.DRACS.Utils.DataPreFetcher;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-
-import me.ibrahimsn.lib.SmoothBottomBar;
 
 public class SearchFragment extends Fragment {
     // Page IDs that can be searched

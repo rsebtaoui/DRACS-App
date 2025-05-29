@@ -95,7 +95,7 @@
     <fragment
         android:id="@+id/about"
         android:name="com.khalil.DRACS.Fragments.About"
-        android:label="حول التطبيق"
+        android:label="@string/about"
         tools:layout="@layout/fragment_about">
         <action
             android:id="@+id/action_about_to_home"

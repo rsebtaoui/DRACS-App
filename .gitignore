@@ -47,7 +47,6 @@ output.json
 .idea/sqlDataSources.xml
 .idea/dynamic.xml
 .idea/uiDesigner.xml
-.idea/jarRepositories.xml
 
 # Keystore files
 *.jks
@@ -75,14 +74,11 @@ Thumbs.db
 *.log
 
 # Android Studio captures folder
-captures/
 
 # External native build folder generated in Android Studio 2.2 and later
 .externalNativeBuild
-.cxx/
 
 # Version control
-vcs.xml
 
 # lint
 lint/intermediates/
@@ -91,7 +87,6 @@ lint/outputs/
 lint/tmp/
 
 # Android Profiling
-*.hprof
 
 # Backup files
 *.bak

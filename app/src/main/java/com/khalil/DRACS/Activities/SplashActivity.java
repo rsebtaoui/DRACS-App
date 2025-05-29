@@ -1,4 +1,4 @@
-package com.khalil.DRACS.Avtivities;
+package com.khalil.DRACS.Activities;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,6 +11,7 @@ import android.widget.Toast;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.app.AppCompatDelegate;
 
+import com.khalil.DRACS.Activities.Activity_main;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.DataPreFetcher;
 import com.khalil.DRACS.Utils.ConnectionUtils;
@@ -28,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         // Remove the title bar and make it full screen
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -56,7 +57,7 @@ public class SplashActivity extends AppCompatActivity {
         } else {
             // Initialize data pre-fetcher
             dataPreFetcher = new DataPreFetcher(this);
-            
+
             // Start pre-fetching data
             dataPreFetcher.startPreFetching(success -> {
                 isDataFetchComplete = true;

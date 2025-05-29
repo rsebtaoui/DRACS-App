@@ -15,6 +15,10 @@
     <uses-permission
         android:name="android.permission.POST_NOTIFICATIONS"
         android:minSdkVersion="32" />
+    <!-- For API 30 and above, request manage storage permission -->
+    <uses-permission
+        android:name="android.permission.MANAGE_EXTERNAL_STORAGE"
+        android:minSdkVersion="30" />
 
     <application
         android:name=".DRACSApplication"
@@ -33,13 +37,8 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <!-- AdMob app ID -->
-        <meta-data
-            android:name="com.google.android.gms.ads.APPLICATION_ID"
-            android:value="ca-app-pub-4915614459591600~4218688820"/>
-
         <activity
-            android:name=".Avtivities.SplashActivity"
+            android:name=".Activities.SplashActivity"
             android:exported="true"
             android:theme="@style/Theme.المديريةالجهويةللفلاحةلجهةالدارالبيضاءسطات.Splash">
             <intent-filter>
@@ -49,7 +48,7 @@
         </activity>
 
         <activity
-            android:name=".Avtivities.Activity_main"
+            android:name=".Activities.Activity_main"
             android:exported="false" />
 
         <!-- to access the scoop storage for download -->
@@ -65,3 +64,5 @@
     </application>
 
 </manifest>
+
+

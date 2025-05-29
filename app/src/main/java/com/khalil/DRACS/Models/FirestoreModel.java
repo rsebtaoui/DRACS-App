@@ -8,7 +8,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class FirestoreModel {
-    private Map<String, Section> sections;
+    private final Map<String, Section> sections;
 
     // Default constructor for Firestore serialization
     public FirestoreModel() {
@@ -18,18 +18,18 @@ public class FirestoreModel {
     public static class Section {
         private String title;
         private String introduction;
-        private List<String> dashes;
+        private final List<String> dashes;
 
         @PropertyName("clickable_words")
-        private List<ClickableWord> clickableWords;
+        private final List<ClickableWord> clickableWords;
 
         @PropertyName("colored_lines")
-        private List<ColoredLine> coloredLines;
+        private final List<ColoredLine> coloredLines;
 
         private String conclusion;
 
         @PropertyName("order")
-        private int order = 0;
+        private int order;
 
         // Default constructor for Firestore serialization
         public Section() {
@@ -40,6 +40,9 @@ public class FirestoreModel {
 
         @PropertyName("order")
         public int getOrder() { return order; }
+
+        @PropertyName("order")
+        public void setOrder(int order) { this.order = order; }
 
         // Getters and setters with null checks
         public String getTitle() { return title != null ? title : ""; }
@@ -57,16 +60,16 @@ public class FirestoreModel {
 
     public static class ClickableWord {
         @PropertyName("text")
-        private String text;
+        private final String text;
 
         @PropertyName("color")
-        private String color;
+        private final String color;
 
         @PropertyName("action_type")
-        private String actionType;
+        private final String actionType;
 
         @PropertyName("action_value")
-        private String actionValue;
+        private final String actionValue;
 
         private View.OnClickListener onClickListener;
 
@@ -101,10 +104,10 @@ public class FirestoreModel {
 
     public static class ColoredLine {
         @PropertyName("text")
-        private String text;
+        private final String text;
 
         @PropertyName("color")
-        private String color;
+        private final String color;
 
         // Default constructor for Firestore serialization
         public ColoredLine() {

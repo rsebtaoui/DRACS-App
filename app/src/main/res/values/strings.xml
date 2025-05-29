@@ -5,7 +5,6 @@
     <string name="إعدادات">إعدادات</string>
     <string name="المديرية_الجهوية">المديرية الجهوية للفلاحة لجهة الدارالبيضاء-سطات</string>
     <string name="خروج">خروج</string>
-    <string name="لا_توجد_إعدادات_بعد">لا توجد إعدادات بعد</string>
     <string name="more_information">معلومات إضافية</string>
     <string name="home_icon">الرئيسية</string>
     <string name="title">المديرية الجهوية للفلاحة</string>
@@ -19,33 +18,19 @@
     <string name="تم_إنجاز_هذا_التطبيق"> تم إنجاز هذا التطبيق لتوفير المعلومات الخاصة بالخدمات المقدمة من طرف هاته المديرية. هدفنا هو تبسيط البحث والوصول إلى المعلومات والخدمات الهامة.</string>
     <string name="تم_تطوير_هذا"> تم تطوير هذا التطبيق من طرف المديرية الجهوية للفلاحة لجهة الدار البيضاء سطات بالجديدة بالتعاون مع المدرسة للتكنولوجيا العليا سيدي بنور.</string>
     <string name="تم_تصميمه_من_طرف"> تم تصميمه من طرف السيد رشيد سبتاوي (رئيس مصلحة نظم المعلومات الفلاحية) والسيد رضوان عبد الباسط (رئيس قسم الحماية الاجتماعية) بالمديرية الجهوية، وتمت برمجته من طرف المتدرب السيد كميلي خليل</string>
-    <string name="intro">مقدمة</string>
-    <string name="lists">القوائم</string>
-    <string name="conclusion">خاتمة</string>
     <string name="تحديث_التطبيق">تحديث التطبيق</string>
     <string name="hello_blank_fragment">مرحبا</string>
 
     <!-- Settings Strings -->
-    <string name="app_settings">إعدادات التطبيق</string>
-    <string name="arabic_language">اللغة العربية</string>
     <string name="dark_theme">الوضع الليلي</string>
-    <string name="enable_notifications">تفعيل الإشعارات</string>
     <string name="storage">التخزين</string>
     <string name="clear_cache">مسح ذاكرة التخزين المؤقت</string>
     <string name="about">حول التطبيق</string>
     <string name="app_version">التطبيق الحالي ألإصدار رقم: 1.1 </string>
-    <string name="developed_by">تم التطوير بواسطة: المديرية الجهوية للفلاحة لجهة الدارالبيضاء-سطات</string>
-    <string name="settings_not_available">الإعدادات غير متوفرة حالياً</string>
     <string name="بحث">بحث...</string>
     <string name="البحث">البحث</string>
-    <string name="معلومات">معلومات</string>
     <string name="contact_us">اتصل بنا</string>
     <string name="contact_numbers">رقم الهاتف</string>
-    <string name="division_protection_sociale">قسم الحماية الاجتماعية</string>
-    <string name="Responsable_of_app_number">+212657831603</string>
-    <string name="division_exploitations">قسم الاستغلالات</string>
-    <string name="division_exploitations_number">+212 522-234567</string>
-    <string name="division_services_communs">قسم الخدمات المشتركة</string>
     <string name="res_number">0657831603</string>
     <string name="kamily_khalil_ucd_ma">kamily.khalil@ucd.ma</string>
 </resources>

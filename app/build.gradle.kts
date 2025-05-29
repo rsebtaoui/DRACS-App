@@ -18,10 +18,14 @@ android {
         applicationId = "com.khalil.DRACS"
         minSdk = 23
         targetSdk = 34
-        versionCode = 3
-        versionName = "1.1"
+        versionCode = 7
+        versionName = "1.2"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        ndk {
+            debugSymbolLevel = "SYMBOL_TABLE"
+        }
     }
 
     buildTypes {
@@ -32,10 +36,15 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
+           
         }
         debug {
             isMinifyEnabled = false
             isShrinkResources = false
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
 
@@ -79,8 +88,6 @@ dependencies {
     implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.google.android.gms:play-services-tasks:18.3.0")
     implementation("com.google.android.gms:play-services-basement:18.7.0")
-    // AdMob
-    implementation("com.google.android.gms:play-services-ads:22.6.0")
     // Gson for JSON parsing
     implementation("com.google.code.gson:gson:2.10.1")
     implementation("com.google.firebase:firebase-firestore:25.1.4")

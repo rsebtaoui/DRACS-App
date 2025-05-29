@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -247,31 +248,31 @@ public class FileUtils {
                     Toast.makeText(context, "يرجى تفعيل الإشعارات للاستمرار", Toast.LENGTH_LONG).show();
                     return;
                 }
-        }
+            }
 
-        createNotificationChannel(context);
+            createNotificationChannel(context);
             Intent intent = createPdfViewIntent(context, outputFile);
-            
+
             // Handle PendingIntent flags based on API level
             int flags = PendingIntent.FLAG_UPDATE_CURRENT;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 flags |= PendingIntent.FLAG_IMMUTABLE;
             }
-            
+
             PendingIntent pendingIntent = PendingIntent.getActivity(
-                context,
-                0,
-                intent,
-                flags
+                    context,
+                    0,
+                    intent,
+                    flags
             );
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                .setSmallIcon(android.R.drawable.stat_sys_download_done)
-                .setContentTitle("اكتمل التحميل")
-                .setContentText("تم حفظ الملف في مجلد التنزيلات")
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setContentIntent(pendingIntent)
-                .setAutoCancel(true);
+                    .setSmallIcon(android.R.drawable.stat_sys_download_done)
+                    .setContentTitle("اكتمل التحميل")
+                    .setContentText("تم حفظ الملف في مجلد التنزيلات")
+                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                    .setContentIntent(pendingIntent)
+                    .setAutoCancel(true);
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
             notificationManager.notify(1, builder.build());
@@ -284,21 +285,21 @@ public class FileUtils {
     private static Intent createPdfViewIntent(Context context, File file) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         Uri fileUri;
-        
+
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 // Android 7 and above - use FileProvider
                 fileUri = androidx.core.content.FileProvider.getUriForFile(
-                    context,
-                    context.getPackageName() + ".provider",
-                    file
+                        context,
+                        context.getPackageName() + ".provider",
+                        file
                 );
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             } else {
                 // Android 6 and below - use direct file URI
                 fileUri = Uri.fromFile(file);
             }
-            
+
             intent.setDataAndType(fileUri, "application/pdf");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             return intent;
@@ -311,19 +312,22 @@ public class FileUtils {
 
     private static void openPdfFile(Context context, File file) {
         Intent intent = createPdfViewIntent(context, file);
-        if (intent == null) return;
-
-        try {
-            List<ResolveInfo> activities = context.getPackageManager().queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY);
-            if (!activities.isEmpty()) {
-                context.startActivity(intent);
-            } else {
-                Toast.makeText(context, "لم يتم العثور على عارض PDF", Toast.LENGTH_LONG).show();
+        if (intent != null) {
+            try {
+                // Always show a chooser so the user can pick any capable app
+                Intent chooser = Intent.createChooser(intent, "اختر تطبيق لفتح ملف PDF");
+                context.startActivity(chooser);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(context, "لا يوجد تطبيق لفتح ملفات PDF", Toast.LENGTH_LONG).show();
+                // Optionally prompt user to install a PDF viewer
+                openPdfViewerInPlayStore(context);
             }
-        } catch (SecurityException e) {
-            Toast.makeText(context, "لا يمكن فتح الملف - يرجى التحقق من الأذونات", Toast.LENGTH_LONG).show();
-            e.printStackTrace();
         }
+    }
+
+    private static void openPdfViewerInPlayStore(Context context) {
+        // Implement the logic to open the Play Store for installing a PDF viewer
+        Toast.makeText(context, "يرجى تثبيت تطبيق لفتح ملفات PDF من متجر التطبيقات", Toast.LENGTH_LONG).show();
     }
 
     private static void showErrorOnMainThread(Context context, String message) {
@@ -438,8 +442,8 @@ public class FileUtils {
             return true;
         } else {
             // Android 9 and below - need storage permissions
-        return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
-                && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
+            return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
+                    && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         }
     }
 
@@ -454,11 +458,11 @@ public class FileUtils {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
             Toast.makeText(activity, "يجب منح أذونات التخزين لتحميل الملفات", Toast.LENGTH_LONG).show();
         }
-        
+
         ActivityCompat.requestPermissions(activity,
                 new String[]{
-                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
                 },
                 100);
     }
@@ -469,26 +473,6 @@ public class FileUtils {
         mapIntent.setPackage("com.google.android.apps.maps");
         mapIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         context.startActivity(mapIntent);
-    }
-
-    public static void handleAction(Context context, String actionType, String actionValue) {
-        switch (actionType) {
-            case "download":
-                copyFileFromAssets(context, actionValue);
-                break;
-            case "map":
-                String[] coords = actionValue.split(",");
-                if (coords.length == 2) {
-                    double lat = Double.parseDouble(coords[0]);
-                    double lng = Double.parseDouble(coords[1]);
-                    openGoogleMaps(context, lat, lng, "");
-                }
-                break;
-            case "youtube":
-                openYouTube(context, actionValue);
-                break;
-            default:
-        }
     }
 
     private static void openYouTube(Context context, String videoId) {

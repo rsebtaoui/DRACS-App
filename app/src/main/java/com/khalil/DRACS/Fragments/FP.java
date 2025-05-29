@@ -2,6 +2,7 @@ package com.khalil.DRACS.Fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
@@ -11,12 +12,9 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
-import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -27,14 +25,12 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.khalil.DRACS.Adapters.ExpandableAdapter;
 import com.khalil.DRACS.Adapters.ShimmerAdapter;
-import com.khalil.DRACS.Avtivities.Activity_main;
+import com.khalil.DRACS.Activities.Activity_main;
 import com.khalil.DRACS.Models.FirestoreModel;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.FileUtils;
 import com.khalil.DRACS.Utils.ConnectionUtils;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
 public class FP extends Fragment {
@@ -201,15 +197,25 @@ public class FP extends Fragment {
         for (FirestoreModel.Section section : sections.values()) {
             if (section.getClickableWords() != null) {
                 for (FirestoreModel.ClickableWord cw : section.getClickableWords()) {
-                    if (cw.getActionType().equals("file")) {
+                    if (cw.getActionType().equals("download")) {
                         cw.setOnClickListener(v -> {
                             String filePath = cw.getActionValue();
-                            FileUtils.showDownloadNotification(getContext(), Uri.parse(filePath));
+                            FileUtils.copyFileFromAssets(getContext(), filePath);
                         });
-                    } else if (cw.getActionType().equals("fragment")) {
+                    } else if (cw.getActionType().equals("map")) {
                         cw.setOnClickListener(v -> {
-                            NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
-                            navController.navigate(Integer.parseInt(cw.getActionValue()));
+                            String[] coords = cw.getActionValue().split(",");
+                            if (coords.length == 2) {
+                                double lat = Double.parseDouble(coords[0]);
+                                double lng = Double.parseDouble(coords[1]);
+                                FileUtils.openGoogleMaps(getContext(), lat, lng, "");
+                            }
+                        });
+                    } else if (cw.getActionType().equals("web")) {
+                        cw.setOnClickListener(v -> {
+                            String url = cw.getActionValue();
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            getContext().startActivity(browserIntent);
                         });
                     }
                 }

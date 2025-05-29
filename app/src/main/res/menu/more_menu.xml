@@ -23,6 +23,6 @@
     <item
         android:id="@+id/exite"
         android:icon="@drawable/exit_left"
-        android:title="خروج"
+        android:title="@string/خروج"
         app:iconTint="?attr/colorOnPrimary"/>
 </menu> 

@@ -1,4 +1,4 @@
-package com.khalil.DRACS.Avtivities;
+package com.khalil.DRACS.Activities;
 
 import static androidx.navigation.Navigation.findNavController;
 
@@ -20,8 +20,6 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.navigation.NavController;
 
-import com.google.android.gms.ads.AdView;
-import com.google.android.gms.ads.MobileAds;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
@@ -56,7 +54,6 @@ public class Activity_main extends AppCompatActivity {
         }
     };
     private ActivityResultLauncher<IntentSenderRequest> activityResultLauncher;
-    private AdView adView;
 
     public DataPreFetcher getDataPreFetcher() {
         return dataPreFetcher;
@@ -68,11 +65,7 @@ public class Activity_main extends AppCompatActivity {
         
         // Set window soft input mode to adjust resize
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        
-        // Initialize AdMob
-        MobileAds.initialize(this, initializationStatus -> {
-            // Initialization complete
-        });
+
         
         setContentView(R.layout.activity_home);
 
@@ -148,7 +141,6 @@ public class Activity_main extends AppCompatActivity {
                 new ActivityResultContracts.StartIntentSenderForResult(),
                 result -> {
                     if (result.getResultCode() != RESULT_OK) {
-                        return;
                     }
                 });
 
@@ -209,10 +201,6 @@ public class Activity_main extends AppCompatActivity {
             }
         }).start();
 
-        // Initialize the AdView
-
-//        AdRequest adRequest = new AdRequest.Builder().build();
-//        adView.loadAd(adRequest);
     }
 
     private void shareApp() {
@@ -276,40 +264,29 @@ public class Activity_main extends AppCompatActivity {
                                     activityResultLauncher,
                                     AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build());
                         } catch (Exception e) {
-                            return;
                         }
                     }
                 } catch (Exception e) {
-                    return;
                 }
             }).addOnFailureListener(e -> {
-                return;
             });
 
             try {
                 appUpdateManager.registerListener(listener);
             } catch (Exception e) {
-                return;
             }
         } catch (Exception e) {
-            return;
         }
     }
 
     @Override
     protected void onPause() {
-        if (adView != null) {
-            adView.pause();
-        }
         super.onPause();
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (adView != null) {
-            adView.resume();
-        }
 
         if (appUpdateManager == null) {
             return;
@@ -323,14 +300,11 @@ public class Activity_main extends AppCompatActivity {
                                 popupSnackbarForCompleteUpdate();
                             }
                         } catch (Exception e) {
-                            return;
                         }
                     })
                     .addOnFailureListener(e -> {
-                        return;
                     });
         } catch (Exception e) {
-            return;
         }
     }
 
@@ -344,13 +318,11 @@ public class Activity_main extends AppCompatActivity {
                 try {
                     appUpdateManager.completeUpdate();
                 } catch (Exception e) {
-                    return;
                 }
             });
             snackbar.setActionTextColor(getResources().getColor(R.color.Emerald_Green_700));
             snackbar.show();
         } catch (Exception e) {
-            return;
         }
     }
 
@@ -435,9 +407,6 @@ public class Activity_main extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        if (adView != null) {
-            adView.destroy();
-        }
         super.onDestroy();
     }
 }

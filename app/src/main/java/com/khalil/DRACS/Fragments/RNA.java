@@ -23,7 +23,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.khalil.DRACS.Adapters.ExpandableAdapter;
 import com.khalil.DRACS.Adapters.ShimmerAdapter;
-import com.khalil.DRACS.Avtivities.Activity_main;
+import com.khalil.DRACS.Activities.Activity_main;
 import com.khalil.DRACS.Models.FirestoreModel;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.ConnectionUtils;
@@ -43,7 +43,7 @@ public class RNA extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        
+
         // Get section ID from arguments
         if (getArguments() != null) {
             targetSectionId = getArguments().getString("target_section_id");
@@ -87,7 +87,7 @@ public class RNA extends Fragment {
         if (getArguments() != null) {
             targetSectionId = getArguments().getString("target_section_id");
         }
-        
+
         // Set up shimmer adapter
         shimmerRecyclerView.setAdapter(new ShimmerAdapter());
 
@@ -123,7 +123,7 @@ public class RNA extends Fragment {
             setupClickListeners(sections);
             adapter = new ExpandableAdapter(getContext(), sections);
             recyclerView.setAdapter(adapter);
-            
+
             // Hide shimmer and show content
             shimmerContainer.stopShimmer();
             shimmerContainer.setVisibility(View.GONE);
@@ -147,13 +147,13 @@ public class RNA extends Fragment {
                             if (finalModel != null) {
                                 // Cache the data for future use
                                 ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("rna", finalModel);
-                                
+
                                 // Set up UI
                                 Map<String, FirestoreModel.Section> sections = finalModel.getSections();
                                 setupClickListeners(sections);
                                 adapter = new ExpandableAdapter(getContext(), sections);
                                 recyclerView.setAdapter(adapter);
-                                
+
                                 // Hide shimmer and show content
                                 shimmerContainer.stopShimmer();
                                 shimmerContainer.setVisibility(View.GONE);
@@ -300,13 +300,13 @@ public class RNA extends Fragment {
                             if (finalModel != null) {
                                 // Cache the new data
                                 ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("rna", finalModel);
-                                
+
                                 // Set up UI with new data
                                 Map<String, FirestoreModel.Section> sections = finalModel.getSections();
                                 setupClickListeners(sections);
                                 adapter = new ExpandableAdapter(getContext(), sections);
                                 recyclerView.setAdapter(adapter);
-                                
+
                                 // Hide shimmer and show content
                                 shimmerContainer.stopShimmer();
                                 shimmerContainer.setVisibility(View.GONE);
@@ -322,7 +322,7 @@ public class RNA extends Fragment {
                         // Show error toast if refresh fails
                         Toast.makeText(getContext(), "Failed to refresh content", Toast.LENGTH_SHORT).show();
                     }
-                    
+
                     // Stop the refresh animation
                     swipeRefreshLayout.setRefreshing(false);
                 });

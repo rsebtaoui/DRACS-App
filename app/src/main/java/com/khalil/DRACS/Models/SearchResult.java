@@ -1,9 +1,9 @@
 package com.khalil.DRACS.Models;
 
 public class SearchResult {
-    private String title;
-    private String snippet;
-    private Class<?> targetFragment;
+    private final String title;
+    private final String snippet;
+    private final Class<?> targetFragment;
     private String targetSection;
     private int sectionPosition;
 

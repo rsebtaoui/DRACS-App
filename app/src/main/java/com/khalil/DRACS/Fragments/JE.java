@@ -2,7 +2,9 @@ package com.khalil.DRACS.Fragments;
 
 import static android.content.Context.MODE_PRIVATE;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import androidx.activity.OnBackPressedCallback;
+import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
@@ -21,14 +24,13 @@ import com.facebook.shimmer.ShimmerFrameLayout;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.khalil.DRACS.Activities.Activity_main;
 import com.khalil.DRACS.Adapters.ExpandableAdapter;
 import com.khalil.DRACS.Adapters.ShimmerAdapter;
-import com.khalil.DRACS.Avtivities.Activity_main;
 import com.khalil.DRACS.Models.FirestoreModel;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.ConnectionUtils;
 import com.khalil.DRACS.Utils.FileUtils;
-import com.khalil.DRACS.Utils.PersistentDataUtils;
 
 import java.util.Map;
 
@@ -52,7 +54,7 @@ public class JE extends Fragment {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Check for persistent data
         SharedPreferences prefs = requireActivity().getSharedPreferences("DRACS_Prefs", MODE_PRIVATE);
@@ -119,26 +121,20 @@ public class JE extends Fragment {
         // Try to get data from pre-fetcher first
         FirestoreModel model = ((Activity_main) requireActivity()).getDataPreFetcher().getCachedData("je");
         if (model != null) {
-            try {
-                // Use pre-fetched data
-                Map<String, FirestoreModel.Section> sections = model.getSections();
-                setupClickListeners(sections);
-                adapter = new ExpandableAdapter(getContext(), sections);
-                recyclerView.setAdapter(adapter);
-                
-                // Hide shimmer and show content
-                shimmerContainer.stopShimmer();
-                shimmerContainer.setVisibility(View.GONE);
-                recyclerView.setVisibility(View.VISIBLE);
-                
-                // Expand target section if we have one
-                if (targetSectionId != null) {
-                    expandTargetSection(sections);
-                }
-            } catch (Exception e) {
-                FirebaseCrashlytics.getInstance().recordException(e);
-                FirebaseCrashlytics.getInstance().log("Error processing pre-fetched data in JE fragment");
-                showError("Error loading data");
+            // Use pre-fetched data
+            Map<String, FirestoreModel.Section> sections = model.getSections();
+            setupClickListeners(sections);
+            adapter = new ExpandableAdapter(getContext(), sections);
+            recyclerView.setAdapter(adapter);
+
+            // Hide shimmer and show content
+            shimmerContainer.stopShimmer();
+            shimmerContainer.setVisibility(View.GONE);
+            recyclerView.setVisibility(View.VISIBLE);
+
+            // Expand target section if we have one
+            if (targetSectionId != null) {
+                expandTargetSection(sections);
             }
             return;
         }
@@ -150,53 +146,43 @@ public class JE extends Fragment {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            try {
-                                final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
-                                if (finalModel != null) {
-                                    // Cache the data for future use
-                                    ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("je", finalModel);
-                                    
-                                    // Set up UI
-                                    Map<String, FirestoreModel.Section> sections = finalModel.getSections();
-                                    setupClickListeners(sections);
-                                    adapter = new ExpandableAdapter(getContext(), sections);
-                                    recyclerView.setAdapter(adapter);
-                                    
-                                    // Hide shimmer and show content
-                                    shimmerContainer.stopShimmer();
-                                    shimmerContainer.setVisibility(View.GONE);
-                                    recyclerView.setVisibility(View.VISIBLE);
+                            final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
+                            if (finalModel != null) {
+                                // Cache the data for future use
+                                ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("je", finalModel);
 
-                                    // If we have a target section ID from search, expand that section after UI is ready
-                                    if (targetSectionId != null) {
-                                        expandTargetSection(sections);
-                                    }
+                                // Set up UI
+                                Map<String, FirestoreModel.Section> sections = finalModel.getSections();
+                                setupClickListeners(sections);
+                                adapter = new ExpandableAdapter(getContext(), sections);
+                                recyclerView.setAdapter(adapter);
 
-                                    // Check if this is the first successful connection
-                                    SharedPreferences prefs = requireActivity().getSharedPreferences("DRACS_Prefs", MODE_PRIVATE);
-                                    boolean hasPersistentData = prefs.getBoolean("has_persistent_data", false);
-                                    if (!hasPersistentData) {
-                                        // This is the first successful connection, trigger full data prefetch
-                                        ((Activity_main) requireActivity()).getDataPreFetcher().startPreFetching(success -> {
-                                            if (success) {
-                                                // Mark that we have persistent data
-                                                SharedPreferences.Editor editor = prefs.edit();
-                                                editor.putBoolean("has_persistent_data", true);
-                                                editor.apply();
-                                            }
-                                        });
-                                    }
+                                // Hide shimmer and show content
+                                shimmerContainer.stopShimmer();
+                                shimmerContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+
+                                // If we have a target section ID from search, expand that section after UI is ready
+                                if (targetSectionId != null) {
+                                    expandTargetSection(sections);
                                 }
-                            } catch (Exception e) {
-                                FirebaseCrashlytics.getInstance().recordException(e);
-                                FirebaseCrashlytics.getInstance().log("Error processing Firestore data in JE fragment");
-                                showError("Error loading data");
+
+                                // Check if this is the first successful connection
+                                SharedPreferences prefs = requireActivity().getSharedPreferences("DRACS_Prefs", MODE_PRIVATE);
+                                boolean hasPersistentData = prefs.getBoolean("has_persistent_data", false);
+                                if (!hasPersistentData) {
+                                    // This is the first successful connection, trigger full data prefetch
+                                    ((Activity_main) requireActivity()).getDataPreFetcher().startPreFetching(success -> {
+                                        if (success) {
+                                            // Mark that we have persistent data
+                                            SharedPreferences.Editor editor = prefs.edit();
+                                            editor.putBoolean("has_persistent_data", true);
+                                            editor.apply();
+                                        }
+                                    });
+                                }
                             }
                         }
-                    } else {
-                        FirebaseCrashlytics.getInstance().recordException(task.getException());
-                        FirebaseCrashlytics.getInstance().log("Error fetching data from Firestore in JE fragment");
-                        showError("Error loading data");
                     }
                 });
     }
@@ -252,25 +238,15 @@ public class JE extends Fragment {
                                 FileUtils.openGoogleMaps(getContext(), lat, lng, "");
                             }
                         });
+                    } else if (cw.getActionType().equals("web")) {
+                        cw.setOnClickListener(v -> {
+                            String url = cw.getActionValue();
+                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+                            getContext().startActivity(browserIntent);
+                        });
                     }
                 }
             }
-        }
-    }
-
-    private void handleClickableWordAction(String actionType, String actionValue) {
-        switch (actionType) {
-            case "download":
-                FileUtils.copyFileFromAssets(getContext(), actionValue);
-                break;
-            case "map":
-                String[] coords = actionValue.split(",");
-                if (coords.length == 2) {
-                    double lat = Double.parseDouble(coords[0]);
-                    double lng = Double.parseDouble(coords[1]);
-                    FileUtils.openGoogleMaps(getContext(), lat, lng, "");
-                }
-                break;
         }
     }
 
@@ -313,47 +289,36 @@ public class JE extends Fragment {
                     if (task.isSuccessful()) {
                         DocumentSnapshot document = task.getResult();
                         if (document.exists()) {
-                            try {
-                                final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
-                                if (finalModel != null) {
-                                    // Cache the new data
-                                    ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("je", finalModel);
-                                    
-                                    // Set up UI with new data
-                                    Map<String, FirestoreModel.Section> sections = finalModel.getSections();
-                                    setupClickListeners(sections);
-                                    adapter = new ExpandableAdapter(getContext(), sections);
-                                    recyclerView.setAdapter(adapter);
-                                    
-                                    // Hide shimmer and show content
-                                    shimmerContainer.stopShimmer();
-                                    shimmerContainer.setVisibility(View.GONE);
-                                    recyclerView.setVisibility(View.VISIBLE);
+                            final FirestoreModel finalModel = document.toObject(FirestoreModel.class);
+                            if (finalModel != null) {
+                                // Cache the new data
+                                ((Activity_main) requireActivity()).getDataPreFetcher().cacheData("je", finalModel);
 
-                                    // If we have a target section ID, expand it
-                                    if (targetSectionId != null) {
-                                        expandTargetSection(sections);
-                                    }
+                                // Set up UI with new data
+                                Map<String, FirestoreModel.Section> sections = finalModel.getSections();
+                                setupClickListeners(sections);
+                                adapter = new ExpandableAdapter(getContext(), sections);
+                                recyclerView.setAdapter(adapter);
+
+                                // Hide shimmer and show content
+                                shimmerContainer.stopShimmer();
+                                shimmerContainer.setVisibility(View.GONE);
+                                recyclerView.setVisibility(View.VISIBLE);
+
+                                // If we have a target section ID, expand it
+                                if (targetSectionId != null) {
+                                    expandTargetSection(sections);
                                 }
-                            } catch (Exception e) {
-                                FirebaseCrashlytics.getInstance().recordException(e);
-                                FirebaseCrashlytics.getInstance().log("Error processing refreshed data in JE fragment");
-                                showError("Error refreshing content");
                             }
                         }
                     } else {
-                        FirebaseCrashlytics.getInstance().recordException(task.getException());
-                        FirebaseCrashlytics.getInstance().log("Error refreshing data from Firestore in JE fragment");
-                        showError("Error refreshing content");
+                        // Show error toast if refresh fails
+                        Toast.makeText(getContext(), "Failed to refresh content", Toast.LENGTH_SHORT).show();
                     }
-                    
+
                     // Stop the refresh animation
                     swipeRefreshLayout.setRefreshing(false);
                 });
-    }
-
-    private void showError(String message) {
-        Toast.makeText(requireContext(), message, Toast.LENGTH_LONG).show();
     }
 
 }
