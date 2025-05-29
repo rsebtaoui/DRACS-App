@@ -241,8 +241,7 @@ public class JE extends Fragment {
                     } else if (cw.getActionType().equals("web")) {
                         cw.setOnClickListener(v -> {
                             String url = cw.getActionValue();
-                            Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
-                            getContext().startActivity(browserIntent);
+                            FileUtils.handleWebAction(getContext(), url);
                         });
                     }
                 }

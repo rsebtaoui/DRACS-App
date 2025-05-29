@@ -235,6 +235,11 @@ public class RNA extends Fragment {
                                 FileUtils.openGoogleMaps(getContext(), lat, lng, "");
                             }
                         });
+                    } else if (cw.getActionType().equals("web")) {
+                        cw.setOnClickListener(v -> {
+                            String url = cw.getActionValue();
+                            FileUtils.handleWebAction(getContext(), url);
+                        });
                     }
                 }
             }

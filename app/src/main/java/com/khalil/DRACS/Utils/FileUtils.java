@@ -319,6 +319,8 @@ public class FileUtils {
                 context.startActivity(chooser);
             } catch (ActivityNotFoundException e) {
                 Toast.makeText(context, "لا يوجد تطبيق لفتح ملفات PDF", Toast.LENGTH_LONG).show();
+                // Log the exception to Firebase Crashlytics
+                FirebaseCrashlytics.getInstance().recordException(e);
                 // Optionally prompt user to install a PDF viewer
                 openPdfViewerInPlayStore(context);
             }
@@ -326,8 +328,18 @@ public class FileUtils {
     }
 
     private static void openPdfViewerInPlayStore(Context context) {
-        // Implement the logic to open the Play Store for installing a PDF viewer
-        Toast.makeText(context, "يرجى تثبيت تطبيق لفتح ملفات PDF من متجر التطبيقات", Toast.LENGTH_LONG).show();
+        try {
+            Intent playStoreIntent = new Intent(Intent.ACTION_VIEW);
+            playStoreIntent.setData(Uri.parse("market://search?q=pdf+reader"));
+            context.startActivity(playStoreIntent);
+        } catch (ActivityNotFoundException e) {
+            // Log the exception to Firebase Crashlytics
+            FirebaseCrashlytics.getInstance().recordException(e);
+            // If Play Store not installed, open browser
+            Intent browserIntent = new Intent(Intent.ACTION_VIEW);
+            browserIntent.setData(Uri.parse("https://play.google.com/store/search?q=pdf+reader"));
+            context.startActivity(browserIntent);
+        }
     }
 
     private static void showErrorOnMainThread(Context context, String message) {
@@ -483,5 +495,15 @@ public class FileUtils {
                     Uri.parse("https://www.youtube.com/watch?v=" + videoId));
         }
         context.startActivity(intent);
+    }
+
+    public static void handleWebAction(Context context, String url) {
+        Intent browserIntent = new Intent(Intent.ACTION_VIEW, Uri.parse(url));
+        try {
+            context.startActivity(browserIntent);
+        } catch (ActivityNotFoundException e) {
+            Toast.makeText(context, "لا يمكن فتح الرابط", Toast.LENGTH_LONG).show();
+            FirebaseCrashlytics.getInstance().recordException(e);
+        }
     }
 }
