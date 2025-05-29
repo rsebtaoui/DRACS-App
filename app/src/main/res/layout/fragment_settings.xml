@@ -10,14 +10,6 @@
         android:orientation="vertical"
         android:padding="16dp">
 
-        <!-- App Settings Section -->
-<!--        <TextView-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:text="@string/app_settings"-->
-<!--            android:textSize="20sp"-->
-<!--            android:textStyle="bold"-->
-<!--            android:layout_marginBottom="16dp"/>-->
 
         <!-- Dark Mode Switch -->
         <com.google.android.material.card.MaterialCardView
@@ -58,16 +50,6 @@
             app:cardElevation="2dp"
             app:cardCornerRadius="8dp">
 
-            <!-- Storage Section -->
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/storage"
-                android:textSize="20sp"
-                android:textStyle="bold"
-                android:layout_marginTop="24dp"
-                android:layout_marginBottom="16dp"/>
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -75,14 +57,24 @@
                 android:padding="16dp"
                 android:gravity="center_vertical">
 
+                <!-- TextView on the left -->
+                <TextView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/storage"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
 
+                <!-- Button on the right -->
                 <com.google.android.material.button.MaterialButton
                     android:id="@+id/clear_cache_button"
                     style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="@string/clear_cache" />
             </LinearLayout>
+
         </com.google.android.material.card.MaterialCardView>
 
         <!-- Contact Section -->

@@ -32,9 +32,11 @@ import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.DataPreFetcher;
+import com.khalil.DRACS.Utils.ConnectionUtils;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
+import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 public class Activity_main extends AppCompatActivity {
 
@@ -256,26 +258,39 @@ public class Activity_main extends AppCompatActivity {
 
             appUpdateInfoTask.addOnSuccessListener(appUpdateInfo -> {
                 try {
-                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                            && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.FLEXIBLE)) {
-                        try {
+                    if (appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE) {
+                        if (ConnectionUtils.isNetworkAvailable(this)) {
+                            // Mandatory update if internet is available
+                            appUpdateManager.startUpdateFlowForResult(
+                                    appUpdateInfo,
+                                    activityResultLauncher,
+                                    AppUpdateOptions.newBuilder(AppUpdateType.IMMEDIATE).build());
+                        } else {
+                            // Flexible update if no internet
                             appUpdateManager.startUpdateFlowForResult(
                                     appUpdateInfo,
                                     activityResultLauncher,
                                     AppUpdateOptions.newBuilder(AppUpdateType.FLEXIBLE).build());
-                        } catch (Exception e) {
                         }
                     }
                 } catch (Exception e) {
+                    // Log the exception to Firebase Crashlytics
+                    FirebaseCrashlytics.getInstance().recordException(e);
                 }
             }).addOnFailureListener(e -> {
+                // Log the failure to Firebase Crashlytics
+                FirebaseCrashlytics.getInstance().recordException(e);
             });
 
             try {
                 appUpdateManager.registerListener(listener);
             } catch (Exception e) {
+                // Log the exception to Firebase Crashlytics
+                FirebaseCrashlytics.getInstance().recordException(e);
             }
         } catch (Exception e) {
+            // Log the exception to Firebase Crashlytics
+            FirebaseCrashlytics.getInstance().recordException(e);
         }
     }
 

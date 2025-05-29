@@ -248,31 +248,31 @@ public class FileUtils {
                     Toast.makeText(context, "يرجى تفعيل الإشعارات للاستمرار", Toast.LENGTH_LONG).show();
                     return;
                 }
-            }
+        }
 
-            createNotificationChannel(context);
+        createNotificationChannel(context);
             Intent intent = createPdfViewIntent(context, outputFile);
-
+            
             // Handle PendingIntent flags based on API level
             int flags = PendingIntent.FLAG_UPDATE_CURRENT;
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
                 flags |= PendingIntent.FLAG_IMMUTABLE;
             }
-
+            
             PendingIntent pendingIntent = PendingIntent.getActivity(
-                    context,
-                    0,
-                    intent,
-                    flags
+                context,
+                0,
+                intent,
+                flags
             );
 
             NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
-                    .setSmallIcon(android.R.drawable.stat_sys_download_done)
-                    .setContentTitle("اكتمل التحميل")
-                    .setContentText("تم حفظ الملف في مجلد التنزيلات")
-                    .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                    .setContentIntent(pendingIntent)
-                    .setAutoCancel(true);
+                .setSmallIcon(android.R.drawable.stat_sys_download_done)
+                .setContentTitle("اكتمل التحميل")
+                .setContentText("تم حفظ الملف في مجلد التنزيلات")
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setContentIntent(pendingIntent)
+                .setAutoCancel(true);
 
             NotificationManagerCompat notificationManager = NotificationManagerCompat.from(context);
             notificationManager.notify(1, builder.build());
@@ -285,21 +285,21 @@ public class FileUtils {
     private static Intent createPdfViewIntent(Context context, File file) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
         Uri fileUri;
-
+        
         try {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
                 // Android 7 and above - use FileProvider
                 fileUri = androidx.core.content.FileProvider.getUriForFile(
-                        context,
-                        context.getPackageName() + ".provider",
-                        file
+                    context,
+                    context.getPackageName() + ".provider",
+                    file
                 );
                 intent.addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
             } else {
                 // Android 6 and below - use direct file URI
                 fileUri = Uri.fromFile(file);
             }
-
+            
             intent.setDataAndType(fileUri, "application/pdf");
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             return intent;
@@ -467,16 +467,16 @@ public class FileUtils {
         }
 
         // Android 9 and below - request storage permissions
-        if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-            Toast.makeText(activity, "يجب منح أذونات التخزين لتحميل الملفات", Toast.LENGTH_LONG).show();
-        }
+            if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                Toast.makeText(activity, "يجب منح أذونات التخزين لتحميل الملفات", Toast.LENGTH_LONG).show();
+            }
 
-        ActivityCompat.requestPermissions(activity,
-                new String[]{
+            ActivityCompat.requestPermissions(activity,
+                    new String[]{
                         Manifest.permission.READ_EXTERNAL_STORAGE,
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
-                },
-                100);
+                    },
+                    100);
     }
 
     public static void openGoogleMaps(Context context, double latitude, double longitude, String label) {
