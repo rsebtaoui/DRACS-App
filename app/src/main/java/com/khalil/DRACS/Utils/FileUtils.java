@@ -144,14 +144,7 @@ public class FileUtils {
     }
 
     private static File prepareOutputFile(Context context) {
-        File downloadDir;
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            // Use MediaStore for Android 10 and above
-            downloadDir = new File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS), "");
-        } else {
-            // Use direct file access for Android 9 and below
-            downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-        }
+        File downloadDir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
 
         if (!downloadDir.exists() && !downloadDir.mkdirs()) {
             Toast.makeText(context, "لا يمكن إنشاء مجلد التنزيلات", Toast.LENGTH_LONG).show();
@@ -368,7 +361,7 @@ public class FileUtils {
 
             if (!fileFound) {
                 FirebaseCrashlytics.getInstance().log("File not found in assets: " + fileName);
-                Toast.makeText(context, "لم يتم العثور على الملف: " + fileName, Toast.LENGTH_LONG).show();
+                Toast.makeText(context, "الملف غير متوفر حالياً", Toast.LENGTH_LONG).show();
                 return;
             }
 
@@ -449,11 +442,11 @@ public class FileUtils {
 
     // Check if required permissions are granted
     private static boolean hasRequiredPermissions(Context context) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            // Android 10 and above - no storage permissions needed for Downloads
-            return true;
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // For Android 11 and above, check MANAGE_EXTERNAL_STORAGE permission
+            return Environment.isExternalStorageManager();
         } else {
-            // Android 9 and below - need storage permissions
+            // For Android 10 and below, check READ and WRITE permissions
             return ContextCompat.checkSelfPermission(context, Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED
                     && ContextCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED;
         }
@@ -461,12 +454,20 @@ public class FileUtils {
 
     // Request permissions
     private static void requestPermissions(Activity activity) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            // Android 10 and above - no storage permissions needed
-            return;
-        }
-
-        // Android 9 and below - request storage permissions
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+            // For Android 11 and above, request MANAGE_EXTERNAL_STORAGE permission
+            try {
+                Intent intent = new Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION);
+                intent.addCategory("android.intent.category.DEFAULT");
+                intent.setData(Uri.parse(String.format("package:%s", activity.getPackageName())));
+                activity.startActivityForResult(intent, 2000);
+            } catch (Exception e) {
+                Intent intent = new Intent();
+                intent.setAction(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
+                activity.startActivityForResult(intent, 2000);
+            }
+        } else {
+            // For Android 10 and below, request READ and WRITE permissions
             if (ActivityCompat.shouldShowRequestPermissionRationale(activity, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
                 Toast.makeText(activity, "يجب منح أذونات التخزين لتحميل الملفات", Toast.LENGTH_LONG).show();
             }
@@ -477,6 +478,7 @@ public class FileUtils {
                         Manifest.permission.WRITE_EXTERNAL_STORAGE
                     },
                     100);
+        }
     }
 
     public static void openGoogleMaps(Context context, double latitude, double longitude, String label) {

@@ -32,7 +32,7 @@ import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.DataPreFetcher;
-import com.khalil.DRACS.Utils.ConnectionUtils;
+\import com.khalil.DRACS.Utils.ConnectionUtils;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
