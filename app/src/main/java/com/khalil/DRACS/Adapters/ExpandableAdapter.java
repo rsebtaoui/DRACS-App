@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -24,10 +25,12 @@ import com.khalil.DRACS.R;
 
 import net.cachapa.expandablelayout.ExpandableLayout;
 
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Set;
 
 public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.ViewHolder> {
     private final Context context;
@@ -35,10 +38,25 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
     private String expandedSectionId = null;
     private static final String TAG = "ExpandableAdapter";
     private RecyclerView recyclerView;
+    private Set<String> favoriteSectionIds = new HashSet<>();
+    private OnBookmarkClickListener bookmarkClickListener;
+
+    public interface OnBookmarkClickListener {
+        void onBookmarkClick(String sectionId, String sectionTitle);
+    }
 
     public ExpandableAdapter(Context context, Map<String, FirestoreModel.Section> sections) {
         this.context = context;
         this.sections = sections;
+    }
+
+    public void setOnBookmarkClickListener(OnBookmarkClickListener listener) {
+        this.bookmarkClickListener = listener;
+    }
+
+    public void updateFavoriteSectionIds(Set<String> favoriteIds) {
+        favoriteSectionIds = favoriteIds != null ? new HashSet<>(favoriteIds) : new HashSet<>();
+        notifyDataSetChanged();
     }
 
     @Override
@@ -55,14 +73,31 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
         return new ViewHolder(view);
     }
 
-    @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    private List<Map.Entry<String, FirestoreModel.Section>> getSortedSections() {
         List<Map.Entry<String, FirestoreModel.Section>> sectionEntries = new ArrayList<>(sections.entrySet());
         sectionEntries.sort(Comparator.comparingInt(a -> a.getValue().getOrder()));
-        Map.Entry<String, FirestoreModel.Section> sectionEntry = sectionEntries.get(position);
+        return sectionEntries;
+    }
+
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        Map.Entry<String, FirestoreModel.Section> sectionEntry = getSortedSections().get(position);
         FirestoreModel.Section section = sectionEntry.getValue();
 
-        holder.title.setText("▼ " + sectionEntry.getKey());
+        String displayTitle = section.getTitle();
+        if (displayTitle.isEmpty()) {
+            displayTitle = sectionEntry.getKey();
+        }
+        holder.title.setText("▼ " + displayTitle);
+
+        boolean isFavorite = favoriteSectionIds.contains(sectionEntry.getKey());
+        holder.bookmarkButton.setImageResource(
+                isFavorite ? R.drawable.ic_bookmark_filled : R.drawable.ic_bookmark_outline);
+        holder.bookmarkButton.setOnClickListener(v -> {
+            if (bookmarkClickListener != null) {
+                bookmarkClickListener.onBookmarkClick(sectionEntry.getKey(), displayTitle);
+            }
+        });
 
         // 1. Build FULL content: intro + dashes + conclusion
         StringBuilder fullContentBuilder = new StringBuilder();
@@ -198,22 +233,20 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
     }
 
     public void expandSection(String sectionId) {
-        if (sectionId != null) {
-            expandedSectionId = sectionId;
-            // Find the position of the section to update it
-            int position = 0;
-            for (Map.Entry<String, FirestoreModel.Section> entry : sections.entrySet()) {
-                if (entry.getKey().equals(sectionId)) {
-                    // Force the expandable layout to expand
-                    ViewHolder holder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
-                    if (holder != null) {
-                        holder.expandableLayout.setExpanded(true, true);
-                        holder.lists.setVisibility(View.VISIBLE);
-                    }
-                    notifyItemChanged(position);
-                    break;
+        if (sectionId == null) {
+            return;
+        }
+        expandedSectionId = sectionId;
+        List<Map.Entry<String, FirestoreModel.Section>> sortedSections = getSortedSections();
+        for (int position = 0; position < sortedSections.size(); position++) {
+            if (sortedSections.get(position).getKey().equals(sectionId)) {
+                ViewHolder holder = (ViewHolder) recyclerView.findViewHolderForAdapterPosition(position);
+                if (holder != null) {
+                    holder.expandableLayout.setExpanded(true, true);
+                    holder.lists.setVisibility(View.VISIBLE);
                 }
-                position++;
+                notifyItemChanged(position);
+                break;
             }
         }
     }
@@ -225,6 +258,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
 
     static class ViewHolder extends RecyclerView.ViewHolder {
         TextView title;
+        ImageButton bookmarkButton;
         TextView introduction;
         TextView lists;
         TextView conclusion;
@@ -233,6 +267,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
         ViewHolder(View itemView) {
             super(itemView);
             title = itemView.findViewById(R.id.title);
+            bookmarkButton = itemView.findViewById(R.id.bookmark_button);
             introduction = itemView.findViewById(R.id.intro);
             lists = itemView.findViewById(R.id.lists);
             conclusion = itemView.findViewById(R.id.conclusion);

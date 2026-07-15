@@ -47,6 +47,7 @@ public class DataPreFetcher {
             throw new IllegalArgumentException("Listener cannot be null");
         }
         this.listener = listener;
+        this.completedRequests = 0;
         for (String pageId : PAGE_IDS) {
             fetchPageData(pageId);
         }

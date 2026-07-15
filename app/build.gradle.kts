@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.khalil.DRACS"
-    compileSdk = 34
+    compileSdk = 35
 
     buildFeatures {
         //noinspection DataBindingWithoutKapt
@@ -17,7 +17,7 @@ android {
     defaultConfig {
         applicationId = "com.khalil.DRACS"
         minSdk = 23
-        targetSdk = 34
+        targetSdk = 35
         versionCode = 8
         versionName = "1.3"
 
@@ -119,4 +119,13 @@ dependencies {
     implementation("com.google.android.play:app-update:2.1.0")
 
     implementation("com.facebook.shimmer:shimmer:0.5.0")
+    implementation("androidx.swiperefreshlayout:swiperefreshlayout:1.1.0")
+
+    // Lifecycle / ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-livedata:2.8.7")
+
+    // Room
+    implementation("androidx.room:room-runtime:2.6.1")
+    annotationProcessor("androidx.room:room-compiler:2.6.1")
 }
