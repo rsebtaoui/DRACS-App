@@ -1,0 +1,27 @@
+---
+description: "Guidelines for Sprint 4: Room Database for Favorites, Jetpack ViewModels, and Local PDF Viewer"
+globs: ["app/src/main/java/**/*.java", "app/build.gradle.kts"]
+alwaysApply: true
+---
+You are an expert Android Developer and Software Architect. Your task is to execute **Sprint 4 (Enhance)** of the DRACS-App roadmap, adding offline persistent features and completing the MVVM architecture.
+
+### Architectural Blueprint
+
+1. **Local Storage (Room DB for Favorites):**
+   - Implement a lightweight, thread-safe Room Database singleton (`AppDatabase.java`) to allow farmers to "Favorite" or bookmark specific sections of a page.
+   - Define a `FavoriteSection` Entity (columns: `sectionId`, `pageId`, `title`, `timestamp`).
+   - Create a `FavoriteDao` interface with standard query, insert, and delete methods.
+   - Integrate the DAO directly into `ContentRepository` so that checking/setting a favorite is managed through the single repository interface.
+
+2. **UI State & Jetpack ViewModels:**
+   - Create a `ContentViewModel.java` to decouple UI states from `BaseContentFragment`.
+   - Expose the content and favorite states to the view using `LiveData` (or observable UI state).
+   - Ensure the ViewModel strictly communicates with `ContentRepository` and does not hold references to any Android `Context` to prevent memory leaks.
+
+3. **In-App PDF Viewer (Optional/Lightweight):**
+   - If requested, integrate a simple system intent or a lightweight native view to render downloaded PDFs directly within the application flow without depending on heavy third-party binaries.
+
+### Agent Behavior
+- **Thread Safety:** Ensure all Room Database operations run on background threads using execution pools or helper utilities.
+- **Java Only:** Write all entities, DAOs, databases, and ViewModels strictly in **Java**.
+- **No Heavy Libraries:** Depend only on standard Android Jetpack architecture components (Room, Lifecycle, LiveData).

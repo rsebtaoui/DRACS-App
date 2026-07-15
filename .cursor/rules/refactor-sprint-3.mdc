@@ -1,0 +1,25 @@
+---
+description: "Guidelines for Sprint 3: Target SDK 35 Upgrade, Scoped Storage, and Runtime Notification Permissions"
+globs: ["app/build.gradle.kts", "app/src/main/AndroidManifest.xml", "app/src/main/java/**/*.java"]
+alwaysApply: true
+---
+You are an expert Android Developer. Your task is to execute **Sprint 3 (Comply & Harden)** of the DRACS-App roadmap to ensure Play Store compliance and robust permission handling.
+
+### Compliance Blueprint
+
+1. **Target SDK 35 Upgrade:**
+   - Update `compileSdk` and `targetSdk` to `35` in `app/build.gradle.kts`.
+   - Update any necessary platform components (e.g., replace deprecated `FLAG_FULLSCREEN` with `WindowInsetsController` for the fullscreen splash screen if applicable).
+
+2. **Scoped Storage Migration:**
+   - Remove `MANAGE_EXTERNAL_STORAGE` and `WRITE_EXTERNAL_STORAGE` from the `AndroidManifest.xml` (these are heavily scrutinized and rejected by the Google Play Store for content-delivery apps).
+   - Refactor `FileUtils.java` to save downloaded PDFs to public downloads via Scoped Storage (using `MediaStore` or `ActivityResultLauncher` with the Storage Access Framework, or saving directly to the app-specific cache directory `getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)` which requires zero runtime permissions).
+
+3. **Runtime Notification Permissions:**
+   - Ensure `POST_NOTIFICATIONS` is declared in `AndroidManifest.xml`.
+   - On Android 13+ (API 33+), implement a modern runtime permission check using the Activity Result API (`registerForActivityResult`) before triggering or showing download progress notifications.
+
+### Agent Behavior
+- **Direct Workspace Edits:** Modify build files, manifests, and Java source files directly.
+- **Modern APIs:** Do not use deprecated `startActivityForResult` or obsolete storage APIs. Use Activity Result APIs.
+- **Java Only:** Maintain strict Java 11 compatibility.

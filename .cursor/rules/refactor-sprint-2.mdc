@@ -1,0 +1,108 @@
+---
+description: DRACS-App Sprint 2 — Consolidate BaseContentFragment and ContentRepository
+globs: app/src/main/java/com/khalil/DRACS/**/*.java
+alwaysApply: false
+---
+
+# Sprint 2 — Consolidate
+
+Sprint 1 (Stabilize) is complete. Sprint 2 eliminates ~90% duplication across the five content fragments (RNA, PS, FDA, JE, FP) and introduces a single data access layer.
+
+## Goals
+
+1. Extract `BaseContentFragment` — shared logic for all content pages
+2. Create `ContentRepository` — cache-first Firestore reads
+3. Thin the five fragments to minimal subclasses (page ID + layout IDs only)
+4. Remove dead code surfaced during consolidation
+
+## Constraints
+
+- **Java only** — no Kotlin migration in this sprint
+- **No heavy DI** — no Hilt; use constructor/factory patterns or Activity-scoped singletons
+- **Preserve RTL** — Arabic layout direction and string resources unchanged
+- **Preserve dark mode** — `DRACS_Prefs` / `AppCompatDelegate` behavior intact
+- **Minimal diff** — do not touch Sprint 3 (targetSdk 35, scoped storage) or Sprint 4 (ViewModels, Room) unless required for compilation
+
+## Architecture Target
+
+```
+Content Fragment (RNA/PS/…) extends BaseContentFragment
+    → ContentRepository (cache-first)
+        → DataPreFetcher (in-memory)
+        → FirebaseFirestore (pages/{pageId})
+    → ExpandableAdapter (unchanged API)
+```
+
+## BaseContentFragment Responsibilities
+
+Move shared logic from RNA/PS/FDA/JE/FP into the base class:
+
+- Offline gate (FrameLayout placeholder + post navigation) — already fixed in Sprint 1
+- Shimmer loading + SwipeRefresh
+- Cache-first fetch via `ContentRepository`
+- `ExpandableAdapter` setup and `target_section_id` deep-link expand
+- Clickable word actions (download / map / web) via `FileUtils`
+- Bottom bar hide/show via `Activity_main` callback
+- Back-press → home navigation
+- Crashlytics error logging on fetch failures
+
+Subclasses provide only:
+
+- `getPageId()` — e.g. `"rna"`, `"ps"`, `"fda"`, `"je"`, `"fp"`
+- `getLayoutResId()` — fragment layout resource
+- `getRecyclerViewId()` / `getHomeActionId()` — view and nav action IDs
+
+## ContentRepository Contract
+
+```java
+public class ContentRepository {
+    // Cache-first: DataPreFetcher → Firestore .get()
+    void getPage(String pageId, ContentCallback callback);
+    void refreshPage(String pageId, ContentCallback callback);
+    void clearPage(String pageId);
+    boolean isCached(String pageId);
+}
+```
+
+- Wrap existing `DataPreFetcher`; do not duplicate cache maps
+- Reset `completedRequests` in `DataPreFetcher.startPreFetching()` if touched
+- Use `ConnectionUtils` for network checks before refresh
+- No RxJava, no coroutines — Firebase `Task` callbacks only
+
+## Refactor Order
+
+1. Create `ContentRepository` + `ContentCallback` interface
+2. Create `BaseContentFragment` with abstract hooks
+3. Migrate `RNA` first (reference implementation), verify behavior
+4. Migrate PS → FDA → JE → FP (mechanical, one at a time)
+5. Delete duplicated private methods from subclasses
+6. Remove dead code: `Item.java`, `JEnt.java`, unused utils if confirmed unused
+7. Update README Firestore schema section to match `pages/{pageId}`
+
+## Do Not Change
+
+- `ExpandableAdapter` public API (Sprint 1 sort/title fixes stay)
+- Navigation graph structure (`nav_main.xml`)
+- Firebase collection/document names
+- `DRACSApplication` Firestore persistence settings
+- Theme, colors, or Arabic string resources
+
+## Verification Checklist
+
+- [ ] All 5 content pages load online and offline (with `has_persistent_data`)
+- [ ] SwipeRefresh works on each page
+- [ ] Search deep-link expands correct section
+- [ ] Clickable words: download, map, web actions work
+- [ ] Dark mode toggle still recreates activity correctly
+- [ ] Back press returns to home from every content page
+- [ ] No `onCreateView` returns null
+- [ ] Gradle sync + debug build pass in Android Studio
+
+## File Locations
+
+| New / Modified | Path |
+|----------------|------|
+| `BaseContentFragment` | `app/src/main/java/com/khalil/DRACS/Fragments/BaseContentFragment.java` |
+| `ContentRepository` | `app/src/main/java/com/khalil/DRACS/Repository/ContentRepository.java` |
+| `ContentCallback` | `app/src/main/java/com/khalil/DRACS/Repository/ContentCallback.java` |
+| Thin fragments | `app/src/main/java/com/khalil/DRACS/Fragments/{RNA,PS,FDA,JE,FP}.java` |

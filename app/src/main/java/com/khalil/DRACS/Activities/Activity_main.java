@@ -2,10 +2,13 @@ package com.khalil.DRACS.Activities;
 
 import static androidx.navigation.Navigation.findNavController;
 
+import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
@@ -18,6 +21,7 @@ import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
 
 import com.google.android.gms.tasks.Task;
@@ -31,8 +35,9 @@ import com.google.android.play.core.install.model.AppUpdateType;
 import com.google.android.play.core.install.model.InstallStatus;
 import com.google.android.play.core.install.model.UpdateAvailability;
 import com.khalil.DRACS.R;
+import com.khalil.DRACS.Repository.ContentRepository;
 import com.khalil.DRACS.Utils.DataPreFetcher;
-\import com.khalil.DRACS.Utils.ConnectionUtils;
+import com.khalil.DRACS.Utils.ConnectionUtils;
 
 import me.ibrahimsn.lib.OnItemSelectedListener;
 import me.ibrahimsn.lib.SmoothBottomBar;
@@ -50,20 +55,60 @@ public class Activity_main extends AppCompatActivity {
     ImageView info;
     private AppUpdateManager appUpdateManager;
     private DataPreFetcher dataPreFetcher;
+    private ContentRepository contentRepository;
     InstallStateUpdatedListener listener = state -> {
         if (state.installStatus() == InstallStatus.DOWNLOADED) {
             popupSnackbarForCompleteUpdate();
         }
     };
     private ActivityResultLauncher<IntentSenderRequest> activityResultLauncher;
+    private ActivityResultLauncher<String> notificationPermissionLauncher;
+    private Runnable pendingNotificationAction;
 
     public DataPreFetcher getDataPreFetcher() {
         return dataPreFetcher;
     }
 
+    public ContentRepository getContentRepository() {
+        return contentRepository;
+    }
+
+    /**
+     * Runs the action immediately if notification permission is granted (or not required).
+     * On API 33+, requests POST_NOTIFICATIONS via Activity Result API when needed.
+     */
+    public void runWithNotificationPermission(Runnable action) {
+        if (action == null) {
+            return;
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU) {
+            action.run();
+            return;
+        }
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+                == PackageManager.PERMISSION_GRANTED) {
+            action.run();
+            return;
+        }
+        pendingNotificationAction = action;
+        notificationPermissionLauncher.launch(Manifest.permission.POST_NOTIFICATIONS);
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        notificationPermissionLauncher = registerForActivityResult(
+                new ActivityResultContracts.RequestPermission(),
+                isGranted -> {
+                    if (isGranted && pendingNotificationAction != null) {
+                        pendingNotificationAction.run();
+                    } else if (!isGranted) {
+                        Toast.makeText(this, "يرجى تفعيل الإشعارات للاستمرار", Toast.LENGTH_LONG).show();
+                    }
+                    pendingNotificationAction = null;
+                }
+        );
         
         // Set window soft input mode to adjust resize
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -83,8 +128,9 @@ public class Activity_main extends AppCompatActivity {
             return;
         }
         
-        // Initialize DataPreFetcher
+        // Initialize DataPreFetcher and ContentRepository
         dataPreFetcher = new DataPreFetcher(this);
+        contentRepository = new ContentRepository(this, dataPreFetcher);
 
         dracsicon=findViewById(R.id.dracs);
         dracsicon.setOnClickListener(v -> {

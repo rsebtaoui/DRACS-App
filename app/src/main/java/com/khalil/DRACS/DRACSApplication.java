@@ -2,7 +2,7 @@ package com.khalil.DRACS;
 
 import android.app.Application;
 
-import com.google.firebase.BuildConfig;
+import com.khalil.DRACS.BuildConfig;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;

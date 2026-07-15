@@ -55,7 +55,6 @@ public class settings extends Fragment {
         darkModeSwitch = view.findViewById(R.id.dark_mode_switch);
         clearCacheButton = view.findViewById(R.id.clear_cache_button);
         contactHeader = view.findViewById(R.id.contact_header);
-//        contactExpandIcon = view.findViewById(R.id.contact_expand_icon);
         contactDetails = view.findViewById(R.id.contact_details);
         phoneNumber = view.findViewById(R.id.phone_number);
         developerEmail = view.findViewById(R.id.developer_email);
@@ -132,17 +131,18 @@ public class settings extends Fragment {
 
     private void toggleContactExpansion() {
         isContactExpanded = !isContactExpanded;
-        
-        // Animate the expand/collapse icon
-        RotateAnimation rotateAnimation = new RotateAnimation(
-            isContactExpanded ? 0 : 180,
-            isContactExpanded ? 180 : 0,
-            Animation.RELATIVE_TO_SELF, 0.5f,
-            Animation.RELATIVE_TO_SELF, 0.5f
-        );
-        rotateAnimation.setDuration(300);
-        rotateAnimation.setFillAfter(true);
-        contactExpandIcon.startAnimation(rotateAnimation);
+
+        if (contactExpandIcon != null) {
+            RotateAnimation rotateAnimation = new RotateAnimation(
+                isContactExpanded ? 0 : 180,
+                isContactExpanded ? 180 : 0,
+                Animation.RELATIVE_TO_SELF, 0.5f,
+                Animation.RELATIVE_TO_SELF, 0.5f
+            );
+            rotateAnimation.setDuration(300);
+            rotateAnimation.setFillAfter(true);
+            contactExpandIcon.startAnimation(rotateAnimation);
+        }
 
         // Show/hide contact details
         contactDetails.setVisibility(isContactExpanded ? View.VISIBLE : View.GONE);

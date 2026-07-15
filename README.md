@@ -21,7 +21,7 @@ DRACS (Digital Resource for the "Direction Régionale d'Agriculture Casablanca s
 
 - Android Studio Hedgehog | 2023.1.1
 - Minimum SDK: 23 (Android 6.0)
-- Target SDK: 34 (Android 14)
+- Target SDK: 35 (Android 15)
 - Java 8
 
 ## Dependencies
@@ -57,8 +57,8 @@ implementation("de.hdodenhof:circleimageview:3.1.0")
    - Create a Firebase project in the [Firebase Console](https://console.firebase.google.com/)
    - Add your Android app with package name `com.khalil.DRACS`
    - Download `google-services.json` and place it in the `app` directory
-   - Enable Firestore Database in test mode
-   - Create a collection named "RNA" in Firestore
+   - Enable Firestore Database
+   - Create a collection named `pages` with documents: `rna`, `ps`, `fda`, `je`, `fp`
 
 3. **Build Configuration**
    - Open the project in Android Studio
@@ -68,15 +68,36 @@ implementation("de.hdodenhof:circleimageview:3.1.0")
 4. **Content Management**
    - Access the Firebase Console
    - Navigate to Firestore Database
-   - Add content to the "RNA" collection with the following structure:
+   - Add content to each document under the `pages` collection using this structure:
      ```json
      {
-       "title": "عنوان القسم",
-       "intro": "المقدمة",
-       "content": "المحتوى",
-       "conclu": "الخاتمة"
+       "sections": {
+         "section_key_1": {
+           "title": "عنوان القسم",
+           "introduction": "المقدمة",
+           "dashes": ["نقطة 1", "نقطة 2"],
+           "conclusion": "الخاتمة",
+           "order": 1,
+           "clickable_words": [
+             {
+               "text": "تحميل النموذج",
+               "color": "#0000FF",
+               "action_type": "download",
+               "action_value": "path_or_drive_url"
+             }
+           ],
+           "colored_lines": [
+             {
+               "text": "سطر ملون",
+               "color": "#FF0000"
+             }
+           ]
+         }
+       }
      }
      ```
+
+     **Supported `action_type` values:** `download`, `map` (lat,lng), `web` (URL)
 
 ## Security Notes
 
@@ -93,21 +114,33 @@ app/
 │   ├── main/
 │   │   ├── java/com/khalil/DRACS/
 │   │   │   ├── DRACSApplication.java
+│   │   │   ├── Activities/
+│   │   │   │   ├── SplashActivity.java
+│   │   │   │   └── Activity_main.java
 │   │   │   ├── Fragments/
-│   │   │   │   ├── RNA.java
-│   │   │   │   └── Settings.java
+│   │   │   │   ├── BaseContentFragment.java
+│   │   │   │   ├── RNA.java, PS.java, FDA.java, JE.java, FP.java
+│   │   │   │   ├── home.java, SearchFragment.java
+│   │   │   │   └── settings.java, About.java
+│   │   │   ├── Repository/
+│   │   │   │   ├── ContentRepository.java
+│   │   │   │   └── ContentCallback.java
 │   │   │   ├── Adapters/
-│   │   │   │   └── ExpandableAdapter.java
+│   │   │   │   ├── ExpandableAdapter.java
+│   │   │   │   ├── SearchAdapter.java
+│   │   │   │   └── ShimmerAdapter.java
 │   │   │   ├── Models/
-│   │   │   │   └── Item.java
-│   │   │   └── Services/
-│   │   │       └── FirebaseService.java
+│   │   │   │   └── FirestoreModel.java
+│   │   │   └── Utils/
+│   │   │       ├── DataPreFetcher.java
+│   │   │       ├── ConnectionUtils.java
+│   │   │       └── FileUtils.java
 │   │   ├── res/
 │   │   │   ├── layout/
-│   │   │   │   ├── fragment_r_n_a.xml
+│   │   │   │   ├── fragment_content_page.xml
 │   │   │   │   └── fragment_settings.xml
-│   │   │   └── values/
-│   │   │       └── strings.xml
+│   │   │   └── navigation/
+│   │   │       └── nav_main.xml
 │   │   └── AndroidManifest.xml
 │   └── build.gradle.kts
 └── google-services.json (DO NOT COMMIT THIS FILE)
@@ -118,19 +151,28 @@ app/
 The app uses Firebase for:
 - Content Management (Firestore)
 - Analytics
-- Storage for PDF files
+- Crashlytics
 
 ### Firestore Structure
 
 ```
-RNA (Collection)
-├── Document 1
-│   ├── title: String
-│   ├── intro: String
-│   ├── content: String
-│   └── conclu: String
-└── Document 2
-    └── ...
+pages (Collection)
+├── rna (Document)   → السجل الوطني الفلاحي
+├── ps  (Document)   → الحماية الاجتماعية
+├── fda (Document)   → صندوق التنمية الفلاحية
+├── je  (Document)   → المقاولين الشباب
+└── fp  (Document)   → التكوين المهني
+
+Each document contains:
+  sections: Map<String, Section>
+    Section:
+      ├── title: String
+      ├── introduction: String
+      ├── dashes: String[]
+      ├── conclusion: String
+      ├── order: Number
+      ├── clickable_words: Array<{ text, color, action_type, action_value }>
+      └── colored_lines: Array<{ text, color }>
 ```
 
 ## Features in Detail
