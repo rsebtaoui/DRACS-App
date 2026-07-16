@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Night overrides for content polish (readable on dark surfaces) -->
+    <color name="forest_green">#A5D6A7</color>
+    <color name="charcoal">#F5F5F5</color>
+    <color name="soft_green_surface">#1B3A1F</color>
+    <color name="card_stroke">#2C2C2C</color>
+    <color name="body_text_secondary">#BDBDBD</color>
+</resources>

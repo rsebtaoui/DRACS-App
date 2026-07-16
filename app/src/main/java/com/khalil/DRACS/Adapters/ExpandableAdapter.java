@@ -84,10 +84,9 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
         Map.Entry<String, FirestoreModel.Section> sectionEntry = getSortedSections().get(position);
         FirestoreModel.Section section = sectionEntry.getValue();
 
-        String displayTitle = section.getTitle();
-        if (displayTitle.isEmpty()) {
-            displayTitle = sectionEntry.getKey();
-        }
+        final String displayTitle = section.getTitle().isEmpty()
+                ? sectionEntry.getKey()
+                : section.getTitle();
         holder.title.setText("▼ " + displayTitle);
 
         boolean isFavorite = favoriteSectionIds.contains(sectionEntry.getKey());

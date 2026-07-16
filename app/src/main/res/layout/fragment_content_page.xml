@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.swiperefreshlayout.widget.SwipeRefreshLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.swiperefreshlayout.widget.SwipeRefreshLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/swipeRefreshLayout"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="?android:attr/colorBackground">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -20,8 +20,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:clipToPadding="false"
-                android:paddingTop="8dp"
-                android:paddingBottom="8dp" />
+                android:paddingStart="0dp"
+                android:paddingTop="12dp"
+                android:paddingEnd="0dp"
+                android:paddingBottom="24dp"
+                android:scrollbars="none" />
 
         </com.facebook.shimmer.ShimmerFrameLayout>
 
@@ -30,8 +33,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:clipToPadding="false"
-            android:paddingTop="8dp"
-            android:paddingBottom="8dp" />
+            android:paddingStart="0dp"
+            android:paddingTop="12dp"
+            android:paddingEnd="0dp"
+            android:paddingBottom="24dp"
+            android:scrollbars="none"
+            android:overScrollMode="ifContentScrolls" />
 
     </FrameLayout>
 
