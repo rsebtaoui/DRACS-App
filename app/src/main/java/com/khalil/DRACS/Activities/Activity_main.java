@@ -1,7 +1,5 @@
 package com.khalil.DRACS.Activities;
 
-import static androidx.navigation.Navigation.findNavController;
-
 import android.Manifest;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
@@ -23,8 +21,10 @@ import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.play.core.appupdate.AppUpdateInfo;
 import com.google.android.play.core.appupdate.AppUpdateManager;
@@ -39,8 +39,6 @@ import com.khalil.DRACS.Repository.ContentRepository;
 import com.khalil.DRACS.Utils.DataPreFetcher;
 import com.khalil.DRACS.Utils.ConnectionUtils;
 
-import me.ibrahimsn.lib.OnItemSelectedListener;
-import me.ibrahimsn.lib.SmoothBottomBar;
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
 public class Activity_main extends AppCompatActivity {
@@ -49,7 +47,7 @@ public class Activity_main extends AppCompatActivity {
     private static final String KEY_DARK_MODE = "dark_mode";
     private static final String KEY_LAST_NAV_ITEM = "last_nav_item";
 
-    SmoothBottomBar smoothBottomBar;
+    BottomNavigationView bottomNav;
     NavController navController;
     ImageView dracsicon;
     ImageView info;
@@ -132,14 +130,19 @@ public class Activity_main extends AppCompatActivity {
         dataPreFetcher = new DataPreFetcher(this);
         contentRepository = new ContentRepository(this, dataPreFetcher);
 
-        dracsicon=findViewById(R.id.dracs);
-        dracsicon.setOnClickListener(v -> {
-            navController.navigate(R.id.about);
-        });
-
-        // Define the views
-        smoothBottomBar = findViewById(R.id.bottomBar);
+        NavHostFragment navHostFragment =
+                (NavHostFragment) getSupportFragmentManager().findFragmentById(R.id.navHostFragment);
+        if (navHostFragment == null) {
+            throw new IllegalStateException("NavHostFragment not found for R.id.navHostFragment");
+        }
+        navController = navHostFragment.getNavController();
+        bottomNav = findViewById(R.id.bottom_nav);
+        dracsicon = findViewById(R.id.dracs);
         ImageView moreIcon = findViewById(R.id.notif_icon);
+        ImageView searchIcon = findViewById(R.id.search_icon);
+        TextView textTitle = findViewById(R.id.title);
+
+        searchIcon.setOnClickListener(v -> navController.navigate(R.id.Search));
 
         // Set up more icon click listener
         moreIcon.setOnClickListener(v -> {
@@ -192,44 +195,35 @@ public class Activity_main extends AppCompatActivity {
                     }
                 });
 
-        // Handling navigation
-        navController = findNavController(this, R.id.navHostFragment);
-        TextView textTitle = findViewById(R.id.title);
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             textTitle.setText(destination.getLabel());
             handleDestinationChange(destination.getId());
-            
-            // Update the icon based on destination
+
             if (destination.getId() == R.id.home) {
+                dracsicon.clearColorFilter();
                 dracsicon.setImageResource(R.mipmap.ic_dra_3);
-                dracsicon.setOnClickListener(v -> {
-                    navController.navigate(R.id.about);
-                });
+                dracsicon.setOnClickListener(v -> navController.navigate(R.id.about));
             } else {
                 dracsicon.setImageResource(R.drawable.ic_back);
-                dracsicon.setOnClickListener(v -> {
-                    navController.navigate(R.id.home);
-                });
+                dracsicon.setColorFilter(ContextCompat.getColor(this, R.color.primary_foreground));
+                dracsicon.setOnClickListener(v -> navController.navigate(R.id.home));
             }
         });
 
-        // Handling bottom nav bar navigation
-        smoothBottomBar.setOnItemSelectedListener((OnItemSelectedListener) i -> {
-            // Save the selected item index
-            SharedPreferences.Editor editor = getSharedPreferences(PREFS_NAME, MODE_PRIVATE).edit();
-            editor.putInt(KEY_LAST_NAV_ITEM, i);
-            editor.apply();
-
-            switch (i) {
-                case 0:
-                    navController.navigate(R.id.home);
-                    break;
-                case 1:
-                    navController.navigate(R.id.Search);
-                    break;
-                case 2:
-                    navController.navigate(R.id.setting);
-                    break;
+        bottomNav.setOnItemSelectedListener(item -> {
+            int itemId = item.getItemId();
+            if (itemId == R.id.home) {
+                navController.navigate(R.id.home);
+                saveLastNavItem(0);
+                return true;
+            } else if (itemId == R.id.favorites) {
+                navController.navigate(R.id.favorites);
+                saveLastNavItem(1);
+                return true;
+            } else if (itemId == R.id.setting) {
+                navController.navigate(R.id.setting);
+                saveLastNavItem(2);
+                return true;
             }
             return false;
         });
@@ -388,34 +382,28 @@ public class Activity_main extends AppCompatActivity {
     }
 
     public void hideBottomAppBar() {
-        if (smoothBottomBar != null) {
-            runOnUiThread(() -> {
-                smoothBottomBar.setVisibility(View.GONE);
-                smoothBottomBar.postInvalidate();
-            });
+        if (bottomNav != null) {
+            runOnUiThread(() -> bottomNav.setVisibility(View.GONE));
         }
     }
 
     public void showBottomAppBar() {
-        if (smoothBottomBar != null) {
-            runOnUiThread(() -> {
-                smoothBottomBar.setVisibility(View.VISIBLE);
-                smoothBottomBar.postInvalidate();
-            });
+        if (bottomNav != null) {
+            runOnUiThread(() -> bottomNav.setVisibility(View.VISIBLE));
         }
     }
 
     private void syncBottomBarWithFragment(int fragmentId) {
         if (fragmentId == R.id.home) {
-            smoothBottomBar.setItemActiveIndex(0);
+            checkBottomNavItem(R.id.home);
             saveLastNavItem(0);
             showBottomAppBar();
-        } else if (fragmentId == R.id.Search) {
-            smoothBottomBar.setItemActiveIndex(1);
+        } else if (fragmentId == R.id.favorites) {
+            checkBottomNavItem(R.id.favorites);
             saveLastNavItem(1);
             showBottomAppBar();
         } else if (fragmentId == R.id.setting) {
-            smoothBottomBar.setItemActiveIndex(2);
+            checkBottomNavItem(R.id.setting);
             saveLastNavItem(2);
             showBottomAppBar();
         } else {
@@ -423,30 +411,24 @@ public class Activity_main extends AppCompatActivity {
         }
     }
 
+    private void checkBottomNavItem(int itemId) {
+        if (bottomNav != null && bottomNav.getMenu().findItem(itemId) != null) {
+            bottomNav.getMenu().findItem(itemId).setChecked(true);
+        }
+    }
+
     private void handleDestinationChange(int destinationId) {
         updateBottomBarVisibilityForDestination(destinationId);
-        
-        // Only sync bottom bar selection for main navigation destinations
-        if (destinationId == R.id.home || destinationId == R.id.setting || destinationId == R.id.Search) {
+
+        if (destinationId == R.id.home
+                || destinationId == R.id.setting
+                || destinationId == R.id.favorites) {
             syncBottomBarWithFragment(destinationId);
         }
     }
 
     public void updateBottomBarSelection(int itemId) {
-        runOnUiThread(() -> {
-            if (smoothBottomBar != null) {
-                if (itemId == R.id.home) {
-                    smoothBottomBar.setItemActiveIndex(0);
-                    saveLastNavItem(0);
-                } else if (itemId == R.id.Search) {
-                    smoothBottomBar.setItemActiveIndex(1);
-                    saveLastNavItem(1);
-                } else if (itemId == R.id.setting) {
-                    smoothBottomBar.setItemActiveIndex(2);
-                    saveLastNavItem(2);
-                }
-            }
-        });
+        runOnUiThread(() -> checkBottomNavItem(itemId));
     }
 
     private void saveLastNavItem(int index) {
@@ -456,10 +438,12 @@ public class Activity_main extends AppCompatActivity {
         editor.apply();
     }
 
-    // Method to manually set bottom app bar visibility 
+    // Method to manually set bottom app bar visibility
     // based on destination ID for search results navigation
     public void updateBottomBarVisibilityForDestination(int destinationId) {
-        if (destinationId == R.id.home || destinationId == R.id.setting || destinationId == R.id.Search) {
+        if (destinationId == R.id.home
+                || destinationId == R.id.setting
+                || destinationId == R.id.favorites) {
             showBottomAppBar();
         } else {
             hideBottomAppBar();

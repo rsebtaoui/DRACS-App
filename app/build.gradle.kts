@@ -101,9 +101,6 @@ dependencies {
     implementation("androidx.activity:activity:1.9.0")
     implementation("androidx.gridlayout:gridlayout:1.0.0")
 
-    //Buttom app bar dependancy
-    implementation("com.github.ibrahimsn98:SmoothBottomBar:1.7.9")
-
     //Drawer layout
     implementation("androidx.drawerlayout:drawerlayout:1.2.0")
 

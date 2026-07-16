@@ -1,113 +1,345 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/background"
+    android:clipToPadding="false"
+    android:fillViewport="true"
+    android:paddingStart="@dimen/spacing_md"
+    android:paddingTop="@dimen/spacing_md"
+    android:paddingEnd="@dimen/spacing_md"
+    android:paddingBottom="@dimen/spacing_md"
     tools:context=".Fragments.home">
 
-    <com.khalil.DRACS.Views.InteractiveMapView
-        android:id="@+id/cart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="-20dp"
-        android:alpha="0.85"
-        android:contentDescription="@string/cart_image"
-        android:src="@mipmap/ic_cart"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cart">
+        android:layout_height="wrap_content">
 
-        <androidx.gridlayout.widget.GridLayout
-            android:layout_width="match_parent"
+        <!-- Compact regional map card — 200dp -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/map_card"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/map_card_height"
+            app:cardBackgroundColor="@color/card"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="2dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:strokeColor="@color/border"
+            app:strokeWidth="1dp">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="@dimen/spacing_md">
+
+                <TextView
+                    android:id="@+id/map_label"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/regional_map_label"
+                    android:textColor="@color/primary"
+                    android:textSize="@dimen/text_body"
+                    android:textStyle="bold"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <com.khalil.DRACS.Views.InteractiveMapView
+                    android:id="@+id/cart"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="@dimen/spacing_sm"
+                    android:adjustViewBounds="true"
+                    android:contentDescription="@string/cart_image"
+                    android:scaleType="fitCenter"
+                    android:src="@mipmap/ic_cart"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/map_label" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- Welcome strip -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/welcome_card"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:gravity="center"
-            android:padding="10dp"
-            app:columnCount="2">
+            android:layout_marginTop="@dimen/spacing_md"
+            app:cardBackgroundColor="@color/primary_50"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="0dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/map_card"
+            app:strokeWidth="0dp">
 
             <TextView
-                android:id="@+id/RNA"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/rounded_corners"
+                android:padding="@dimen/spacing_md"
+                android:text="@string/dashboard_welcome"
+                android:textColor="@color/primary"
+                android:textSize="@dimen/text_small" />
+        </com.google.android.material.card.MaterialCardView>
+
+        <!-- 2x2 service grid -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/RNA"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/service_card_height"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:layout_marginEnd="@dimen/spacing_sm"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="@color/service_blue"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="1dp"
+            app:layout_constraintEnd_toStartOf="@+id/ps"
+            app:layout_constraintHorizontal_chainStyle="spread"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/welcome_card"
+            app:rippleColor="?attr/colorControlHighlight">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:gravity="center"
-                android:padding="30dp"
-                android:text="@string/السجل_الوطني_الفلاحي"
-                android:textColor="?attr/colorPrimary"
-                android:textSize="23sp"
-                android:textStyle="bold"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1" />
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_md">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/السجل_الوطني_الفلاحي"
+                    android:textColor="@color/foreground"
+                    android:textSize="@dimen/text_small"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:gravity="center"
+                    android:text="@string/service_rna_subtitle"
+                    android:textColor="@color/muted_foreground"
+                    android:textSize="@dimen/text_tiny" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/ps"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/service_card_height"
+            android:layout_marginStart="@dimen/spacing_sm"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="@color/service_green"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/RNA"
+            app:layout_constraintTop_toBottomOf="@+id/welcome_card"
+            app:rippleColor="?attr/colorControlHighlight">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_md">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/الحماية_الإجتماعية"
+                    android:textColor="@color/foreground"
+                    android:textSize="@dimen/text_small"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:gravity="center"
+                    android:text="@string/service_ps_subtitle"
+                    android:textColor="@color/muted_foreground"
+                    android:textSize="@dimen/text_tiny" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/JE"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/service_card_height"
+            android:layout_marginTop="@dimen/grid_gap"
+            android:layout_marginEnd="@dimen/spacing_sm"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="@color/service_amber"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="1dp"
+            app:layout_constraintEnd_toStartOf="@+id/FP"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/RNA"
+            app:rippleColor="?attr/colorControlHighlight">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_md">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/المقاولين_الشباب"
+                    android:textColor="@color/foreground"
+                    android:textSize="@dimen/text_small"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:gravity="center"
+                    android:text="@string/service_je_subtitle"
+                    android:textColor="@color/muted_foreground"
+                    android:textSize="@dimen/text_tiny" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/FP"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/service_card_height"
+            android:layout_marginStart="@dimen/spacing_sm"
+            android:layout_marginTop="@dimen/grid_gap"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="@color/service_purple"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_weight="1"
+            app:layout_constraintStart_toEndOf="@+id/JE"
+            app:layout_constraintTop_toBottomOf="@+id/ps"
+            app:rippleColor="?attr/colorControlHighlight">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_md">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/التكوين_المهني"
+                    android:textColor="@color/foreground"
+                    android:textSize="@dimen/text_small"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:gravity="center"
+                    android:text="@string/service_fp_subtitle"
+                    android:textColor="@color/muted_foreground"
+                    android:textSize="@dimen/text_tiny" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.constraintlayout.widget.Barrier
+            android:id="@+id/row2_barrier"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:barrierDirection="bottom"
+            app:constraint_referenced_ids="JE,FP" />
+
+        <!-- Full-width FDA card (5th service) -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/FDA"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/service_card_height"
+            android:layout_marginTop="@dimen/grid_gap"
+            android:clickable="true"
+            android:focusable="true"
+            app:cardBackgroundColor="@color/primary_50"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="1dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/row2_barrier"
+            app:rippleColor="?attr/colorControlHighlight">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:orientation="vertical"
+                android:padding="@dimen/spacing_md">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="@string/صندوق_التنمية_الفلاحية"
+                    android:textColor="@color/foreground"
+                    android:textSize="@dimen/text_small"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/spacing_xs"
+                    android:gravity="center"
+                    android:text="@string/service_fda_subtitle"
+                    android:textColor="@color/muted_foreground"
+                    android:textSize="@dimen/text_tiny" />
+            </LinearLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/hint_card"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:layout_marginBottom="@dimen/spacing_sm"
+            app:cardBackgroundColor="@color/card"
+            app:cardCornerRadius="@dimen/radius_lg"
+            app:cardElevation="0dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/FDA"
+            app:strokeColor="@color/border"
+            app:strokeWidth="1dp">
 
             <TextView
-                android:id="@+id/ps"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/rounded_corners"
                 android:gravity="center"
-                android:padding="30dp"
-                android:text="@string/الحماية_الإجتماعية"
-                android:textColor="?attr/colorPrimary"
-                android:textSize="23sp"
-                android:textStyle="bold"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1" />
+                android:padding="@dimen/spacing_md"
+                android:text="@string/dashboard_tap_hint"
+                android:textColor="@color/muted_foreground"
+                android:textSize="@dimen/text_tiny" />
+        </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:id="@+id/JE"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/rounded_corners"
-                android:gravity="center"
-                android:padding="30dp"
-                android:text="@string/المقاولين_الشباب"
-                android:textColor="?attr/colorPrimary"
-                android:textSize="23sp"
-                android:textStyle="bold"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1" />
-
-            <TextView
-                android:id="@+id/FP"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/rounded_corners"
-                android:gravity="center"
-                android:padding="30dp"
-                android:text="@string/التكوين_المهني"
-                android:textColor="?attr/colorPrimary"
-                android:textSize="23sp"
-                android:textStyle="bold"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1" />
-
-            <TextView
-                android:id="@+id/FDA"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_margin="5dp"
-                android:background="@drawable/rounded_corners"
-                android:gravity="center"
-                android:padding="30dp"
-                android:text="@string/صندوق_التنمية_الفلاحية"
-                android:textColor="?attr/colorPrimary"
-                android:textSize="23sp"
-                android:textStyle="bold"
-                app:layout_columnWeight="1"
-                app:layout_rowWeight="1" />
-        </androidx.gridlayout.widget.GridLayout>
-    </ScrollView>
-</androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</androidx.core.widget.NestedScrollView>

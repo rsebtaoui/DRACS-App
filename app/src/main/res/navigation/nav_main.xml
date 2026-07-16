@@ -93,6 +93,12 @@
     </fragment>
 
     <fragment
+        android:id="@+id/favorites"
+        android:name="com.khalil.DRACS.Fragments.FavoritesFragment"
+        android:label="@string/favorites"
+        tools:layout="@layout/fragment_favorites" />
+
+    <fragment
         android:id="@+id/about"
         android:name="com.khalil.DRACS.Fragments.About"
         android:label="@string/about"

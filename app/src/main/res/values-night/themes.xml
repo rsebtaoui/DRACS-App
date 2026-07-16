@@ -1,22 +1,22 @@
 <resources>
     <!-- Dark application theme. -->
     <style name="Theme.المديريةالجهويةللفلاحةلجهةالدارالبيضاءسطات.Dark" parent="Theme.MaterialComponents.DayNight.NoActionBar">
-        <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/Emerald_Green_300</item>
-        <item name="colorPrimaryVariant">@color/Emerald_Green_700</item>
-        <item name="colorOnPrimary">@color/dark_surface</item>
+        <!-- Primary brand color (v0 Forest Green tokens). -->
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/primary_50</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/Emerald_Green_200</item>
-        <item name="colorSecondaryVariant">@color/Emerald_Green_500</item>
-        <item name="colorOnSecondary">@color/white</item>
+        <item name="colorSecondary">@color/primary_light</item>
+        <item name="colorSecondaryVariant">@color/primary</item>
+        <item name="colorOnSecondary">@color/dark_surface</item>
         <!-- Background colors -->
-        <item name="android:colorBackground">@color/dark_background</item>
-        <item name="colorSurface">@color/dark_surface</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorSurface">@color/card</item>
         <item name="colorOnBackground">@color/dark_on_background</item>
         <item name="colorOnSurface">@color/dark_on_surface</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">@color/dark_status_bar</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
         <!-- Customize your theme here. -->
-        <item name="android:navigationBarColor">@color/dark_background</item>
+        <item name="android:navigationBarColor">@color/card</item>
     </style>
 </resources>

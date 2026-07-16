@@ -13,7 +13,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
-import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
@@ -88,7 +88,7 @@ public abstract class BaseContentFragment extends Fragment {
                 && !ConnectionUtils.isNetworkAvailable(requireContext())) {
             Toast.makeText(requireContext(), "تحتاج إلى اتصال بالإنترنت", Toast.LENGTH_LONG).show();
             View offlineView = new FrameLayout(requireContext());
-            offlineView.post(() -> Navigation.findNavController(requireActivity(), R.id.navHostFragment)
+            offlineView.post(() -> NavHostFragment.findNavController(this)
                     .navigate(getHomeActionId()));
             return offlineView;
         }
@@ -212,7 +212,7 @@ public abstract class BaseContentFragment extends Fragment {
                 new OnBackPressedCallback(true) {
                     @Override
                     public void handleOnBackPressed() {
-                        Navigation.findNavController(requireActivity(), R.id.navHostFragment)
+                        NavHostFragment.findNavController(BaseContentFragment.this)
                                 .navigate(getHomeActionId());
                     }
                 }

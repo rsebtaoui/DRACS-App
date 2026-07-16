@@ -14,7 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.NavController;
-import androidx.navigation.Navigation;
+import androidx.navigation.fragment.NavHostFragment;
 import androidx.activity.OnBackPressedCallback;
 
 import com.khalil.DRACS.Activities.Activity_main;
@@ -84,7 +84,7 @@ public class SearchFragment extends Fragment {
             searchResultsList.setVisibility(View.VISIBLE);
         }
 
-        navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
+        navController = NavHostFragment.findNavController(this);
 
         // Add back press handler
         requireActivity().getOnBackPressedDispatcher().addCallback(
@@ -251,7 +251,7 @@ public class SearchFragment extends Fragment {
         args.putString("target_section_id", targetSectionId);
         
         // Get the NavController and MainActivity
-        NavController navController = Navigation.findNavController(requireActivity(), R.id.navHostFragment);
+        NavController navController = NavHostFragment.findNavController(this);
         Activity_main mainActivity = (Activity_main) requireActivity();
         
         // Force hide bottom app bar
