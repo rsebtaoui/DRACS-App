@@ -1,15 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Expandable content row (R.layout.item_expandable).
+  Fixes applied:
+  - Bookmark target raised to 48dp with contentDescription.
+  - Header is a single accessible expand control (minHeight 48dp).
+  - Flat ConstraintLayout (no LinearLayout weight chain).
+  - All spacing uses start/end + shared dimens.
+-->
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="16dp"
-    android:layout_marginTop="8dp"
-    android:layout_marginEnd="16dp"
-    android:layout_marginBottom="8dp"
+    android:layout_marginStart="@dimen/spacing_md"
+    android:layout_marginTop="@dimen/spacing_sm"
+    android:layout_marginEnd="@dimen/spacing_md"
+    android:layout_marginBottom="@dimen/spacing_sm"
     app:cardBackgroundColor="?attr/colorSurface"
-    app:cardCornerRadius="16dp"
+    app:cardCornerRadius="@dimen/radius_lg"
     app:cardElevation="2dp"
     app:strokeColor="@color/card_stroke"
     app:strokeWidth="1dp">
@@ -17,20 +25,21 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="16dp">
+        android:padding="@dimen/spacing_md">
 
-        <LinearLayout
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/section_header"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/bg_section_header"
-            android:gravity="center_vertical"
-            android:minHeight="52dp"
-            android:orientation="horizontal"
-            android:paddingStart="16dp"
-            android:paddingTop="12dp"
-            android:paddingEnd="8dp"
-            android:paddingBottom="12dp"
+            android:clickable="true"
+            android:contentDescription="@string/cd_expand_section"
+            android:focusable="true"
+            android:minHeight="@dimen/touch_target"
+            android:paddingStart="@dimen/spacing_md"
+            android:paddingTop="@dimen/spacing_sm"
+            android:paddingEnd="@dimen/spacing_sm"
+            android:paddingBottom="@dimen/spacing_sm"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -39,33 +48,39 @@
                 android:id="@+id/title"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_marginEnd="@dimen/spacing_sm"
                 android:ellipsize="end"
                 android:maxLines="3"
                 android:text="@string/title"
                 android:textColor="@color/forest_green"
                 android:textSize="17sp"
                 android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/bookmark_button"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 tools:text="▼ عنوان القسم" />
 
             <ImageButton
                 android:id="@+id/bookmark_button"
-                android:layout_width="44dp"
-                android:layout_height="44dp"
-                android:layout_marginStart="8dp"
+                android:layout_width="@dimen/touch_target"
+                android:layout_height="@dimen/touch_target"
                 android:background="?attr/selectableItemBackgroundBorderless"
                 android:contentDescription="@string/bookmark_section"
-                android:padding="8dp"
+                android:padding="@dimen/spacing_sm"
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_bookmark_outline"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
                 app:tint="@color/forest_green" />
-        </LinearLayout>
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <net.cachapa.expandablelayout.ExpandableLayout
             android:id="@+id/expandableLayout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="@dimen/spacing_sm"
             android:clipChildren="true"
             android:clipToPadding="true"
             app:layout_constraintEnd_toEndOf="parent"
@@ -76,16 +91,16 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:paddingStart="4dp"
-                android:paddingEnd="4dp"
-                android:paddingBottom="4dp">
+                android:paddingStart="@dimen/spacing_xs"
+                android:paddingEnd="@dimen/spacing_xs"
+                android:paddingBottom="@dimen/spacing_xs">
 
                 <TextView
                     android:id="@+id/intro"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingMultiplier="1.25"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="@dimen/spacing_sm"
                     android:textColor="@color/charcoal"
                     android:textSize="15sp"
                     android:visibility="gone"
@@ -108,7 +123,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:lineSpacingMultiplier="1.25"
-                    android:paddingTop="8dp"
+                    android:paddingTop="@dimen/spacing_sm"
                     android:textColor="@color/body_text_secondary"
                     android:textSize="14sp"
                     android:visibility="gone"

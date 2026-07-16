@@ -18,10 +18,18 @@
     <dimen name="radius_lg">16dp</dimen>
     <dimen name="radius_xl">24dp</dimen>
 
-    <dimen name="touch_target">44dp</dimen>
+    <!-- WCAG / Material: minimum interactive target -->
+    <dimen name="touch_target">48dp</dimen>
+    <dimen name="header_min_height">64dp</dimen>
+    <dimen name="bottom_nav_min_height">56dp</dimen>
+    <!-- Prefer minHeight + wrap_content so large fonts / Arabic wrap safely -->
+    <dimen name="map_card_min_height">180dp</dimen>
+    <dimen name="service_card_min_height">112dp</dimen>
+    <dimen name="grid_gap">12dp</dimen>
+
+    <!-- Legacy aliases (avoid breaking any remaining references) -->
     <dimen name="header_height">64dp</dimen>
     <dimen name="bottom_nav_height">56dp</dimen>
     <dimen name="map_card_height">200dp</dimen>
     <dimen name="service_card_height">120dp</dimen>
-    <dimen name="grid_gap">12dp</dimen>
 </resources>

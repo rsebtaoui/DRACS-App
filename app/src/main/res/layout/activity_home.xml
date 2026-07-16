@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Shell for Activity_main (R.layout.activity_home).
+  Fixes applied:
+  - Removed forced layoutDirection/textDirection (rely on locale + start/end).
+  - Header uses wrap_content + minHeight so large fonts / Arabic titles don't clip.
+  - Touch targets are 48dp.
+  - Bottom nav uses wrap_content + minHeight for labeled mode + font scale.
+-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,18 +14,19 @@
     android:layout_height="match_parent"
     android:background="@color/background"
     android:fitsSystemWindows="true"
-    android:layoutDirection="rtl"
-    android:textDirection="rtl"
     tools:context=".Activities.Activity_main">
 
-    <!-- Material 3 Top App Bar — 64dp -->
+    <!-- Top app bar: height grows with font scale; stays clear of status bar via fitsSystemWindows -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header_bar"
         android:layout_width="0dp"
-        android:layout_height="@dimen/header_height"
+        android:layout_height="wrap_content"
         android:background="@color/primary"
+        android:minHeight="@dimen/header_min_height"
         android:paddingStart="@dimen/spacing_sm"
+        android:paddingTop="@dimen/spacing_xs"
         android:paddingEnd="@dimen/spacing_sm"
+        android:paddingBottom="@dimen/spacing_xs"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -30,58 +39,58 @@
             android:clickable="true"
             android:contentDescription="@string/home_icon"
             android:focusable="true"
-            android:padding="10dp"
+            android:padding="@dimen/spacing_sm"
             android:src="@mipmap/ic_dra_3"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
+        <TextView
+            android:id="@+id/title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/spacing_sm"
             android:layout_marginEnd="@dimen/spacing_sm"
+            android:ellipsize="end"
             android:gravity="center"
-            android:orientation="vertical"
+            android:maxLines="2"
+            android:text="@string/home_icon"
+            android:textColor="@color/primary_foreground"
+            android:textSize="@dimen/text_headline_3"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/toolbar_subtitle"
+            app:layout_constraintEnd_toStartOf="@+id/search_icon"
+            app:layout_constraintStart_toEndOf="@+id/dracs"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed" />
+
+        <TextView
+            android:id="@+id/toolbar_subtitle"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/spacing_sm"
+            android:layout_marginEnd="@dimen/spacing_sm"
+            android:ellipsize="end"
+            android:gravity="center"
+            android:maxLines="2"
+            android:text="@string/toolbar_subtitle_region"
+            android:textColor="@color/primary_50"
+            android:textSize="@dimen/text_tiny"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/search_icon"
             app:layout_constraintStart_toEndOf="@+id/dracs"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <TextView
-                android:id="@+id/title"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:maxLines="1"
-                android:text="@string/home_icon"
-                android:textColor="@color/primary_foreground"
-                android:textSize="@dimen/text_headline_3"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/toolbar_subtitle"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:ellipsize="end"
-                android:gravity="center"
-                android:maxLines="1"
-                android:text="@string/toolbar_subtitle_region"
-                android:textColor="@color/primary_50"
-                android:textSize="@dimen/text_tiny" />
-        </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@+id/title" />
 
         <ImageView
             android:id="@+id/search_icon"
             android:layout_width="@dimen/touch_target"
             android:layout_height="@dimen/touch_target"
-            android:layout_marginEnd="4dp"
+            android:layout_marginEnd="@dimen/spacing_xs"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
             android:contentDescription="@string/البحث"
             android:focusable="true"
-            android:padding="10dp"
+            android:padding="@dimen/spacing_sm"
             android:src="@drawable/baseline_search_24"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/notif_icon"
@@ -94,9 +103,9 @@
             android:layout_height="@dimen/touch_target"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:contentDescription="@string/more_information"
+            android:contentDescription="@string/cd_notifications"
             android:focusable="true"
-            android:padding="10dp"
+            android:padding="@dimen/spacing_sm"
             android:src="@drawable/more"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -116,13 +125,13 @@
         app:layout_constraintTop_toBottomOf="@+id/header_bar"
         app:navGraph="@navigation/nav_main" />
 
-    <!-- Sticky Material 3 Bottom Navigation — 56dp -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_nav"
         android:layout_width="0dp"
-        android:layout_height="@dimen/bottom_nav_height"
+        android:layout_height="wrap_content"
         android:background="@color/card"
         android:elevation="8dp"
+        android:minHeight="@dimen/bottom_nav_min_height"
         app:itemIconTint="@color/bottom_nav_color"
         app:itemTextColor="@color/bottom_nav_color"
         app:labelVisibilityMode="labeled"

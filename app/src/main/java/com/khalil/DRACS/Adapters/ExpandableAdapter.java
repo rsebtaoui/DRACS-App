@@ -225,7 +225,9 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
         holder.expandableLayout.setExpanded(isExpanded, false);
         holder.lists.setVisibility(isExpanded ? View.VISIBLE : View.GONE);
 
-        holder.title.setOnClickListener(v -> {
+        holder.sectionHeader.setContentDescription(
+                context.getString(R.string.cd_expand_section) + ": " + displayTitle);
+        holder.sectionHeader.setOnClickListener(v -> {
             expandedSectionId = isExpanded ? null : sectionEntry.getKey();
             notifyDataSetChanged();
         });
@@ -256,6 +258,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder {
+        View sectionHeader;
         TextView title;
         ImageButton bookmarkButton;
         TextView introduction;
@@ -265,6 +268,7 @@ public class ExpandableAdapter extends RecyclerView.Adapter<ExpandableAdapter.Vi
 
         ViewHolder(View itemView) {
             super(itemView);
+            sectionHeader = itemView.findViewById(R.id.section_header);
             title = itemView.findViewById(R.id.title);
             bookmarkButton = itemView.findViewById(R.id.bookmark_button);
             introduction = itemView.findViewById(R.id.intro);

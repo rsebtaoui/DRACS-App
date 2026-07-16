@@ -1,30 +1,27 @@
 package com.khalil.DRACS.Fragments;
 
 import android.content.ActivityNotFoundException;
-import android.content.ClipData;
-import android.content.ClipboardManager;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.RotateAnimation;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
+import androidx.core.os.LocaleListCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.activity.OnBackPressedCallback;
 
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.switchmaterial.SwitchMaterial;
+import com.khalil.DRACS.BuildConfig;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.DataPreFetcher;
 import com.khalil.DRACS.Activities.Activity_main;
@@ -32,16 +29,18 @@ import com.khalil.DRACS.Activities.Activity_main;
 public class settings extends Fragment {
     private static final String PREFS_NAME = "DRACS_Prefs";
     private static final String KEY_DARK_MODE = "dark_mode";
+    private static final String KEY_LARGE_FONT = "large_font";
+    private static final String KEY_SOUNDS = "sounds_enabled";
+    private static final String KEY_LANGUAGE = "app_language";
 
     private SwitchMaterial darkModeSwitch;
+    private SwitchMaterial largeFontSwitch;
+    private SwitchMaterial soundsSwitch;
     private MaterialButton clearCacheButton;
-    private View contactHeader;
-    private ImageView contactExpandIcon;
-    private LinearLayout contactDetails;
-    private boolean isContactExpanded = false;
-    private TextView phoneNumber;
-    private TextView developerEmail;
-    private ClipboardManager clipboard;
+    private MaterialButton btnLangAr;
+    private MaterialButton btnLangFr;
+    private MaterialButton btnSendFeedback;
+    private TextView appVersionText;
     private Context context;
 
     @Override
@@ -49,102 +48,90 @@ public class settings extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         context = requireContext();
-        clipboard = (ClipboardManager) context.getSystemService(Context.CLIPBOARD_SERVICE);
 
-        // Initialize views
         darkModeSwitch = view.findViewById(R.id.dark_mode_switch);
+        largeFontSwitch = view.findViewById(R.id.large_font_switch);
+        soundsSwitch = view.findViewById(R.id.sounds_switch);
         clearCacheButton = view.findViewById(R.id.clear_cache_button);
-        contactHeader = view.findViewById(R.id.contact_header);
-        contactDetails = view.findViewById(R.id.contact_details);
-        phoneNumber = view.findViewById(R.id.phone_number);
-        developerEmail = view.findViewById(R.id.developer_email);
+        btnLangAr = view.findViewById(R.id.btn_lang_ar);
+        btnLangFr = view.findViewById(R.id.btn_lang_fr);
+        btnSendFeedback = view.findViewById(R.id.btn_send_feedback);
+        appVersionText = view.findViewById(R.id.app_version_text);
 
-        // Set up phone number click listener
-        phoneNumber.setOnClickListener(v -> {
-            ClipData clip = ClipData.newPlainText("Phone Number", phoneNumber.getText().toString());
-            clipboard.setPrimaryClip(clip);
-            Toast.makeText(context, "تم نسخ رقم الهاتف", Toast.LENGTH_SHORT).show();
-        });
-
-        // Set up developer email click listener
-        developerEmail.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_SENDTO);
-            intent.setData(Uri.parse("mailto:" + developerEmail.getText().toString()));
-            intent.putExtra(Intent.EXTRA_SUBJECT, "تطبيق DRACS");
-            try {
-                startActivity(intent);
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(getContext(), "لا يوجد تطبيق بريد إلكتروني مثبت", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        // Load saved preferences
         SharedPreferences prefs = requireActivity().getSharedPreferences(PREFS_NAME, 0);
+
+        appVersionText.setText(getString(R.string.settings_version_format, BuildConfig.VERSION_NAME));
+
+        String language = prefs.getString(KEY_LANGUAGE, "ar");
+        updateLanguageButtons(language);
+
         darkModeSwitch.setChecked(prefs.getBoolean(KEY_DARK_MODE, false));
+        largeFontSwitch.setChecked(prefs.getBoolean(KEY_LARGE_FONT, false));
+        soundsSwitch.setChecked(prefs.getBoolean(KEY_SOUNDS, true));
 
-        // Set up dark mode switch listener
+        btnLangAr.setOnClickListener(v -> setLanguage("ar", prefs));
+        btnLangFr.setOnClickListener(v -> setLanguage("fr", prefs));
+
         darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean(KEY_DARK_MODE, isChecked);
-            editor.apply();
-
-            // Update the theme
-            if (isChecked) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES);
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO);
-            }
-
-            // Restart the activity to apply theme changes
+            prefs.edit().putBoolean(KEY_DARK_MODE, isChecked).apply();
+            AppCompatDelegate.setDefaultNightMode(
+                    isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
             requireActivity().recreate();
         });
 
-        // Set up clear cache button listener
+        largeFontSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            prefs.edit().putBoolean(KEY_LARGE_FONT, isChecked).apply();
+            requireActivity().recreate();
+        });
+
+        soundsSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
+                prefs.edit().putBoolean(KEY_SOUNDS, isChecked).apply());
+
         clearCacheButton.setOnClickListener(v -> {
-            // Clear the cache
             DataPreFetcher dataPreFetcher = ((Activity_main) requireActivity()).getDataPreFetcher();
             dataPreFetcher.clearCache();
-            
-            // Clear persistent data flag
-            SharedPreferences.Editor editor = prefs.edit();
-            editor.putBoolean("has_persistent_data", false);
-            editor.apply();
-
-            // Show success toast
-            Toast.makeText(context, "تم مسح ذاكرة التخزين المؤقت بنجاح", Toast.LENGTH_SHORT).show();
+            prefs.edit().putBoolean("has_persistent_data", false).apply();
+            Toast.makeText(context, R.string.settings_cache_cleared, Toast.LENGTH_SHORT).show();
         });
 
-        // Set up contact section expansion
-        contactHeader.setOnClickListener(v -> toggleContactExpansion());
-
-        // Set up back press handling
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                // Navigate back to home
-                Navigation.findNavController(requireView()).navigate(R.id.home);
+        btnSendFeedback.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_SENDTO);
+            intent.setData(Uri.parse("mailto:" + getString(R.string.kamily_khalil_ucd_ma)));
+            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.settings_feedback_subject));
+            try {
+                startActivity(intent);
+            } catch (ActivityNotFoundException e) {
+                Toast.makeText(context, R.string.settings_no_email_app, Toast.LENGTH_SHORT).show();
             }
         });
+
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),
+                new OnBackPressedCallback(true) {
+                    @Override
+                    public void handleOnBackPressed() {
+                        Navigation.findNavController(requireView()).navigate(R.id.home);
+                    }
+                });
 
         return view;
     }
 
-    private void toggleContactExpansion() {
-        isContactExpanded = !isContactExpanded;
-
-        if (contactExpandIcon != null) {
-            RotateAnimation rotateAnimation = new RotateAnimation(
-                isContactExpanded ? 0 : 180,
-                isContactExpanded ? 180 : 0,
-                Animation.RELATIVE_TO_SELF, 0.5f,
-                Animation.RELATIVE_TO_SELF, 0.5f
-            );
-            rotateAnimation.setDuration(300);
-            rotateAnimation.setFillAfter(true);
-            contactExpandIcon.startAnimation(rotateAnimation);
+    private void setLanguage(String languageTag, SharedPreferences prefs) {
+        String current = prefs.getString(KEY_LANGUAGE, "ar");
+        if (languageTag.equals(current)) {
+            updateLanguageButtons(languageTag);
+            return;
         }
+        prefs.edit().putString(KEY_LANGUAGE, languageTag).apply();
+        updateLanguageButtons(languageTag);
+        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(languageTag));
+    }
 
-        // Show/hide contact details
-        contactDetails.setVisibility(isContactExpanded ? View.VISIBLE : View.GONE);
+    private void updateLanguageButtons(String languageTag) {
+        boolean arabic = !"fr".equals(languageTag);
+        btnLangAr.setBackgroundResource(arabic ? R.drawable.bg_lang_selected : R.drawable.bg_lang_unselected);
+        btnLangFr.setBackgroundResource(arabic ? R.drawable.bg_lang_unselected : R.drawable.bg_lang_selected);
+        btnLangAr.setTextColor(ContextCompat.getColor(context, arabic ? R.color.white : R.color.foreground));
+        btnLangFr.setTextColor(ContextCompat.getColor(context, arabic ? R.color.foreground : R.color.white));
     }
 }

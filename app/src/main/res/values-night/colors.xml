@@ -30,4 +30,7 @@
     <color name="service_amber_accent">#FFD54F</color>
     <color name="service_purple">#2A1A33</color>
     <color name="service_purple_accent">#CE93D8</color>
+
+    <color name="settings_accent">#1B5E20</color>
+    <color name="settings_section_label">#81C784</color>
 </resources>

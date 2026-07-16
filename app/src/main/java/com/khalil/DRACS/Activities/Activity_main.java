@@ -2,9 +2,11 @@ package com.khalil.DRACS.Activities;
 
 import android.Manifest;
 import android.content.ActivityNotFoundException;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -45,6 +47,7 @@ public class Activity_main extends AppCompatActivity {
 
     private static final String PREFS_NAME = "DRACS_Prefs";
     private static final String KEY_DARK_MODE = "dark_mode";
+    private static final String KEY_LARGE_FONT = "large_font";
     private static final String KEY_LAST_NAV_ITEM = "last_nav_item";
 
     BottomNavigationView bottomNav;
@@ -62,6 +65,15 @@ public class Activity_main extends AppCompatActivity {
     private ActivityResultLauncher<IntentSenderRequest> activityResultLauncher;
     private ActivityResultLauncher<String> notificationPermissionLauncher;
     private Runnable pendingNotificationAction;
+
+    @Override
+    protected void attachBaseContext(Context newBase) {
+        SharedPreferences prefs = newBase.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        float fontScale = prefs.getBoolean(KEY_LARGE_FONT, false) ? 1.15f : 1.0f;
+        Configuration config = new Configuration(newBase.getResources().getConfiguration());
+        config.fontScale = fontScale;
+        super.attachBaseContext(newBase.createConfigurationContext(config));
+    }
 
     public DataPreFetcher getDataPreFetcher() {
         return dataPreFetcher;
