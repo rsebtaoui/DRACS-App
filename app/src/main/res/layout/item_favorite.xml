@@ -26,7 +26,7 @@
             android:layout_width="24dp"
             android:layout_height="24dp"
             android:contentDescription="@string/favorites"
-            android:src="@drawable/ic_bookmark_filled"
+            android:src="@drawable/ic_bookmark_outline"
             app:tint="@color/primary" />
 
         <LinearLayout

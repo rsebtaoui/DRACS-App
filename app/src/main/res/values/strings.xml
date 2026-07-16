@@ -39,6 +39,7 @@
     <string name="settings_send_feedback">إرسال ملاحظات</string>
     <string name="settings_feedback_subject">ملاحظات حول تطبيق DRACS</string>
     <string name="settings_no_email_app">لا يوجد تطبيق بريد إلكتروني مثبت</string>
+    <string name="settings_language_failed">تعذر تغيير اللغة</string>
     <string name="settings_cache_cleared">تم مسح ذاكرة التخزين المؤقت بنجاح</string>
     <string name="cd_lang_arabic">اختيار اللغة العربية</string>
     <string name="cd_lang_french">اختيار اللغة الفرنسية</string>

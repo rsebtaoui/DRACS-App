@@ -327,21 +327,23 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_send_feedback"
-            style="@style/Widget.Material3.Button"
+            style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/spacing_lg"
-            android:background="@drawable/bg_lang_selected"
+            android:background="@drawable/bg_button_outlined"
             android:insetTop="0dp"
             android:insetBottom="0dp"
             android:minHeight="56dp"
             android:text="@string/settings_send_feedback"
             android:textAllCaps="false"
-            android:textColor="@color/white"
+            android:textColor="@color/settings_accent"
             android:textSize="@dimen/text_body"
             android:textStyle="bold"
             app:backgroundTint="@null"
-            app:cornerRadius="@dimen/radius_xl" />
+            app:cornerRadius="@dimen/radius_xl"
+            app:strokeColor="@color/settings_accent"
+            app:strokeWidth="2dp" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

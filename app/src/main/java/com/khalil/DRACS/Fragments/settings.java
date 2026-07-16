@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +28,7 @@ import com.khalil.DRACS.Utils.DataPreFetcher;
 import com.khalil.DRACS.Activities.Activity_main;
 
 public class settings extends Fragment {
+    private static final String TAG = "SettingsFragment";
     private static final String PREFS_NAME = "DRACS_Prefs";
     private static final String KEY_DARK_MODE = "dark_mode";
     private static final String KEY_LARGE_FONT = "large_font";
@@ -42,6 +44,7 @@ public class settings extends Fragment {
     private MaterialButton btnSendFeedback;
     private TextView appVersionText;
     private Context context;
+    private boolean bindingUi;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -62,33 +65,56 @@ public class settings extends Fragment {
 
         appVersionText.setText(getString(R.string.settings_version_format, BuildConfig.VERSION_NAME));
 
+        bindingUi = true;
         String language = prefs.getString(KEY_LANGUAGE, "ar");
         updateLanguageButtons(language);
-
         darkModeSwitch.setChecked(prefs.getBoolean(KEY_DARK_MODE, false));
         largeFontSwitch.setChecked(prefs.getBoolean(KEY_LARGE_FONT, false));
         soundsSwitch.setChecked(prefs.getBoolean(KEY_SOUNDS, true));
+        bindingUi = false;
 
         btnLangAr.setOnClickListener(v -> setLanguage("ar", prefs));
         btnLangFr.setOnClickListener(v -> setLanguage("fr", prefs));
 
         darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (bindingUi || !isAdded()) {
+                return;
+            }
             prefs.edit().putBoolean(KEY_DARK_MODE, isChecked).apply();
+            // setDefaultNightMode already recreates activities — do not also call recreate()
             AppCompatDelegate.setDefaultNightMode(
                     isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-            requireActivity().recreate();
         });
 
         largeFontSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (bindingUi || !isAdded()) {
+                return;
+            }
             prefs.edit().putBoolean(KEY_LARGE_FONT, isChecked).apply();
-            requireActivity().recreate();
+            // Defer recreate until after the touch/switch animation finishes
+            requireActivity().getWindow().getDecorView().post(() -> {
+                if (isAdded()) {
+                    requireActivity().recreate();
+                }
+            });
         });
 
-        soundsSwitch.setOnCheckedChangeListener((buttonView, isChecked) ->
-                prefs.edit().putBoolean(KEY_SOUNDS, isChecked).apply());
+        soundsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            if (bindingUi) {
+                return;
+            }
+            prefs.edit().putBoolean(KEY_SOUNDS, isChecked).apply();
+        });
 
         clearCacheButton.setOnClickListener(v -> {
+            if (!(requireActivity() instanceof Activity_main)) {
+                return;
+            }
             DataPreFetcher dataPreFetcher = ((Activity_main) requireActivity()).getDataPreFetcher();
+            if (dataPreFetcher == null) {
+                Toast.makeText(context, R.string.settings_cache_cleared, Toast.LENGTH_SHORT).show();
+                return;
+            }
             dataPreFetcher.clearCache();
             prefs.edit().putBoolean("has_persistent_data", false).apply();
             Toast.makeText(context, R.string.settings_cache_cleared, Toast.LENGTH_SHORT).show();
@@ -99,8 +125,11 @@ public class settings extends Fragment {
             intent.setData(Uri.parse("mailto:" + getString(R.string.kamily_khalil_ucd_ma)));
             intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.settings_feedback_subject));
             try {
-                startActivity(intent);
+                startActivity(Intent.createChooser(intent, getString(R.string.settings_send_feedback)));
             } catch (ActivityNotFoundException e) {
+                Toast.makeText(context, R.string.settings_no_email_app, Toast.LENGTH_SHORT).show();
+            } catch (Exception e) {
+                Log.e(TAG, "Failed to open feedback email", e);
                 Toast.makeText(context, R.string.settings_no_email_app, Toast.LENGTH_SHORT).show();
             }
         });
@@ -117,6 +146,9 @@ public class settings extends Fragment {
     }
 
     private void setLanguage(String languageTag, SharedPreferences prefs) {
+        if (!isAdded()) {
+            return;
+        }
         String current = prefs.getString(KEY_LANGUAGE, "ar");
         if (languageTag.equals(current)) {
             updateLanguageButtons(languageTag);
@@ -124,7 +156,12 @@ public class settings extends Fragment {
         }
         prefs.edit().putString(KEY_LANGUAGE, languageTag).apply();
         updateLanguageButtons(languageTag);
-        AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(languageTag));
+        try {
+            AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(languageTag));
+        } catch (Exception e) {
+            Log.e(TAG, "Failed to apply locale: " + languageTag, e);
+            Toast.makeText(context, R.string.settings_language_failed, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void updateLanguageButtons(String languageTag) {

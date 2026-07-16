@@ -29,4 +29,4 @@ public class DRACSApplication extends Application {
         FirebaseCrashlytics.getInstance().setCustomKey("app_version", BuildConfig.VERSION_NAME);
         FirebaseCrashlytics.getInstance().setCustomKey("build_type", BuildConfig.BUILD_TYPE);
     }
-} 
+}
