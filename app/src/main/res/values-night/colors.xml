@@ -1,9 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Night overrides for content polish (readable on dark surfaces) -->
-    <color name="forest_green">#A5D6A7</color>
-    <color name="charcoal">#F5F5F5</color>
-    <color name="soft_green_surface">#1B3A1F</color>
-    <color name="card_stroke">#2C2C2C</color>
+    <!-- Night overrides for v0 design tokens -->
+    <color name="primary">#A5D6A7</color>
+    <color name="primary_dark">#1B5E20</color>
+    <color name="primary_light">#C8E6C9</color>
+    <color name="primary_50">#1B3A1F</color>
+    <color name="primary_100">#243D28</color>
+    <color name="primary_200">#81C784</color>
+    <color name="primary_foreground">#0D3A12</color>
+
+    <color name="forest_green">@color/primary</color>
+    <color name="soft_green_surface">@color/primary_50</color>
+    <color name="charcoal">#F5F5F3</color>
+    <color name="card_stroke">#2A2A27</color>
     <color name="body_text_secondary">#BDBDBD</color>
+
+    <color name="background">#0F0F0D</color>
+    <color name="card">#1A1A18</color>
+    <color name="foreground">#F5F5F3</color>
+    <color name="muted_foreground">#BDBDBD</color>
+    <color name="border">#2A2A27</color>
+    <color name="muted">#242422</color>
+
+    <color name="service_blue">#0D2137</color>
+    <color name="service_blue_accent">#64B5F6</color>
+    <color name="service_green">#1B3A1F</color>
+    <color name="service_green_accent">#81C784</color>
+    <color name="service_amber">#3A2F0D</color>
+    <color name="service_amber_accent">#FFD54F</color>
+    <color name="service_purple">#2A1A33</color>
+    <color name="service_purple_accent">#CE93D8</color>
 </resources>

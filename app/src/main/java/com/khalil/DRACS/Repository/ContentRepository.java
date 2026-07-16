@@ -109,6 +109,10 @@ public class ContentRepository {
         return favoriteDao.getFavoritesForPage(pageId);
     }
 
+    public LiveData<List<FavoriteSection>> observeAllFavorites() {
+        return favoriteDao.getAllFavorites();
+    }
+
     public void addFavorite(String pageId, String sectionId, String title) {
         AppDatabase.getDatabaseExecutor().execute(() ->
                 favoriteDao.insert(new FavoriteSection(

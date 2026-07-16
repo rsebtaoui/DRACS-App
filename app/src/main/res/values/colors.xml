@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Legacy emerald aliases (kept for existing layouts) -->
     <color name="green">#3AA136</color>
     <color name="Emerald_Green_700">#52B788</color>
     <color name="Emerald_Green_800">#30815C</color>
@@ -7,12 +8,39 @@
     <color name="Emerald_Green_300">#4DB6AC</color>
     <color name="Emerald_Green_200">#D8F3DC</color>
 
-    <!-- Material 3 content polish -->
-    <color name="forest_green">#1B5E20</color>
-    <color name="charcoal">#212121</color>
-    <color name="soft_green_surface">#E8F5E9</color>
-    <color name="card_stroke">#E0E0E0</color>
-    <color name="body_text_secondary">#616161</color>
+    <!-- v0 / Material 3 primary green system -->
+    <color name="primary">#1B5E20</color>
+    <color name="primary_dark">#0D3A12</color>
+    <color name="primary_light">#2E7D32</color>
+    <color name="primary_50">#E8F5E9</color>
+    <color name="primary_100">#C8E6C9</color>
+    <color name="primary_200">#A5D6A7</color>
+    <color name="primary_foreground">#FFFFFF</color>
+
+    <!-- Semantic aliases used across app -->
+    <color name="forest_green">@color/primary</color>
+    <color name="soft_green_surface">@color/primary_50</color>
+    <color name="charcoal">#1A1A18</color>
+    <color name="card_stroke">#E5E5E2</color>
+    <color name="body_text_secondary">#6B6B68</color>
+
+    <!-- Backgrounds -->
+    <color name="background">#FAFAF8</color>
+    <color name="card">#FFFFFF</color>
+    <color name="foreground">#1A1A18</color>
+    <color name="muted_foreground">#6B6B68</color>
+    <color name="border">#E5E5E2</color>
+    <color name="muted">#F3F3F0</color>
+
+    <!-- Service card surfaces -->
+    <color name="service_blue">#E3F2FD</color>
+    <color name="service_blue_accent">#2196F3</color>
+    <color name="service_green">#E8F5E9</color>
+    <color name="service_green_accent">#4CAF50</color>
+    <color name="service_amber">#FFF8E1</color>
+    <color name="service_amber_accent">#FFC107</color>
+    <color name="service_purple">#F3E5F5</color>
+    <color name="service_purple_accent">#9C27B0</color>
 
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
@@ -22,10 +50,10 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="red">#FF0000</color>
-    <color name="dark_background">#121212</color>
-    <color name="dark_surface">#1E1E1E</color>
+    <color name="dark_background">#0F0F0D</color>
+    <color name="dark_surface">#1A1A18</color>
     <color name="dark_status_bar">#000000</color>
-    <color name="dark_on_background">#E6E6E6</color>
+    <color name="dark_on_background">#F5F5F3</color>
     <color name="dark_on_surface">#FFFFFF</color>
     <color name="search_border">#CCCCCC</color>
 </resources>

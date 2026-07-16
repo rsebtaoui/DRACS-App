@@ -2,15 +2,18 @@
     <!-- Base application theme. -->
     <style name="Theme.المديريةالجهويةللفلاحةلجهةالدارالبيضاءسطات" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/forest_green</item>
-        <item name="colorPrimaryVariant">@color/Emerald_Green_800</item>
-        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/primary_foreground</item>
         <!-- Secondary brand color. -->
-        <item name="colorSecondary">@color/soft_green_surface</item>
-        <item name="colorSecondaryVariant">@color/forest_green</item>
-        <item name="colorOnSecondary">@color/charcoal</item>
+        <item name="colorSecondary">@color/primary_50</item>
+        <item name="colorSecondaryVariant">@color/primary</item>
+        <item name="colorOnSecondary">@color/foreground</item>
+        <item name="android:colorBackground">@color/background</item>
+        <item name="colorSurface">@color/card</item>
+        <item name="colorOnSurface">@color/foreground</item>
         <!-- Status bar color. -->
-        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
         <!-- Customize your theme here. -->
     </style>
 
