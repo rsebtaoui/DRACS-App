@@ -14,8 +14,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatDelegate;
-import androidx.core.content.ContextCompat;
-import androidx.core.os.LocaleListCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.activity.OnBackPressedCallback;
@@ -25,6 +23,7 @@ import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.khalil.DRACS.BuildConfig;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.DataPreFetcher;
+import com.khalil.DRACS.Utils.LocaleHelper;
 import com.khalil.DRACS.Activities.Activity_main;
 
 public class settings extends Fragment {
@@ -33,14 +32,11 @@ public class settings extends Fragment {
     private static final String KEY_DARK_MODE = "dark_mode";
     private static final String KEY_LARGE_FONT = "large_font";
     private static final String KEY_SOUNDS = "sounds_enabled";
-    private static final String KEY_LANGUAGE = "app_language";
 
     private SwitchMaterial darkModeSwitch;
     private SwitchMaterial largeFontSwitch;
     private SwitchMaterial soundsSwitch;
     private MaterialButton clearCacheButton;
-    private MaterialButton btnLangAr;
-    private MaterialButton btnLangFr;
     private MaterialButton btnSendFeedback;
     private TextView appVersionText;
     private Context context;
@@ -52,12 +48,12 @@ public class settings extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
         context = requireContext();
 
+        LocaleHelper.clearLanguagePreference(context);
+
         darkModeSwitch = view.findViewById(R.id.dark_mode_switch);
         largeFontSwitch = view.findViewById(R.id.large_font_switch);
         soundsSwitch = view.findViewById(R.id.sounds_switch);
         clearCacheButton = view.findViewById(R.id.clear_cache_button);
-        btnLangAr = view.findViewById(R.id.btn_lang_ar);
-        btnLangFr = view.findViewById(R.id.btn_lang_fr);
         btnSendFeedback = view.findViewById(R.id.btn_send_feedback);
         appVersionText = view.findViewById(R.id.app_version_text);
 
@@ -66,22 +62,16 @@ public class settings extends Fragment {
         appVersionText.setText(getString(R.string.settings_version_format, BuildConfig.VERSION_NAME));
 
         bindingUi = true;
-        String language = prefs.getString(KEY_LANGUAGE, "ar");
-        updateLanguageButtons(language);
         darkModeSwitch.setChecked(prefs.getBoolean(KEY_DARK_MODE, false));
         largeFontSwitch.setChecked(prefs.getBoolean(KEY_LARGE_FONT, false));
         soundsSwitch.setChecked(prefs.getBoolean(KEY_SOUNDS, true));
         bindingUi = false;
-
-        btnLangAr.setOnClickListener(v -> setLanguage("ar", prefs));
-        btnLangFr.setOnClickListener(v -> setLanguage("fr", prefs));
 
         darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (bindingUi || !isAdded()) {
                 return;
             }
             prefs.edit().putBoolean(KEY_DARK_MODE, isChecked).apply();
-            // setDefaultNightMode already recreates activities — do not also call recreate()
             AppCompatDelegate.setDefaultNightMode(
                     isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
         });
@@ -91,7 +81,6 @@ public class settings extends Fragment {
                 return;
             }
             prefs.edit().putBoolean(KEY_LARGE_FONT, isChecked).apply();
-            // Defer recreate until after the touch/switch animation finishes
             requireActivity().getWindow().getDecorView().post(() -> {
                 if (isAdded()) {
                     requireActivity().recreate();
@@ -143,32 +132,5 @@ public class settings extends Fragment {
                 });
 
         return view;
-    }
-
-    private void setLanguage(String languageTag, SharedPreferences prefs) {
-        if (!isAdded()) {
-            return;
-        }
-        String current = prefs.getString(KEY_LANGUAGE, "ar");
-        if (languageTag.equals(current)) {
-            updateLanguageButtons(languageTag);
-            return;
-        }
-        prefs.edit().putString(KEY_LANGUAGE, languageTag).apply();
-        updateLanguageButtons(languageTag);
-        try {
-            AppCompatDelegate.setApplicationLocales(LocaleListCompat.forLanguageTags(languageTag));
-        } catch (Exception e) {
-            Log.e(TAG, "Failed to apply locale: " + languageTag, e);
-            Toast.makeText(context, R.string.settings_language_failed, Toast.LENGTH_SHORT).show();
-        }
-    }
-
-    private void updateLanguageButtons(String languageTag) {
-        boolean arabic = !"fr".equals(languageTag);
-        btnLangAr.setBackgroundResource(arabic ? R.drawable.bg_lang_selected : R.drawable.bg_lang_unselected);
-        btnLangFr.setBackgroundResource(arabic ? R.drawable.bg_lang_unselected : R.drawable.bg_lang_selected);
-        btnLangAr.setTextColor(ContextCompat.getColor(context, arabic ? R.color.white : R.color.foreground));
-        btnLangFr.setTextColor(ContextCompat.getColor(context, arabic ? R.color.foreground : R.color.white));
     }
 }

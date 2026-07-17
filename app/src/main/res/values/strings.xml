@@ -27,8 +27,6 @@
     <string name="clear_cache">مسح ذاكرة التخزين المؤقت</string>
     <string name="about">عن التطبيق</string>
     <string name="app_version">التطبيق الحالي ألإصدار رقم: 1.1 </string>
-    <string name="lang_arabic">العربية (Arabic)</string>
-    <string name="lang_french">Français (French)</string>
     <string name="settings_display">العرض</string>
     <string name="settings_accessibility">سهولة الاستخدام</string>
     <string name="settings_large_font">خط أكبر</string>
@@ -39,17 +37,19 @@
     <string name="settings_send_feedback">إرسال ملاحظات</string>
     <string name="settings_feedback_subject">ملاحظات حول تطبيق DRACS</string>
     <string name="settings_no_email_app">لا يوجد تطبيق بريد إلكتروني مثبت</string>
-    <string name="settings_language_failed">تعذر تغيير اللغة</string>
     <string name="settings_cache_cleared">تم مسح ذاكرة التخزين المؤقت بنجاح</string>
-    <string name="cd_lang_arabic">اختيار اللغة العربية</string>
-    <string name="cd_lang_french">اختيار اللغة الفرنسية</string>
+
+    <!-- Arabic-only splash -->
+    <string name="splash_title_line1">المديرية الجهوية للفلاحة</string>
+    <string name="splash_title_line2">لجهة الدار البيضاء - سطات</string>
+    <string name="splash_start">ابدأ / Commencer</string>
     <string name="بحث">بحث...</string>
     <string name="bookmark_section">إضافة إلى المفضلة</string>
     <string name="favorites">المفضلة</string>
     <string name="favorites_empty_title">لا توجد أقسام مفضلة بعد</string>
     <string name="favorites_empty_subtitle">اضغط على أيقونة الإشارة المرجعية داخل أي قسم لإضافته هنا</string>
     <string name="favorites_count_format">%1$d عنصر محفوظ</string>
-    <string name="regional_map_label">الجهات الإقليمية</string>
+    <string name="regional_map_label">إقليم جهة الدار البيضاء - سطات</string>
     <string name="dashboard_welcome">مرحبا بك في منصة الخدمات الفلاحية المتكاملة</string>
     <string name="dashboard_tap_hint">اضغط على أي خدمة لمزيد من التفاصيل</string>
     <string name="toolbar_subtitle_region">الدار البيضاء - سطات</string>
@@ -70,4 +70,50 @@
     <string name="contact_numbers">رقم الهاتف</string>
     <string name="res_number">0657831603</string>
     <string name="kamily_khalil_ucd_ma">kamily.khalil@ucd.ma</string>
+
+    <!-- Interactive DPA / DRA map (official institutional dataset) -->
+    <string name="regional_map_image_desc">خريطة أقاليم جهة الدار البيضاء - سطات مع المديريات الإقليمية للفلاحة</string>
+    <string name="dpa_detail_hint">اضغط على دبوس لاختيار المديرية الإقليمية</string>
+    <string name="cd_dpa_call">الاتصال بالمديرية</string>
+    <string name="cd_dpa_navigate">فتح الموقع في الخرائط</string>
+    <string name="cd_dra_route">المسار نحو المقر الجهوي بالجديدة</string>
+    <string name="dpa_phone_unavailable">رقم الهاتف غير متوفر حالياً</string>
+    <string name="dpa_maps_unavailable">تعذر فتح تطبيق الخرائط</string>
+    <string name="dra_primary_route">المديرية الجهوية — مقر الجديدة</string>
+
+    <string name="dra_siege_name">المديرية الجهوية للفلاحة — مقر الجديدة</string>
+    <string name="dra_siege_address">Avenue du Caire, El Jadida</string>
+    <string name="dra_siege_phone" translatable="false">0523394020</string>
+    <string name="dra_siege_pin_desc">دبوس المقر الجهوي للفلاحة بالجديدة</string>
+    <string name="dra_siege_geo_label" translatable="false">DRA+Siege+El+Jadida</string>
+
+    <string name="dpa_el_jadida_name">المديرية الإقليمية للفلاحة بالجديدة</string>
+    <string name="dpa_el_jadida_address">Avenue des FAR, BP 79</string>
+    <string name="dpa_el_jadida_phone" translatable="false">0523342990</string>
+    <string name="dpa_el_jadida_pin_desc">دبوس المديرية الإقليمية للفلاحة بالجديدة</string>
+
+    <string name="dpa_sidi_bennour_name">المديرية الإقليمية للفلاحة بسيدي بنور</string>
+    <string name="dpa_sidi_bennour_address">Sidi Bennour</string>
+    <string name="dpa_sidi_bennour_phone" translatable="false"></string>
+    <string name="dpa_sidi_bennour_pin_desc">دبوس المديرية الإقليمية للفلاحة بسيدي بنور</string>
+
+    <string name="dpa_settat_name">المديرية الإقليمية للفلاحة بسطات</string>
+    <string name="dpa_settat_address">Cité administratif, Settat</string>
+    <string name="dpa_settat_phone" translatable="false">0523400507</string>
+    <string name="dpa_settat_pin_desc">دبوس المديرية الإقليمية للفلاحة بسطات</string>
+
+    <string name="dpa_casablanca_name">المديرية الإقليمية للفلاحة بالدار البيضاء</string>
+    <string name="dpa_casablanca_address">24 Rue d\'Avesnes, Roche Noire, Casablanca</string>
+    <string name="dpa_casablanca_phone" translatable="false">0522278871</string>
+    <string name="dpa_casablanca_pin_desc">دبوس المديرية الإقليمية للفلاحة بالدار البيضاء</string>
+
+    <string name="dpa_benslimane_name">المديرية الإقليمية للفلاحة ببن سليمان</string>
+    <string name="dpa_benslimane_address">Route souk tlat ziaida, Benslimane</string>
+    <string name="dpa_benslimane_phone" translatable="false">0523291112</string>
+    <string name="dpa_benslimane_pin_desc">دبوس المديرية الإقليمية للفلاحة ببن سليمان</string>
+
+    <string name="dpa_berrechid_name">المديرية الإقليمية للفلاحة ببرشيد</string>
+    <string name="dpa_berrechid_address">5, Avenue mohammed V, quartier Al Yousr, Berrechid</string>
+    <string name="dpa_berrechid_phone" translatable="false">0522030603</string>
+    <string name="dpa_berrechid_pin_desc">دبوس المديرية الإقليمية للفلاحة ببرشيد</string>
 </resources>

@@ -1,15 +1,102 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--
+  Arabic-only splash / onboarding entry.
+  Language chips removed — single CTA launches the dashboard.
+-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/primary"
+    android:fitsSystemWindows="true"
+    android:layoutDirection="rtl"
+    android:paddingStart="@dimen/spacing_lg"
+    android:paddingEnd="@dimen/spacing_lg"
+    tools:context=".Activities.SplashActivity">
 
     <ImageView
         android:id="@+id/splash_logo"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true"
+        android:layout_width="96dp"
+        android:layout_height="96dp"
+        android:background="@drawable/bg_splash_logo_circle"
+        android:contentDescription="@string/app_name"
+        android:padding="16dp"
         android:scaleType="centerInside"
-        android:src="@mipmap/ic_dra_3" />
+        android:src="@mipmap/ic_dra_3"
+        app:layout_constraintBottom_toTopOf="@+id/splash_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.38"
+        app:layout_constraintVertical_chainStyle="packed" />
 
-</RelativeLayout>
+    <TextView
+        android:id="@+id/splash_title"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_lg"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1.2"
+        android:text="@string/splash_title_line1"
+        android:textColor="@color/primary_foreground"
+        android:textSize="@dimen/text_headline_2"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/splash_subtitle"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/splash_logo" />
+
+    <TextView
+        android:id="@+id/splash_subtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_sm"
+        android:gravity="center"
+        android:lineSpacingMultiplier="1.25"
+        android:text="@string/splash_title_line2"
+        android:textColor="@color/primary_50"
+        android:textSize="@dimen/text_body"
+        app:layout_constraintBottom_toTopOf="@+id/splash_start_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/splash_title" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/splash_start_button"
+        style="@style/Widget.Material3.Button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/spacing_xl"
+        android:contentDescription="@string/splash_start"
+        android:insetTop="0dp"
+        android:insetBottom="0dp"
+        android:minHeight="@dimen/touch_target"
+        android:paddingStart="@dimen/spacing_xl"
+        android:paddingEnd="@dimen/spacing_xl"
+        android:text="@string/splash_start"
+        android:textAllCaps="false"
+        android:textColor="@color/primary"
+        android:textSize="@dimen/text_body"
+        android:textStyle="bold"
+        app:backgroundTint="@color/white"
+        app:cornerRadius="@dimen/radius_xl"
+        app:layout_constraintBottom_toTopOf="@+id/splash_footer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/splash_subtitle" />
+
+    <TextView
+        android:id="@+id/splash_footer"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/spacing_xl"
+        android:gravity="center"
+        android:text="@string/settings_about_title"
+        android:textColor="@color/primary_50"
+        android:textSize="@dimen/text_tiny"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

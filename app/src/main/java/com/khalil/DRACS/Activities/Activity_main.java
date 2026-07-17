@@ -40,6 +40,7 @@ import com.khalil.DRACS.R;
 import com.khalil.DRACS.Repository.ContentRepository;
 import com.khalil.DRACS.Utils.DataPreFetcher;
 import com.khalil.DRACS.Utils.ConnectionUtils;
+import com.khalil.DRACS.Utils.LocaleHelper;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
 
@@ -70,9 +71,10 @@ public class Activity_main extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         SharedPreferences prefs = newBase.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         float fontScale = prefs.getBoolean(KEY_LARGE_FONT, false) ? 1.15f : 1.0f;
-        Configuration config = new Configuration(newBase.getResources().getConfiguration());
+        Context arabicBase = LocaleHelper.wrapArabic(newBase);
+        Configuration config = new Configuration(arabicBase.getResources().getConfiguration());
         config.fontScale = fontScale;
-        super.attachBaseContext(newBase.createConfigurationContext(config));
+        super.attachBaseContext(arabicBase.createConfigurationContext(config));
     }
 
     public DataPreFetcher getDataPreFetcher() {
