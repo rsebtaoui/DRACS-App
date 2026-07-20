@@ -47,7 +47,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 public class Activity_main extends AppCompatActivity {
 
     private static final String PREFS_NAME = "DRACS_Prefs";
-    private static final String KEY_DARK_MODE = "dark_mode";
     private static final String KEY_LARGE_FONT = "large_font";
     private static final String KEY_LAST_NAV_ITEM = "last_nav_item";
 

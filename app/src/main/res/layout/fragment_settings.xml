@@ -46,52 +46,82 @@
                 android:paddingEnd="@dimen/spacing_md"
                 android:paddingBottom="@dimen/spacing_xs">
 
-                <androidx.constraintlayout.widget.ConstraintLayout
+                <!-- Theme: Auto (phone) / Light / Dark -->
+                <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="@dimen/touch_target"
                     android:paddingTop="@dimen/spacing_sm"
-                    android:paddingBottom="@dimen/spacing_sm">
+                    android:paddingBottom="@dimen/spacing_sm"
+                    android:text="@string/settings_theme_title"
+                    android:textColor="@color/foreground"
+                    android:textSize="@dimen/text_body"
+                    android:textStyle="bold" />
 
-                    <ImageView
-                        android:id="@+id/icon_dark_mode"
-                        android:layout_width="22dp"
-                        android:layout_height="22dp"
-                        android:contentDescription="@null"
-                        android:importantForAccessibility="no"
-                        android:src="@drawable/ic_moon"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:tint="@color/foreground" />
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btn_theme_auto"
+                    style="@style/Widget.Material3.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_sm"
+                    android:background="@drawable/bg_lang_unselected"
+                    android:contentDescription="@string/cd_theme_auto"
+                    android:insetTop="0dp"
+                    android:insetBottom="0dp"
+                    android:minHeight="48dp"
+                    android:text="@string/settings_theme_auto"
+                    android:textAllCaps="false"
+                    android:textColor="@color/foreground"
+                    android:textSize="@dimen/text_small"
+                    app:backgroundTint="@null"
+                    app:cornerRadius="@dimen/radius_lg"
+                    app:strokeWidth="0dp" />
 
-                    <TextView
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="@dimen/spacing_sm"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_theme_light"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="@dimen/spacing_md"
-                        android:layout_marginEnd="@dimen/spacing_sm"
-                        android:text="@string/dark_theme"
+                        android:layout_marginEnd="@dimen/spacing_xs"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_lang_unselected"
+                        android:contentDescription="@string/cd_theme_light"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:minHeight="48dp"
+                        android:text="@string/settings_theme_light"
+                        android:textAllCaps="false"
                         android:textColor="@color/foreground"
-                        android:textSize="@dimen/text_body"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@id/icon_dark_mode"
-                        app:layout_constraintStart_toEndOf="@id/dark_mode_switch"
-                        app:layout_constraintTop_toTopOf="parent" />
+                        android:textSize="@dimen/text_small"
+                        app:backgroundTint="@null"
+                        app:cornerRadius="@dimen/radius_lg"
+                        app:strokeWidth="0dp" />
 
-                    <com.google.android.material.switchmaterial.SwitchMaterial
-                        android:id="@+id/dark_mode_switch"
-                        android:layout_width="wrap_content"
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btn_theme_dark"
+                        style="@style/Widget.Material3.Button.OutlinedButton"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:minWidth="@dimen/touch_target"
-                        android:minHeight="@dimen/touch_target"
-                        android:showText="false"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:thumbTint="@color/white"
-                        app:trackTint="@color/settings_switch_track"
-                        app:useMaterialThemeColors="false" />
-                </androidx.constraintlayout.widget.ConstraintLayout>
+                        android:layout_marginStart="@dimen/spacing_xs"
+                        android:layout_weight="1"
+                        android:background="@drawable/bg_lang_unselected"
+                        android:contentDescription="@string/cd_theme_dark"
+                        android:insetTop="0dp"
+                        android:insetBottom="0dp"
+                        android:minHeight="48dp"
+                        android:text="@string/settings_theme_dark"
+                        android:textAllCaps="false"
+                        android:textColor="@color/foreground"
+                        android:textSize="@dimen/text_small"
+                        app:backgroundTint="@null"
+                        app:cornerRadius="@dimen/radius_lg"
+                        app:strokeWidth="0dp" />
+                </LinearLayout>
 
                 <View
                     android:layout_width="match_parent"

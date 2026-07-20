@@ -23,6 +23,13 @@
 
     <!-- Settings Strings -->
     <string name="dark_theme">الوضع الليلي</string>
+    <string name="settings_theme_title">مظهر التطبيق</string>
+    <string name="settings_theme_auto">تلقائي (من الهاتف)</string>
+    <string name="settings_theme_light">فاتح</string>
+    <string name="settings_theme_dark">داكن</string>
+    <string name="cd_theme_auto">اتباع وضع النظام في الهاتف</string>
+    <string name="cd_theme_light">مظهر فاتح ثابت</string>
+    <string name="cd_theme_dark">مظهر داكن ثابت</string>
     <string name="storage">التخزين</string>
     <string name="clear_cache">مسح ذاكرة التخزين المؤقت</string>
     <string name="about">عن التطبيق</string>

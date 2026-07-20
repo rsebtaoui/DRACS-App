@@ -13,7 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatDelegate;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.Navigation;
 import androidx.activity.OnBackPressedCallback;
@@ -24,16 +24,18 @@ import com.khalil.DRACS.BuildConfig;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.DataPreFetcher;
 import com.khalil.DRACS.Utils.LocaleHelper;
+import com.khalil.DRACS.Utils.ThemeHelper;
 import com.khalil.DRACS.Activities.Activity_main;
 
 public class settings extends Fragment {
     private static final String TAG = "SettingsFragment";
     private static final String PREFS_NAME = "DRACS_Prefs";
-    private static final String KEY_DARK_MODE = "dark_mode";
     private static final String KEY_LARGE_FONT = "large_font";
     private static final String KEY_SOUNDS = "sounds_enabled";
 
-    private SwitchMaterial darkModeSwitch;
+    private MaterialButton btnThemeAuto;
+    private MaterialButton btnThemeLight;
+    private MaterialButton btnThemeDark;
     private SwitchMaterial largeFontSwitch;
     private SwitchMaterial soundsSwitch;
     private MaterialButton clearCacheButton;
@@ -50,7 +52,9 @@ public class settings extends Fragment {
 
         LocaleHelper.clearLanguagePreference(context);
 
-        darkModeSwitch = view.findViewById(R.id.dark_mode_switch);
+        btnThemeAuto = view.findViewById(R.id.btn_theme_auto);
+        btnThemeLight = view.findViewById(R.id.btn_theme_light);
+        btnThemeDark = view.findViewById(R.id.btn_theme_dark);
         largeFontSwitch = view.findViewById(R.id.large_font_switch);
         soundsSwitch = view.findViewById(R.id.sounds_switch);
         clearCacheButton = view.findViewById(R.id.clear_cache_button);
@@ -62,19 +66,14 @@ public class settings extends Fragment {
         appVersionText.setText(getString(R.string.settings_version_format, BuildConfig.VERSION_NAME));
 
         bindingUi = true;
-        darkModeSwitch.setChecked(prefs.getBoolean(KEY_DARK_MODE, false));
+        updateThemeButtons(ThemeHelper.getThemeMode(context));
         largeFontSwitch.setChecked(prefs.getBoolean(KEY_LARGE_FONT, false));
         soundsSwitch.setChecked(prefs.getBoolean(KEY_SOUNDS, true));
         bindingUi = false;
 
-        darkModeSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (bindingUi || !isAdded()) {
-                return;
-            }
-            prefs.edit().putBoolean(KEY_DARK_MODE, isChecked).apply();
-            AppCompatDelegate.setDefaultNightMode(
-                    isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
-        });
+        btnThemeAuto.setOnClickListener(v -> selectTheme(ThemeHelper.MODE_SYSTEM));
+        btnThemeLight.setOnClickListener(v -> selectTheme(ThemeHelper.MODE_LIGHT));
+        btnThemeDark.setOnClickListener(v -> selectTheme(ThemeHelper.MODE_DARK));
 
         largeFontSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
             if (bindingUi || !isAdded()) {
@@ -132,5 +131,29 @@ public class settings extends Fragment {
                 });
 
         return view;
+    }
+
+    private void selectTheme(String themeMode) {
+        if (bindingUi || !isAdded()) {
+            return;
+        }
+        if (themeMode.equals(ThemeHelper.getThemeMode(context))) {
+            updateThemeButtons(themeMode);
+            return;
+        }
+        ThemeHelper.setThemeMode(requireContext(), themeMode);
+        updateThemeButtons(themeMode);
+    }
+
+    private void updateThemeButtons(String themeMode) {
+        styleThemeButton(btnThemeAuto, ThemeHelper.MODE_SYSTEM.equals(themeMode));
+        styleThemeButton(btnThemeLight, ThemeHelper.MODE_LIGHT.equals(themeMode));
+        styleThemeButton(btnThemeDark, ThemeHelper.MODE_DARK.equals(themeMode));
+    }
+
+    private void styleThemeButton(MaterialButton button, boolean selected) {
+        button.setBackgroundResource(selected ? R.drawable.bg_lang_selected : R.drawable.bg_lang_unselected);
+        button.setTextColor(ContextCompat.getColor(context,
+                selected ? R.color.white : R.color.foreground));
     }
 }
