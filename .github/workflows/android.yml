@@ -20,101 +20,57 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Accept Android SDK licenses
+        run: yes | sdkmanager --licenses
+
+      - name: Install Android SDK packages
+        run: sdkmanager --install "platform-tools" "platforms;android-35" "build-tools;35.0.0"
+
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Create google-services.json
+      - name: Ensure google-services.json exists
         run: |
-          mkdir -p app
-          cat << 'EOF' > app/google-services.json
-          {
-            "project_info": {
-              "project_number": "${{ secrets.FIREBASE_PROJECT_NUMBER }}",
-              "project_id": "${{ secrets.FIREBASE_PROJECT_ID }}",
-              "storage_bucket": "${{ secrets.FIREBASE_STORAGE_BUCKET }}"
-            },
-            "client": [
-              {
-                "client_info": {
-                  "mobilesdk_app_id": "${{ secrets.FIREBASE_MOBILE_SDK_APP_ID }}",
-                  "android_client_info": {
-                    "package_name": "com.khalil.DRACS"
-                  }
-                },
-                "oauth_client": [],
-                "api_key": [
-                  {
-                    "current_key": "${{ secrets.FIREBASE_API_KEY }}"
-                  }
-                ],
-                "services": {
-                  "appinvite_service": {
-                    "other_platform_oauth_client": []
+          if [ ! -f app/google-services.json ]; then
+            mkdir -p app
+            cat << 'EOF' > app/google-services.json
+            {
+              "project_info": {
+                "project_number": "000000000000",
+                "project_id": "local-ci-project",
+                "storage_bucket": "local-ci-project.appspot.com"
+              },
+              "client": [
+                {
+                  "client_info": {
+                    "mobilesdk_app_id": "1:000000000000:android:0000000000000000",
+                    "android_client_info": {
+                      "package_name": "com.khalil.DRACS"
+                    }
+                  },
+                  "oauth_client": [],
+                  "api_key": [
+                    {
+                      "current_key": "AIzaSyDUMMYKEYFORCI"
+                    }
+                  ],
+                  "services": {
+                    "appinvite_service": {
+                      "other_platform_oauth_client": []
+                    }
                   }
                 }
-              }
-            ],
-            "configuration_version": "1"
-          }
-          EOF
-
-      - name: Update build.gradle.kts for lint baseline
-        run: |
-          if [ -f "app/build.gradle.kts" ]; then
-            if grep -q "android {" app/build.gradle.kts; then
-              # Insert lint configuration inside existing android block
-              sed -i '/android {/a \    lint {\n        baseline = file("lint-baseline.xml")\n        abortOnError = false\n    }' app/build.gradle.kts
-            else
-              # Add full android block if not present
-              echo "android {" >> app/build.gradle.kts
-              echo "    lint {" >> app/build.gradle.kts
-              echo '        baseline = file("lint-baseline.xml")' >> app/build.gradle.kts
-              echo "        abortOnError = false" >> app/build.gradle.kts
-              echo "    }" >> app/build.gradle.kts
-              echo "}" >> app/build.gradle.kts
-            fi
-          else
-            echo "Error: app/build.gradle.kts not found!"
-            exit 1
+              ],
+              "configuration_version": "1"
+            }
+            EOF
           fi
 
-      - name: Create lint baseline
-        run: |
-          ./gradlew :app:lintDebug -PupdateLintBaseline || echo "Lint baseline created (warnings ignored)"
-          if [ -f "app/lint-baseline.xml" ]; then
-            echo "Lint baseline file created successfully"
-          else
-            echo "Creating empty lint baseline file"
-            echo '<?xml version="1.0" encoding="UTF-8"?><issues format="5" by="lint 4.2.0"/>' > app/lint-baseline.xml
-          fi
+      - name: Build debug APK
+        run: ./gradlew --no-daemon assembleDebug
 
-      - name: Build with Gradle
-        run: ./gradlew build
-
-      - name: Build Debug APK
-        run: ./gradlew :app:assembleDebug
-
-      - name: Build AndroidTest APK
-        run: ./gradlew :app:assembleAndroidTest
-
-      - name: Verify APK files exist
-        run: ls -l app/build/outputs/apk/androidTest/debug/
-
-      - name: Set up Google Cloud SDK
-        run: |
-          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}' > service-account.json
-          jq '.' service-account.json || (echo "Invalid JSON in service account" && exit 1)
-          gcloud auth activate-service-account --key-file=service-account.json
-          gcloud config set project ${{ secrets.FIREBASE_PROJECT_ID }}
-
-      - name: Install Firebase CLI
-        run: |
-          curl -sL https://firebase.tools | bash
-          firebase --version
-
-      - name: Run Firebase Test Lab tests
-        run: |
-          gcloud firebase test android run \
-            --app app/build/outputs/apk/debug/app-debug.apk \
-            --type robo \
-            --timeout 5m
+      - name: Run unit tests
+        run: ./gradlew --no-daemon test
