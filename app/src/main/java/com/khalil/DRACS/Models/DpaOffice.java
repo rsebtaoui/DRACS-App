@@ -57,6 +57,15 @@ public enum DpaOffice {
             -7.6108030,
             null
     ),
+    MOHAMMEDIA(
+            R.id.pin_mohammedia,
+            R.string.dpa_mohammedia_name,
+            R.string.dpa_mohammedia_address,
+            R.string.dpa_mohammedia_phone,
+            33.6865,
+            -7.3830,
+            null
+    ),
     BENSLIMANE(
             R.id.pin_benslimane,
             R.string.dpa_benslimane_name,
@@ -128,6 +137,9 @@ public enum DpaOffice {
         }
         if ("CASABLANCA_MOHAMMEDIA".equals(key)) {
             return CASABLANCA;
+        }
+        if ("MOHAMMEDIA".equals(key)) {
+            return MOHAMMEDIA;
         }
         try {
             return DpaOffice.valueOf(key);

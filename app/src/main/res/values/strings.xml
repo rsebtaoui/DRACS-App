@@ -114,6 +114,11 @@
     <string name="dpa_casablanca_phone" translatable="false">0522278871</string>
     <string name="dpa_casablanca_pin_desc">دبوس المديرية الإقليمية للفلاحة بالدار البيضاء</string>
 
+    <string name="dpa_mohammedia_name">المديرية الإقليمية للفلاحة بمحمدية</string>
+    <string name="dpa_mohammedia_address">Secteur territorial Mohammedia — DPA Casablanca-Mohammedia</string>
+    <string name="dpa_mohammedia_phone" translatable="false">0522278871</string>
+    <string name="dpa_mohammedia_pin_desc">دبوس المديرية الإقليمية للفلاحة بمحمدية</string>
+
     <string name="dpa_benslimane_name">المديرية الإقليمية للفلاحة ببن سليمان</string>
     <string name="dpa_benslimane_address">Route souk tlat ziaida, Benslimane</string>
     <string name="dpa_benslimane_phone" translatable="false">0523291112</string>

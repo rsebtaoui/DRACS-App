@@ -56,15 +56,17 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 
-                <!-- Interactive map: ratio matches ic_cart (~521:471) so pins lock to provinces -->
+                <!-- Map + pins: container sized by the image; overlay locked to ImageView
+                     bounds. layoutDirection=ltr prevents RTL from mirroring vertical %. -->
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/map_container"
                     android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_sm"
                     android:clipChildren="false"
+                    android:clipToPadding="false"
                     android:contentDescription="@string/regional_map_image_desc"
-                    app:layout_constraintDimensionRatio="H,521:471"
+                    android:layoutDirection="ltr"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/map_label">
@@ -72,184 +74,225 @@
                     <ImageView
                         android:id="@+id/cart"
                         android:layout_width="0dp"
-                        android:layout_height="0dp"
+                        android:layout_height="wrap_content"
+                        android:adjustViewBounds="true"
                         android:contentDescription="@string/regional_map_image_desc"
                         android:importantForAccessibility="no"
-                        android:scaleType="fitXY"
+                        android:scaleType="fitCenter"
                         android:src="@mipmap/ic_cart"
-                        app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
 
-                    <!-- Calibrated to provincial color zones on ic_cart -->
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guide_el_jadida_v"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.40" />
+                    <!-- Overlay shares exact bounds with the scaled map graphic -->
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/map_pins_overlay"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:clipChildren="false"
+                        android:layoutDirection="ltr"
+                        app:layout_constraintBottom_toBottomOf="@id/cart"
+                        app:layout_constraintEnd_toEndOf="@id/cart"
+                        app:layout_constraintStart_toStartOf="@id/cart"
+                        app:layout_constraintTop_toTopOf="@id/cart">
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guide_el_jadida_h"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintGuide_percent="0.52" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_el_jadida_v"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.35" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guide_sidi_bennour_v"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.25" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_el_jadida_h"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.55" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guide_sidi_bennour_h"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintGuide_percent="0.76" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_sidi_bennour_v"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.28" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guide_settat_v"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.64" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_sidi_bennour_h"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.75" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guide_settat_h"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintGuide_percent="0.68" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_settat_v"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.65" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guide_berrechid_v"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.60" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_settat_h"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.65" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guide_berrechid_h"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintGuide_percent="0.39" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_berrechid_v"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.55" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guide_benslimane_v"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.78" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_berrechid_h"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.45" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guide_benslimane_h"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintGuide_percent="0.30" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_benslimane_v"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.78" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guide_casablanca_v"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.58" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_benslimane_h"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.30" />
 
-                    <androidx.constraintlayout.widget.Guideline
-                        android:id="@+id/guide_casablanca_h"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        app:layout_constraintGuide_percent="0.28" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_casablanca_v"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.61" />
 
-                    <ImageButton
-                        android:id="@+id/pin_el_jadida"
-                        android:layout_width="@dimen/touch_target"
-                        android:layout_height="@dimen/touch_target"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/dpa_el_jadida_pin_desc"
-                        android:padding="12dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/map_pin"
-                        app:layout_constraintBottom_toBottomOf="@id/guide_el_jadida_h"
-                        app:layout_constraintEnd_toEndOf="@id/guide_el_jadida_v"
-                        app:layout_constraintStart_toStartOf="@id/guide_el_jadida_v"
-                        app:layout_constraintTop_toTopOf="@id/guide_el_jadida_h" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_casablanca_h"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.36" />
 
-                    <ImageButton
-                        android:id="@+id/pin_sidi_bennour"
-                        android:layout_width="@dimen/touch_target"
-                        android:layout_height="@dimen/touch_target"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/dpa_sidi_bennour_pin_desc"
-                        android:padding="12dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/map_pin"
-                        app:layout_constraintBottom_toBottomOf="@id/guide_sidi_bennour_h"
-                        app:layout_constraintEnd_toEndOf="@id/guide_sidi_bennour_v"
-                        app:layout_constraintStart_toStartOf="@id/guide_sidi_bennour_v"
-                        app:layout_constraintTop_toTopOf="@id/guide_sidi_bennour_h" />
+                        <!-- Mohammedia: NE of Casablanca on the coast (between Casa & Benslimane) -->
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_mohammedia_v"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.65" />
 
-                    <ImageButton
-                        android:id="@+id/pin_settat"
-                        android:layout_width="@dimen/touch_target"
-                        android:layout_height="@dimen/touch_target"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/dpa_settat_pin_desc"
-                        android:padding="12dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/map_pin"
-                        app:layout_constraintBottom_toBottomOf="@id/guide_settat_h"
-                        app:layout_constraintEnd_toEndOf="@id/guide_settat_v"
-                        app:layout_constraintStart_toStartOf="@id/guide_settat_v"
-                        app:layout_constraintTop_toTopOf="@id/guide_settat_h" />
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_mohammedia_h"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.25" />
 
-                    <ImageButton
-                        android:id="@+id/pin_berrechid"
-                        android:layout_width="@dimen/touch_target"
-                        android:layout_height="@dimen/touch_target"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/dpa_berrechid_pin_desc"
-                        android:padding="12dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/map_pin"
-                        app:layout_constraintBottom_toBottomOf="@id/guide_berrechid_h"
-                        app:layout_constraintEnd_toEndOf="@id/guide_berrechid_v"
-                        app:layout_constraintStart_toStartOf="@id/guide_berrechid_v"
-                        app:layout_constraintTop_toTopOf="@id/guide_berrechid_h" />
+                        <ImageButton
+                            android:id="@+id/pin_el_jadida"
+                            android:layout_width="@dimen/touch_target"
+                            android:layout_height="@dimen/touch_target"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/dpa_el_jadida_pin_desc"
+                            android:padding="12dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/map_pin"
+                            app:layout_constraintBottom_toBottomOf="@id/guide_el_jadida_h"
+                            app:layout_constraintEnd_toEndOf="@id/guide_el_jadida_v"
+                            app:layout_constraintStart_toStartOf="@id/guide_el_jadida_v"
+                            app:layout_constraintTop_toTopOf="@id/guide_el_jadida_h" />
 
-                    <ImageButton
-                        android:id="@+id/pin_benslimane"
-                        android:layout_width="@dimen/touch_target"
-                        android:layout_height="@dimen/touch_target"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/dpa_benslimane_pin_desc"
-                        android:padding="12dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/map_pin"
-                        app:layout_constraintBottom_toBottomOf="@id/guide_benslimane_h"
-                        app:layout_constraintEnd_toEndOf="@id/guide_benslimane_v"
-                        app:layout_constraintStart_toStartOf="@id/guide_benslimane_v"
-                        app:layout_constraintTop_toTopOf="@id/guide_benslimane_h" />
+                        <ImageButton
+                            android:id="@+id/pin_sidi_bennour"
+                            android:layout_width="@dimen/touch_target"
+                            android:layout_height="@dimen/touch_target"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/dpa_sidi_bennour_pin_desc"
+                            android:padding="12dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/map_pin"
+                            app:layout_constraintBottom_toBottomOf="@id/guide_sidi_bennour_h"
+                            app:layout_constraintEnd_toEndOf="@id/guide_sidi_bennour_v"
+                            app:layout_constraintStart_toStartOf="@id/guide_sidi_bennour_v"
+                            app:layout_constraintTop_toTopOf="@id/guide_sidi_bennour_h" />
 
-                    <ImageButton
-                        android:id="@+id/pin_casablanca"
-                        android:layout_width="@dimen/touch_target"
-                        android:layout_height="@dimen/touch_target"
-                        android:background="?attr/selectableItemBackgroundBorderless"
-                        android:contentDescription="@string/dpa_casablanca_pin_desc"
-                        android:padding="12dp"
-                        android:scaleType="fitCenter"
-                        android:src="@drawable/map_pin"
-                        app:layout_constraintBottom_toBottomOf="@id/guide_casablanca_h"
-                        app:layout_constraintEnd_toEndOf="@id/guide_casablanca_v"
-                        app:layout_constraintStart_toStartOf="@id/guide_casablanca_v"
-                        app:layout_constraintTop_toTopOf="@id/guide_casablanca_h" />
+                        <ImageButton
+                            android:id="@+id/pin_settat"
+                            android:layout_width="@dimen/touch_target"
+                            android:layout_height="@dimen/touch_target"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/dpa_settat_pin_desc"
+                            android:padding="12dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/map_pin"
+                            app:layout_constraintBottom_toBottomOf="@id/guide_settat_h"
+                            app:layout_constraintEnd_toEndOf="@id/guide_settat_v"
+                            app:layout_constraintStart_toStartOf="@id/guide_settat_v"
+                            app:layout_constraintTop_toTopOf="@id/guide_settat_h" />
+
+                        <ImageButton
+                            android:id="@+id/pin_berrechid"
+                            android:layout_width="@dimen/touch_target"
+                            android:layout_height="@dimen/touch_target"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/dpa_berrechid_pin_desc"
+                            android:padding="12dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/map_pin"
+                            app:layout_constraintBottom_toBottomOf="@id/guide_berrechid_h"
+                            app:layout_constraintEnd_toEndOf="@id/guide_berrechid_v"
+                            app:layout_constraintStart_toStartOf="@id/guide_berrechid_v"
+                            app:layout_constraintTop_toTopOf="@id/guide_berrechid_h" />
+
+                        <ImageButton
+                            android:id="@+id/pin_benslimane"
+                            android:layout_width="@dimen/touch_target"
+                            android:layout_height="@dimen/touch_target"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/dpa_benslimane_pin_desc"
+                            android:padding="12dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/map_pin"
+                            app:layout_constraintBottom_toBottomOf="@id/guide_benslimane_h"
+                            app:layout_constraintEnd_toEndOf="@id/guide_benslimane_v"
+                            app:layout_constraintStart_toStartOf="@id/guide_benslimane_v"
+                            app:layout_constraintTop_toTopOf="@id/guide_benslimane_h" />
+
+                        <ImageButton
+                            android:id="@+id/pin_casablanca"
+                            android:layout_width="@dimen/touch_target"
+                            android:layout_height="@dimen/touch_target"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/dpa_casablanca_pin_desc"
+                            android:padding="12dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/map_pin"
+                            app:layout_constraintBottom_toBottomOf="@id/guide_casablanca_h"
+                            app:layout_constraintEnd_toEndOf="@id/guide_casablanca_v"
+                            app:layout_constraintStart_toStartOf="@id/guide_casablanca_v"
+                            app:layout_constraintTop_toTopOf="@id/guide_casablanca_h" />
+
+                        <ImageButton
+                            android:id="@+id/pin_mohammedia"
+                            android:layout_width="@dimen/touch_target"
+                            android:layout_height="@dimen/touch_target"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/dpa_mohammedia_pin_desc"
+                            android:padding="12dp"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/map_pin"
+                            app:layout_constraintBottom_toBottomOf="@id/guide_mohammedia_h"
+                            app:layout_constraintEnd_toEndOf="@id/guide_mohammedia_v"
+                            app:layout_constraintStart_toStartOf="@id/guide_mohammedia_v"
+                            app:layout_constraintTop_toTopOf="@id/guide_mohammedia_h" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <!-- Selected office contact card (directly under map) -->

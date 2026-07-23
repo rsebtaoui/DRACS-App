@@ -28,7 +28,6 @@ public class home extends Fragment {
     private static final String PREFS_NAME = "DRACS_Prefs";
     private static final String KEY_SELECTED_DPA = "selected_dpa_office";
     private static final long DETAIL_FADE_MS = 220L;
-
     private TextView dpaDetailName;
     private TextView dpaDetailAddress;
     private ImageButton dpaCallButton;
