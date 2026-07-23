@@ -89,7 +89,6 @@ public enum DpaOffice {
     public static final DpaOffice DEFAULT = DRA_SIEGE;
 
     /** {@code 0} means this office has no pin on the map. */
-    @IdRes
     public final int pinViewId;
     @StringRes
     public final int nameResId;

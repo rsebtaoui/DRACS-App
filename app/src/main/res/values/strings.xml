@@ -83,15 +83,12 @@
     <string name="dpa_detail_hint">اضغط على دبوس لاختيار المديرية الإقليمية</string>
     <string name="cd_dpa_call">الاتصال بالمديرية</string>
     <string name="cd_dpa_navigate">فتح الموقع في الخرائط</string>
-    <string name="cd_dra_route">المسار نحو المقر الجهوي بالجديدة</string>
     <string name="dpa_phone_unavailable">رقم الهاتف غير متوفر حالياً</string>
     <string name="dpa_maps_unavailable">تعذر فتح تطبيق الخرائط</string>
-    <string name="dra_primary_route">المديرية الجهوية — مقر الجديدة</string>
 
     <string name="dra_siege_name">المديرية الجهوية للفلاحة — مقر الجديدة</string>
     <string name="dra_siege_address">Avenue du Caire, El Jadida</string>
     <string name="dra_siege_phone" translatable="false">0523394020</string>
-    <string name="dra_siege_pin_desc">دبوس المقر الجهوي للفلاحة بالجديدة</string>
     <string name="dra_siege_geo_label" translatable="false">DRA+Siege+El+Jadida</string>
 
     <string name="dpa_el_jadida_name">المديرية الإقليمية للفلاحة بالجديدة</string>

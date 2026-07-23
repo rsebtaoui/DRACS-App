@@ -130,7 +130,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/card"
-        android:elevation="8dp"
+        android:elevation="@dimen/bottom_nav_elevation"
         android:minHeight="@dimen/bottom_nav_min_height"
         app:itemBackground="@drawable/bottom_nav_item_background"
         app:itemIconTint="@color/bottom_nav_color"
