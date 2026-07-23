@@ -126,4 +126,7 @@ dependencies {
     // Room
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
+
+    // Unit testing
+    testImplementation("junit:junit:4.13.2")
 }
