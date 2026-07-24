@@ -177,76 +177,6 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Accessibility -->
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_lg"
-            android:layout_marginBottom="@dimen/spacing_sm"
-            android:text="@string/settings_accessibility"
-            android:textColor="@color/settings_section_label"
-            android:textSize="@dimen/text_small"
-            android:textStyle="bold" />
-
-        <com.google.android.material.card.MaterialCardView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:cardBackgroundColor="@color/card"
-            app:cardCornerRadius="@dimen/radius_xl"
-            app:cardElevation="0dp"
-            app:strokeColor="@color/border"
-            app:strokeWidth="1dp">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:minHeight="@dimen/touch_target"
-                android:paddingStart="@dimen/spacing_md"
-                android:paddingTop="@dimen/spacing_sm"
-                android:paddingEnd="@dimen/spacing_md"
-                android:paddingBottom="@dimen/spacing_sm">
-
-                <ImageView
-                    android:id="@+id/icon_sounds"
-                    android:layout_width="22dp"
-                    android:layout_height="22dp"
-                    android:contentDescription="@null"
-                    android:importantForAccessibility="no"
-                    android:src="@drawable/ic_volume"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:tint="@color/foreground" />
-
-                <TextView
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/spacing_md"
-                    android:layout_marginEnd="@dimen/spacing_sm"
-                    android:text="@string/settings_sounds"
-                    android:textColor="@color/foreground"
-                    android:textSize="@dimen/text_body"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@id/icon_sounds"
-                    app:layout_constraintStart_toEndOf="@id/sounds_switch"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <com.google.android.material.switchmaterial.SwitchMaterial
-                    android:id="@+id/sounds_switch"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:minWidth="@dimen/touch_target"
-                    android:minHeight="@dimen/touch_target"
-                    android:showText="false"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:thumbTint="@color/white"
-                    app:trackTint="@color/settings_switch_track"
-                    app:useMaterialThemeColors="false" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
-
         <!-- About -->
         <TextView
             android:layout_width="match_parent"
@@ -302,25 +232,39 @@
                     android:text="@string/settings_copyright"
                     android:textColor="@color/muted_foreground"
                     android:textSize="@dimen/text_tiny" />
-
-                <com.google.android.material.button.MaterialButton
-                    android:id="@+id/clear_cache_button"
-                    style="@style/Widget.Material3.Button.TextButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/spacing_sm"
-                    android:minHeight="@dimen/touch_target"
-                    android:text="@string/clear_cache"
-                    android:textColor="@color/settings_section_label" />
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/clear_cache_button"
+            style="@style/Widget.Material3.Button.OutlinedButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/spacing_md"
+            android:background="@drawable/bg_button_outlined"
+            android:insetTop="0dp"
+            android:insetBottom="0dp"
+            android:minHeight="56dp"
+            android:text="@string/clear_cache"
+            android:textAllCaps="false"
+            android:textColor="@color/settings_accent"
+            android:textSize="@dimen/text_body"
+            android:textStyle="bold"
+            app:backgroundTint="@null"
+            app:cornerRadius="@dimen/radius_xl"
+            app:icon="@drawable/ic_delete"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/spacing_sm"
+            app:iconTint="@color/settings_accent"
+            app:strokeColor="@color/settings_accent"
+            app:strokeWidth="2dp" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_send_feedback"
             style="@style/Widget.Material3.Button.OutlinedButton"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_lg"
+            android:layout_marginTop="@dimen/spacing_sm"
             android:background="@drawable/bg_button_outlined"
             android:insetTop="0dp"
             android:insetBottom="0dp"
@@ -332,6 +276,10 @@
             android:textStyle="bold"
             app:backgroundTint="@null"
             app:cornerRadius="@dimen/radius_xl"
+            app:icon="@drawable/ic_feedback"
+            app:iconGravity="textStart"
+            app:iconPadding="@dimen/spacing_sm"
+            app:iconTint="@color/settings_accent"
             app:strokeColor="@color/settings_accent"
             app:strokeWidth="2dp" />
 

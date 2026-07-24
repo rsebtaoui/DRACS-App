@@ -35,9 +35,7 @@
     <string name="about">عن التطبيق</string>
     <string name="app_version">التطبيق الحالي ألإصدار رقم: 1.1 </string>
     <string name="settings_display">العرض</string>
-    <string name="settings_accessibility">سهولة الاستخدام</string>
     <string name="settings_large_font">خط أكبر</string>
-    <string name="settings_sounds">الأصوات</string>
     <string name="settings_about_title">منصة الخدمات الفلاحية المتكاملة</string>
     <string name="settings_version_format">الإصدار: %1$s</string>
     <string name="settings_copyright">© 2024 المديرية الجهوية</string>
