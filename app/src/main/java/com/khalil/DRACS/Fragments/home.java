@@ -4,6 +4,9 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -11,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,6 +37,11 @@ public class home extends Fragment {
 
     private static final String STATE_SELECTED_DPA = "state_selected_dpa";
     private static final long DETAIL_FADE_MS = 220L;
+    /** Pixels with every channel >= this are treated as the map's white background. */
+    private static final int WHITE_KEY_THRESHOLD = 238;
+
+    /** Cached transparent-background map; the asset ships with a baked white background. */
+    private static Bitmap transparentMapBitmap;
 
     private TextView dpaDetailName;
     private TextView dpaDetailAddress;
@@ -81,7 +90,56 @@ public class home extends Fragment {
         jeClick.setOnClickListener(v -> navigateTo(R.id.action_home_to_JE));
 
         bindDpaMap(view);
+        applyTransparentMap(view);
         selectDpa(selectedOffice, false);
+    }
+
+    /**
+     * The map asset ({@code ic_cart}) has a solid white background baked in, which shows as a
+     * light box on the dark card. Key out the near-white pixels once so the card background
+     * (light or dark) shows through and the map matches the current theme.
+     */
+    private void applyTransparentMap(@NonNull View root) {
+        ImageView mapView = root.findViewById(R.id.cart);
+        if (mapView == null) {
+            return;
+        }
+        if (transparentMapBitmap == null || transparentMapBitmap.isRecycled()) {
+            transparentMapBitmap = buildTransparentMap(getResources());
+        }
+        if (transparentMapBitmap != null) {
+            mapView.setImageBitmap(transparentMapBitmap);
+        }
+    }
+
+    @Nullable
+    private static Bitmap buildTransparentMap(@NonNull Resources res) {
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap src = BitmapFactory.decodeResource(res, R.mipmap.ic_cart, opts);
+        if (src == null) {
+            return null;
+        }
+        Bitmap out = src.copy(Bitmap.Config.ARGB_8888, true);
+        src.recycle();
+        if (out == null) {
+            return null;
+        }
+        int w = out.getWidth();
+        int h = out.getHeight();
+        int[] pixels = new int[w * h];
+        out.getPixels(pixels, 0, w, 0, 0, w, h);
+        for (int i = 0; i < pixels.length; i++) {
+            int color = pixels[i];
+            int r = (color >> 16) & 0xFF;
+            int g = (color >> 8) & 0xFF;
+            int b = color & 0xFF;
+            if (r >= WHITE_KEY_THRESHOLD && g >= WHITE_KEY_THRESHOLD && b >= WHITE_KEY_THRESHOLD) {
+                pixels[i] = 0x00000000;
+            }
+        }
+        out.setPixels(pixels, 0, w, 0, 0, w, h);
+        return out;
     }
 
     @Override
