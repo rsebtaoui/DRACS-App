@@ -180,20 +180,20 @@
                             android:orientation="horizontal"
                             app:layout_constraintGuide_percent="0.36" />
 
-                        <!-- Mohammedia: NE of Casablanca on the coast (between Casa & Benslimane) -->
+                        <!-- Regional Direction (DRA) siège — in El Jadida, offset from the DPA pin -->
                         <androidx.constraintlayout.widget.Guideline
-                            android:id="@+id/guide_mohammedia_v"
+                            android:id="@+id/guide_dra_siege_v"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:layout_constraintGuide_percent="0.65" />
+                            app:layout_constraintGuide_percent="0.31" />
 
                         <androidx.constraintlayout.widget.Guideline
-                            android:id="@+id/guide_mohammedia_h"
+                            android:id="@+id/guide_dra_siege_h"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            app:layout_constraintGuide_percent="0.25" />
+                            app:layout_constraintGuide_percent="0.44" />
 
                         <ImageButton
                             android:id="@+id/pin_el_jadida"
@@ -280,18 +280,18 @@
                             app:layout_constraintTop_toTopOf="@id/guide_casablanca_h" />
 
                         <ImageButton
-                            android:id="@+id/pin_mohammedia"
+                            android:id="@+id/pin_dra_siege"
                             android:layout_width="@dimen/touch_target"
                             android:layout_height="@dimen/touch_target"
                             android:background="?attr/selectableItemBackgroundBorderless"
-                            android:contentDescription="@string/dpa_mohammedia_pin_desc"
+                            android:contentDescription="@string/dra_siege_pin_desc"
                             android:padding="@dimen/pin_icon_padding"
                             android:scaleType="fitCenter"
-                            android:src="@drawable/map_pin"
-                            app:layout_constraintBottom_toBottomOf="@id/guide_mohammedia_h"
-                            app:layout_constraintEnd_toEndOf="@id/guide_mohammedia_v"
-                            app:layout_constraintStart_toStartOf="@id/guide_mohammedia_v"
-                            app:layout_constraintTop_toTopOf="@id/guide_mohammedia_h" />
+                            android:src="@drawable/map_pin_blue"
+                            app:layout_constraintBottom_toBottomOf="@id/guide_dra_siege_h"
+                            app:layout_constraintEnd_toEndOf="@id/guide_dra_siege_v"
+                            app:layout_constraintStart_toStartOf="@id/guide_dra_siege_v"
+                            app:layout_constraintTop_toTopOf="@id/guide_dra_siege_h" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

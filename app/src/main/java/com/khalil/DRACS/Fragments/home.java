@@ -3,7 +3,6 @@ package com.khalil.DRACS.Fragments;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Bundle;
@@ -27,12 +26,11 @@ import com.khalil.DRACS.R;
 
 /**
  * Home dashboard: service grid + interactive Casablanca-Settat DPA map.
- * Presentational only (no ViewModel) — selection is persisted in {@code DRACS_Prefs}.
+ * Presentational only (no ViewModel). Each launch defaults to the regional DRA
+ * office (El Jadida); the in-session selection is only kept across config changes.
  */
 public class home extends Fragment {
 
-    private static final String PREFS_NAME = "DRACS_Prefs";
-    private static final String KEY_SELECTED_DPA = "selected_dpa_office";
     private static final String STATE_SELECTED_DPA = "state_selected_dpa";
     private static final long DETAIL_FADE_MS = 220L;
 
@@ -51,10 +49,12 @@ public class home extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Fresh start → always default to the regional DRA (El Jadida).
+        // Config change (rotation) → restore the office the user was viewing.
         if (savedInstanceState != null) {
             selectedOffice = DpaOffice.fromKey(savedInstanceState.getString(STATE_SELECTED_DPA));
         } else {
-            selectedOffice = resolveInitialDpa();
+            selectedOffice = DpaOffice.DEFAULT;
         }
     }
 
@@ -126,29 +126,11 @@ public class home extends Fragment {
         dpaMapsButton.setOnClickListener(v -> openOfficeInMaps(selectedOffice));
     }
 
-    @NonNull
-    private DpaOffice resolveInitialDpa() {
-        Context context = getContext();
-        if (context == null) {
-            return DpaOffice.DEFAULT;
-        }
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        String savedKey = prefs.getString(KEY_SELECTED_DPA, null);
-        if (!TextUtils.isEmpty(savedKey)) {
-            return DpaOffice.fromKey(savedKey);
-        }
-        return DpaOffice.DEFAULT;
-    }
-
     private void selectDpa(@NonNull DpaOffice office, boolean animate) {
         if (!isAdded()) {
             return;
         }
         selectedOffice = office;
-        requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-                .edit()
-                .putString(KEY_SELECTED_DPA, office.name())
-                .apply();
 
         View root = getView();
         if (root == null) {
@@ -168,7 +150,9 @@ public class home extends Fragment {
                 continue;
             }
             boolean selected = office == selectedOffice;
-            pin.setImageResource(selected ? R.drawable.map_pin_blue : R.drawable.map_pin);
+            // DRA siège (regional HQ) stays blue to remain distinct; others turn blue when selected.
+            boolean useBlue = selected || office == DpaOffice.DRA_SIEGE;
+            pin.setImageResource(useBlue ? R.drawable.map_pin_blue : R.drawable.map_pin);
             pin.setSelected(selected);
             pin.setAlpha(selected ? 1f : 0.95f);
             pin.setScaleX(selected ? 1.12f : 1f);
