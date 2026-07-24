@@ -31,13 +31,11 @@ public class settings extends Fragment {
     private static final String TAG = "SettingsFragment";
     private static final String PREFS_NAME = "DRACS_Prefs";
     private static final String KEY_LARGE_FONT = "large_font";
-    private static final String KEY_SOUNDS = "sounds_enabled";
 
     private MaterialButton btnThemeAuto;
     private MaterialButton btnThemeLight;
     private MaterialButton btnThemeDark;
     private SwitchMaterial largeFontSwitch;
-    private SwitchMaterial soundsSwitch;
     private MaterialButton clearCacheButton;
     private MaterialButton btnSendFeedback;
     private TextView appVersionText;
@@ -56,7 +54,6 @@ public class settings extends Fragment {
         btnThemeLight = view.findViewById(R.id.btn_theme_light);
         btnThemeDark = view.findViewById(R.id.btn_theme_dark);
         largeFontSwitch = view.findViewById(R.id.large_font_switch);
-        soundsSwitch = view.findViewById(R.id.sounds_switch);
         clearCacheButton = view.findViewById(R.id.clear_cache_button);
         btnSendFeedback = view.findViewById(R.id.btn_send_feedback);
         appVersionText = view.findViewById(R.id.app_version_text);
@@ -68,7 +65,6 @@ public class settings extends Fragment {
         bindingUi = true;
         updateThemeButtons(ThemeHelper.getThemeMode(context));
         largeFontSwitch.setChecked(prefs.getBoolean(KEY_LARGE_FONT, false));
-        soundsSwitch.setChecked(prefs.getBoolean(KEY_SOUNDS, true));
         bindingUi = false;
 
         btnThemeAuto.setOnClickListener(v -> selectTheme(ThemeHelper.MODE_SYSTEM));
@@ -85,13 +81,6 @@ public class settings extends Fragment {
                     requireActivity().recreate();
                 }
             });
-        });
-
-        soundsSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (bindingUi) {
-                return;
-            }
-            prefs.edit().putBoolean(KEY_SOUNDS, isChecked).apply();
         });
 
         clearCacheButton.setOnClickListener(v -> {
