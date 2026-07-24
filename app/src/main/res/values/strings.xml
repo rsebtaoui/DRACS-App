@@ -45,6 +45,7 @@
     <string name="settings_feedback_subject">ملاحظات حول تطبيق DRACS</string>
     <string name="settings_no_email_app">لا يوجد تطبيق بريد إلكتروني مثبت</string>
     <string name="settings_cache_cleared">تم مسح ذاكرة التخزين المؤقت بنجاح</string>
+    <string name="press_back_again_to_exit">اضغط مرة أخرى للخروج</string>
 
     <!-- Arabic-only splash -->
     <string name="splash_title_line1">المديرية الجهوية للفلاحة</string>
