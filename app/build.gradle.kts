@@ -59,7 +59,7 @@ android {
         jvmTarget = "1.8"
         freeCompilerArgs += listOf(
             "-Xjvm-default=all",
-            "-Xopt-in=kotlin.RequiresOptIn"
+            "-opt-in=kotlin.RequiresOptIn"
         )
     }
 
@@ -69,6 +69,11 @@ android {
             excludes += "/META-INF/INDEX.LIST"
             excludes += "/META-INF/io.netty.versions.properties"
             excludes += "META-INF/*.kotlin_module"
+        }
+        jniLibs {
+            // Store .so files uncompressed so the linker can mmap them; with AGP 8.5.1+
+            // uncompressed libs are zipaligned to 16 KB for Android 15 page-size support.
+            useLegacyPackaging = false
         }
     }
 }
@@ -126,6 +131,11 @@ dependencies {
     // Room
     implementation("androidx.room:room-runtime:2.6.1")
     annotationProcessor("androidx.room:room-compiler:2.6.1")
+
+    // Force a 16 KB page-size aligned DataStore native lib (libdatastore_shared_counter.so).
+    // Pulled transitively by Firebase Sessions / Play libs; older builds were 4 KB-aligned.
+    implementation("androidx.datastore:datastore-core:1.1.7")
+    implementation("androidx.datastore:datastore-core-okio:1.1.7")
 
     // Unit testing
     testImplementation("junit:junit:4.13.2")
