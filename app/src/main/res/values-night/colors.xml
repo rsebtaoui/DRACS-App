@@ -17,6 +17,8 @@
 
     <color name="background">#0F0F0D</color>
     <color name="card">#1A1A18</color>
+    <!-- Keep the map panel light so the illustration stays legible in dark mode -->
+    <color name="map_surface">#F5F5F3</color>
     <color name="foreground">#F5F5F3</color>
     <color name="muted_foreground">#BDBDBD</color>
     <color name="border">#2A2A27</color>

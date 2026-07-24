@@ -27,6 +27,8 @@
     <!-- Backgrounds -->
     <color name="background">#FAFAF8</color>
     <color name="card">#FFFFFF</color>
+    <!-- Light backing for the (white-baked) regional map illustration; light in both themes -->
+    <color name="map_surface">#FFFFFF</color>
     <color name="foreground">#1A1A18</color>
     <color name="muted_foreground">#6B6B68</color>
     <color name="border">#E5E5E2</color>
