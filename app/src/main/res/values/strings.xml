@@ -3,7 +3,7 @@
     <string name="navigation_bar">شريط التنقل</string>
     <string name="القائمة">القائمة</string>
     <string name="إعدادات">إعدادات</string>
-    <string name="المديرية_الجهوية">المديرية الجهوية للفلاحة لجهة الدارالبيضاء-سطات</string>
+    <string name="المديرية_الجهوية">المديرية الجهوية للفلاحة</string>
     <string name="خروج">خروج</string>
     <string name="more_information">معلومات إضافية</string>
     <string name="home_icon">الرئيسية</string>
@@ -35,8 +35,10 @@
     <string name="about">عن التطبيق</string>
     <string name="app_version">التطبيق الحالي ألإصدار رقم: 1.1 </string>
     <string name="settings_display">العرض</string>
+    <string name="settings_accessibility">سهولة الاستخدام</string>
     <string name="settings_large_font">خط أكبر</string>
-    <string name="settings_about_title">منصة الخدمات الفلاحية المتكاملة</string>
+    <string name="settings_sounds">الأصوات</string>
+    <string name="settings_about_title">بوابتكم الرقمية للمعلومات و الإجراءات  الفلاحية</string>
     <string name="settings_version_format">الإصدار: %1$s</string>
     <string name="settings_copyright">© 2024 المديرية الجهوية</string>
     <string name="settings_send_feedback">إرسال ملاحظات</string>
@@ -54,8 +56,8 @@
     <string name="favorites_empty_title">لا توجد أقسام مفضلة بعد</string>
     <string name="favorites_empty_subtitle">اضغط على أيقونة الإشارة المرجعية داخل أي قسم لإضافته هنا</string>
     <string name="favorites_count_format">%1$d عنصر محفوظ</string>
-    <string name="regional_map_label">إقليم جهة الدار البيضاء - سطات</string>
-    <string name="dashboard_welcome">مرحبا بك في منصة الخدمات الفلاحية المتكاملة</string>
+    <string name="regional_map_label">أقاليم جهة الدار البيضاء - سطات</string>
+    <string name="dashboard_welcome">بوابتكم الرقمية للمعلومات و الإجراءات  الفلاحية</string>
     <string name="dashboard_tap_hint">اضغط على أي خدمة لمزيد من التفاصيل</string>
     <string name="toolbar_subtitle_region">الدار البيضاء - سطات</string>
     <string name="service_rna_subtitle">معلومات السجل الشامل</string>
@@ -81,12 +83,15 @@
     <string name="dpa_detail_hint">اضغط على دبوس لاختيار المديرية الإقليمية</string>
     <string name="cd_dpa_call">الاتصال بالمديرية</string>
     <string name="cd_dpa_navigate">فتح الموقع في الخرائط</string>
+    <string name="cd_dra_route">المسار نحو المقر الجهوي بالجديدة</string>
     <string name="dpa_phone_unavailable">رقم الهاتف غير متوفر حالياً</string>
     <string name="dpa_maps_unavailable">تعذر فتح تطبيق الخرائط</string>
+    <string name="dra_primary_route">المديرية الجهوية — مقر الجديدة</string>
 
     <string name="dra_siege_name">المديرية الجهوية للفلاحة — مقر الجديدة</string>
     <string name="dra_siege_address">Avenue du Caire, El Jadida</string>
     <string name="dra_siege_phone" translatable="false">0523394020</string>
+    <string name="dra_siege_pin_desc">دبوس المقر الجهوي للفلاحة بالجديدة</string>
     <string name="dra_siege_geo_label" translatable="false">DRA+Siege+El+Jadida</string>
 
     <string name="dpa_el_jadida_name">المديرية الإقليمية للفلاحة بالجديدة</string>
