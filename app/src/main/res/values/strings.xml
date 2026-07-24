@@ -88,6 +88,7 @@
 
     <string name="dra_siege_name">المديرية الجهوية للفلاحة — مقر الجديدة</string>
     <string name="dra_siege_address">Avenue du Caire, El Jadida</string>
+    <string name="dra_siege_pin_desc">دبوس المديرية الجهوية للفلاحة بالجديدة</string>
     <string name="dra_siege_phone" translatable="false">0523394020</string>
     <string name="dra_siege_geo_label" translatable="false">DRA+Siege+El+Jadida</string>
 
@@ -110,11 +111,6 @@
     <string name="dpa_casablanca_address">24 Rue d\'Avesnes, Roche Noire, Casablanca</string>
     <string name="dpa_casablanca_phone" translatable="false">0522278871</string>
     <string name="dpa_casablanca_pin_desc">دبوس المديرية الإقليمية للفلاحة بالدار البيضاء</string>
-
-    <string name="dpa_mohammedia_name">المديرية الإقليمية للفلاحة بمحمدية</string>
-    <string name="dpa_mohammedia_address">Secteur territorial Mohammedia — DPA Casablanca-Mohammedia</string>
-    <string name="dpa_mohammedia_phone" translatable="false">0522278871</string>
-    <string name="dpa_mohammedia_pin_desc">دبوس المديرية الإقليمية للفلاحة بمحمدية</string>
 
     <string name="dpa_benslimane_name">المديرية الإقليمية للفلاحة ببن سليمان</string>
     <string name="dpa_benslimane_address">Route souk tlat ziaida, Benslimane</string>

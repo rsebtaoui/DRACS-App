@@ -168,7 +168,9 @@ public class home extends Fragment {
                 continue;
             }
             boolean selected = office == selectedOffice;
-            pin.setImageResource(selected ? R.drawable.map_pin_blue : R.drawable.map_pin);
+            // DRA siège (regional HQ) stays blue to remain distinct; others turn blue when selected.
+            boolean useBlue = selected || office == DpaOffice.DRA_SIEGE;
+            pin.setImageResource(useBlue ? R.drawable.map_pin_blue : R.drawable.map_pin);
             pin.setSelected(selected);
             pin.setAlpha(selected ? 1f : 0.95f);
             pin.setScaleX(selected ? 1.12f : 1f);
