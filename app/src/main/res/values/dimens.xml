@@ -36,6 +36,10 @@
     <dimen name="pin_icon_padding">12dp</dimen>
     <dimen name="address_margin_top">2dp</dimen>
 
+    <!-- Settings action buttons (clear cache / feedback) -->
+    <dimen name="settings_action_height">56dp</dimen>
+    <dimen name="settings_action_icon">22dp</dimen>
+
     <!-- Legacy aliases (avoid breaking any remaining references) -->
     <dimen name="header_height">64dp</dimen>
     <dimen name="bottom_nav_height">56dp</dimen>
