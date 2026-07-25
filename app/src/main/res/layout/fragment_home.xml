@@ -63,16 +63,17 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/spacing_sm"
-                    android:background="@drawable/bg_map_surface"
+                    android:background="@android:color/transparent"
                     android:clipChildren="false"
                     android:clipToPadding="false"
-                    android:clipToOutline="true"
                     android:importantForAccessibility="yes"
                     android:layoutDirection="ltr"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/map_label">
 
+                    <!-- src is overridden at runtime with a white-keyed (transparent bg) bitmap
+                         so the map blends with the card in both light and dark themes. -->
                     <ImageView
                         android:id="@+id/cart"
                         android:layout_width="0dp"
