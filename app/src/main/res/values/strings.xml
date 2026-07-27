@@ -56,7 +56,8 @@
     <string name="favorites_empty_title">لا توجد أقسام مفضلة بعد</string>
     <string name="favorites_empty_subtitle">اضغط على أيقونة الإشارة المرجعية داخل أي قسم لإضافته هنا</string>
     <string name="favorites_count_format">%1$d عنصر محفوظ</string>
-    <string name="regional_map_label">أقاليم جهة الدار البيضاء - سطات</string>
+    <string name="regional_map_label">المديريات الإقليمية للفلاحة جهة الدار البيضاء - سطات</string>
+    <string name="click_on_local">اختر موقعك على الخريطة</string>
     <string name="dashboard_welcome">بوابتكم الرقمية للمعلومات و الإجراءات  الفلاحية</string>
     <string name="dashboard_tap_hint">اضغط على أي خدمة لمزيد من التفاصيل</string>
     <string name="toolbar_subtitle_region">الدار البيضاء - سطات</string>
@@ -85,47 +86,37 @@
     <string name="cd_dpa_navigate">فتح الموقع في الخرائط</string>
     <string name="cd_dra_route">المسار نحو المقر الجهوي بالجديدة</string>
     <string name="dpa_phone_unavailable">رقم الهاتف غير متوفر حالياً</string>
-    <string name="dpa_maps_unavailable">تعذر فتح تطبيق الخرائط</string>
+    <string name="dpa_maps_unavailable">تعذر استخراج الموقع حاليا، حاول لاحقا!</string>
     <string name="dra_primary_route">المديرية الجهوية — مقر الجديدة</string>
 
     <string name="dra_siege_name">المديرية الجهوية للفلاحة — مقر الجديدة</string>
-    <string name="dra_siege_address">Avenue du Caire, El Jadida</string>
+    <string name="dra_siege_address">زنقة القاهرة ، الجديدة</string>
     <string name="dra_siege_phone" translatable="false">0523394020</string>
     <string name="dra_siege_pin_desc">دبوس المقر الجهوي للفلاحة بالجديدة</string>
     <string name="dra_siege_geo_label" translatable="false">DRA+Siege+El+Jadida</string>
 
     <string name="dpa_el_jadida_name">المديرية الإقليمية للفلاحة بالجديدة</string>
-    <string name="dpa_el_jadida_address">Avenue des FAR, BP 79</string>
+    <string name="dpa_el_jadida_address">شارع الجيش الملكي ، الجديدة</string>
     <string name="dpa_el_jadida_phone" translatable="false">0523342990</string>
     <string name="dpa_el_jadida_pin_desc">دبوس المديرية الإقليمية للفلاحة بالجديدة</string>
 
-    <string name="dpa_sidi_bennour_name">المديرية الإقليمية للفلاحة بسيدي بنور</string>
-    <string name="dpa_sidi_bennour_address">Sidi Bennour</string>
-    <string name="dpa_sidi_bennour_phone" translatable="false"></string>
-    <string name="dpa_sidi_bennour_pin_desc">دبوس المديرية الإقليمية للفلاحة بسيدي بنور</string>
-
-    <string name="dpa_settat_name">المديرية الإقليمية للفلاحة بسطات</string>
-    <string name="dpa_settat_address">Cité administratif, Settat</string>
+    <string name="dpa_settat_name">المديرية الإقليمية للفلاحة لسطات</string>
+    <string name="dpa_settat_address">الحي الإداري سطات</string>
     <string name="dpa_settat_phone" translatable="false">0523400507</string>
-    <string name="dpa_settat_pin_desc">دبوس المديرية الإقليمية للفلاحة بسطات</string>
+    <string name="dpa_settat_pin_desc">دبوس المديرية الإقليمية للفلاحة لسطات</string>
 
-    <string name="dpa_casablanca_name">المديرية الإقليمية للفلاحة بالدار البيضاء</string>
-    <string name="dpa_casablanca_address">24 Rue d\'Avesnes, Roche Noire, Casablanca</string>
+    <string name="dpa_casablanca_name">المديرية الإقليمية للفلاحةل الدار البيضاء</string>
+    <string name="dpa_casablanca_address">زنقة أفينسن،الصخور السوداء  الدار البيضاء </string>
     <string name="dpa_casablanca_phone" translatable="false">0522278871</string>
-    <string name="dpa_casablanca_pin_desc">دبوس المديرية الإقليمية للفلاحة بالدار البيضاء</string>
+    <string name="dpa_casablanca_pin_desc">دبوس المديرية الإقليمية للفلاحة لالدار البيضاء</string>
 
-    <string name="dpa_mohammedia_name">المديرية الإقليمية للفلاحة بمحمدية</string>
-    <string name="dpa_mohammedia_address">Secteur territorial Mohammedia — DPA Casablanca-Mohammedia</string>
-    <string name="dpa_mohammedia_phone" translatable="false">0522278871</string>
-    <string name="dpa_mohammedia_pin_desc">دبوس المديرية الإقليمية للفلاحة بمحمدية</string>
-
-    <string name="dpa_benslimane_name">المديرية الإقليمية للفلاحة ببن سليمان</string>
-    <string name="dpa_benslimane_address">Route souk tlat ziaida, Benslimane</string>
+    <string name="dpa_benslimane_name">المديرية الإقليمية للفلاحة لبن سليمان</string>
+    <string name="dpa_benslimane_address">ص.ب 186،  طريق سوق ثلاثاء الزيايدة، حي الفتح بنسليمان</string>
     <string name="dpa_benslimane_phone" translatable="false">0523291112</string>
-    <string name="dpa_benslimane_pin_desc">دبوس المديرية الإقليمية للفلاحة ببن سليمان</string>
+    <string name="dpa_benslimane_pin_desc">دبوس المديرية الإقليمية للفلاحة لبن سليمان</string>
 
-    <string name="dpa_berrechid_name">المديرية الإقليمية للفلاحة ببرشيد</string>
-    <string name="dpa_berrechid_address">5, Avenue mohammed V, quartier Al Yousr, Berrechid</string>
+    <string name="dpa_berrechid_name">المديرية الإقليمية للفلاحة لبرشيد</string>
+    <string name="dpa_berrechid_address">5، شارع محمد الخامس، حي اليسر، برشيد</string>
     <string name="dpa_berrechid_phone" translatable="false">0522030603</string>
-    <string name="dpa_berrechid_pin_desc">دبوس المديرية الإقليمية للفلاحة ببرشيد</string>
+    <string name="dpa_berrechid_pin_desc">دبوس المديرية الإقليمية للفلاحةل برشيد</string>
 </resources>

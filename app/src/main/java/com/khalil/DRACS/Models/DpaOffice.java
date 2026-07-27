@@ -30,15 +30,6 @@ public enum DpaOffice {
             -8.5023600,
             null
     ),
-    SIDI_BENNOUR(
-            R.id.pin_sidi_bennour,
-            R.string.dpa_sidi_bennour_name,
-            R.string.dpa_sidi_bennour_address,
-            R.string.dpa_sidi_bennour_phone,
-            32.6495,
-            -8.4272,
-            null
-    ),
     SETTAT(
             R.id.pin_settat,
             R.string.dpa_settat_name,
@@ -55,15 +46,6 @@ public enum DpaOffice {
             R.string.dpa_casablanca_phone,
             33.5835140,
             -7.6108030,
-            null
-    ),
-    MOHAMMEDIA(
-            R.id.pin_mohammedia,
-            R.string.dpa_mohammedia_name,
-            R.string.dpa_mohammedia_address,
-            R.string.dpa_mohammedia_phone,
-            33.6865,
-            -7.3830,
             null
     ),
     BENSLIMANE(
@@ -136,9 +118,6 @@ public enum DpaOffice {
         }
         if ("CASABLANCA_MOHAMMEDIA".equals(key)) {
             return CASABLANCA;
-        }
-        if ("MOHAMMEDIA".equals(key)) {
-            return MOHAMMEDIA;
         }
         try {
             return DpaOffice.valueOf(key);
