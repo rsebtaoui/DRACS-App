@@ -8,12 +8,12 @@ import com.khalil.DRACS.R;
 
 /**
  * Official DRA siège + DPA offices for Casablanca-Settat.
- * Pin view IDs must match {@code fragment_home.xml}. DRA has no map pin (detail-only).
+ * Pin view IDs must match {@code fragment_home.xml}.
  */
 public enum DpaOffice {
-    /** Regional Direction siège — shown in contact card; no map pin. */
+    /** Regional Direction siège — pinned in El Jadida. */
     DRA_SIEGE(
-            0,
+            R.id.pin_dra_siege,
             R.string.dra_siege_name,
             R.string.dra_siege_address,
             R.string.dra_siege_phone,
@@ -70,7 +70,7 @@ public enum DpaOffice {
     /** Default selection — regional DRA siège contact card. */
     public static final DpaOffice DEFAULT = DRA_SIEGE;
 
-    /** {@code 0} means this office has no pin on the map. */
+    @IdRes
     public final int pinViewId;
     @StringRes
     public final int nameResId;
@@ -83,7 +83,7 @@ public enum DpaOffice {
     @Nullable
     public final String geoLabel;
 
-    DpaOffice(int pinViewId,
+    DpaOffice(@IdRes int pinViewId,
               @StringRes int nameResId,
               @StringRes int addressResId,
               @StringRes int phoneResId,
@@ -116,7 +116,8 @@ public enum DpaOffice {
         if (key == null || key.isEmpty()) {
             return DEFAULT;
         }
-        if ("CASABLANCA_MOHAMMEDIA".equals(key)) {
+        // Migrate removed offices from earlier builds.
+        if ("CASABLANCA_MOHAMMEDIA".equals(key) || "MOHAMMEDIA".equals(key)) {
             return CASABLANCA;
         }
         try {

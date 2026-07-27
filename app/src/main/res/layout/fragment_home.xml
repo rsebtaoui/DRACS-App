@@ -54,21 +54,7 @@
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/click_on_map" />
-
-                <TextView
-                    android:id="@+id/click_on_map"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:text="@string/click_on_local"
-                    android:textColor="@color/primary"
-                    android:textSize="@dimen/text_body"
-                    android:textStyle="bold"
-                    app:layout_constraintTop_toBottomOf="@+id/map_label"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toTopOf="@+id/map_container" />
+                    app:layout_constraintTop_toTopOf="parent" />
 
                 <!-- Map + pins: container sized by the image; overlay locked to ImageView
                      bounds. layoutDirection=ltr prevents RTL from mirroring vertical %. -->
@@ -157,42 +143,42 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:layout_constraintGuide_percent="0.53" />
+                            app:layout_constraintGuide_percent="0.55" />
 
                         <androidx.constraintlayout.widget.Guideline
                             android:id="@+id/guide_berrechid_h"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            app:layout_constraintGuide_percent="0.39" />
+                            app:layout_constraintGuide_percent="0.45" />
 
                         <androidx.constraintlayout.widget.Guideline
                             android:id="@+id/guide_benslimane_v"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:layout_constraintGuide_percent="0.85" />
+                            app:layout_constraintGuide_percent="0.78" />
 
                         <androidx.constraintlayout.widget.Guideline
                             android:id="@+id/guide_benslimane_h"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            app:layout_constraintGuide_percent="0.25" />
+                            app:layout_constraintGuide_percent="0.30" />
 
                         <androidx.constraintlayout.widget.Guideline
                             android:id="@+id/guide_casablanca_v"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:layout_constraintGuide_percent="0.63" />
+                            app:layout_constraintGuide_percent="0.61" />
 
                         <androidx.constraintlayout.widget.Guideline
                             android:id="@+id/guide_casablanca_h"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            app:layout_constraintGuide_percent="0.25" />
+                            app:layout_constraintGuide_percent="0.36" />
 
                         <!-- Mohammedia: NE of Casablanca on the coast (between Casa & Benslimane) -->
                         <androidx.constraintlayout.widget.Guideline
@@ -223,6 +209,19 @@
                             app:layout_constraintStart_toStartOf="@id/guide_el_jadida_v"
                             app:layout_constraintTop_toTopOf="@id/guide_el_jadida_h" />
 
+                        <ImageButton
+                            android:id="@+id/pin_sidi_bennour"
+                            android:layout_width="@dimen/touch_target"
+                            android:layout_height="@dimen/touch_target"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/dpa_sidi_bennour_pin_desc"
+                            android:padding="@dimen/pin_icon_padding"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/map_pin"
+                            app:layout_constraintBottom_toBottomOf="@id/guide_sidi_bennour_h"
+                            app:layout_constraintEnd_toEndOf="@id/guide_sidi_bennour_v"
+                            app:layout_constraintStart_toStartOf="@id/guide_sidi_bennour_v"
+                            app:layout_constraintTop_toTopOf="@id/guide_sidi_bennour_h" />
 
                         <ImageButton
                             android:id="@+id/pin_settat"
@@ -235,10 +234,8 @@
                             android:src="@drawable/map_pin"
                             app:layout_constraintBottom_toBottomOf="@id/guide_settat_h"
                             app:layout_constraintEnd_toEndOf="@id/guide_settat_v"
-                            app:layout_constraintHorizontal_bias="0.375"
                             app:layout_constraintStart_toStartOf="@id/guide_settat_v"
-                            app:layout_constraintTop_toTopOf="@id/guide_settat_h"
-                            app:layout_constraintVertical_bias="0.625" />
+                            app:layout_constraintTop_toTopOf="@id/guide_settat_h" />
 
                         <ImageButton
                             android:id="@+id/pin_berrechid"
@@ -282,6 +279,19 @@
                             app:layout_constraintStart_toStartOf="@id/guide_casablanca_v"
                             app:layout_constraintTop_toTopOf="@id/guide_casablanca_h" />
 
+                        <ImageButton
+                            android:id="@+id/pin_mohammedia"
+                            android:layout_width="@dimen/touch_target"
+                            android:layout_height="@dimen/touch_target"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/dpa_mohammedia_pin_desc"
+                            android:padding="@dimen/pin_icon_padding"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/map_pin"
+                            app:layout_constraintBottom_toBottomOf="@id/guide_mohammedia_h"
+                            app:layout_constraintEnd_toEndOf="@id/guide_mohammedia_v"
+                            app:layout_constraintStart_toStartOf="@id/guide_mohammedia_v"
+                            app:layout_constraintTop_toTopOf="@id/guide_mohammedia_h" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

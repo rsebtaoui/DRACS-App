@@ -17,6 +17,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.IntentSenderRequest;
 import androidx.activity.result.contract.ActivityResultContracts;
@@ -49,6 +50,8 @@ public class Activity_main extends AppCompatActivity {
     private static final String PREFS_NAME = "DRACS_Prefs";
     private static final String KEY_LARGE_FONT = "large_font";
     private static final String KEY_LAST_NAV_ITEM = "last_nav_item";
+    /** Window (ms) within which a second back press on Home exits the app. */
+    private static final long BACK_EXIT_INTERVAL_MS = 2000L;
 
     BottomNavigationView bottomNav;
     NavController navController;
@@ -65,6 +68,11 @@ public class Activity_main extends AppCompatActivity {
     private ActivityResultLauncher<IntentSenderRequest> activityResultLauncher;
     private ActivityResultLauncher<String> notificationPermissionLauncher;
     private Runnable pendingNotificationAction;
+
+    // Double-back-to-exit (only active on the Home destination)
+    private OnBackPressedCallback doubleBackToExitCallback;
+    private long lastBackPressedAt = 0L;
+    private Toast exitHintToast;
 
     @Override
     protected void attachBaseContext(Context newBase) {
@@ -208,9 +216,33 @@ public class Activity_main extends AppCompatActivity {
                     }
                 });
 
+        // Press back twice on Home to exit; enabled only while on the Home destination.
+        doubleBackToExitCallback = new OnBackPressedCallback(false) {
+            @Override
+            public void handleOnBackPressed() {
+                long now = System.currentTimeMillis();
+                if (now - lastBackPressedAt < BACK_EXIT_INTERVAL_MS) {
+                    if (exitHintToast != null) {
+                        exitHintToast.cancel();
+                    }
+                    finish();
+                    return;
+                }
+                lastBackPressedAt = now;
+                exitHintToast = Toast.makeText(
+                        Activity_main.this, R.string.press_back_again_to_exit, Toast.LENGTH_SHORT);
+                exitHintToast.show();
+            }
+        };
+        getOnBackPressedDispatcher().addCallback(this, doubleBackToExitCallback);
+
         navController.addOnDestinationChangedListener((controller, destination, arguments) -> {
             textTitle.setText(destination.getLabel());
             handleDestinationChange(destination.getId());
+
+            if (doubleBackToExitCallback != null) {
+                doubleBackToExitCallback.setEnabled(destination.getId() == R.id.home);
+            }
 
             if (destination.getId() == R.id.home) {
                 dracsicon.clearColorFilter();
@@ -465,6 +497,10 @@ public class Activity_main extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
+        if (exitHintToast != null) {
+            exitHintToast.cancel();
+            exitHintToast = null;
+        }
         super.onDestroy();
     }
 }

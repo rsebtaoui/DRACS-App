@@ -3,8 +3,10 @@ package com.khalil.DRACS.Fragments;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -12,6 +14,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,14 +30,18 @@ import com.khalil.DRACS.R;
 
 /**
  * Home dashboard: service grid + interactive Casablanca-Settat DPA map.
- * Presentational only (no ViewModel) — selection is persisted in {@code DRACS_Prefs}.
+ * Presentational only (no ViewModel). Each launch defaults to the regional DRA
+ * office (El Jadida); the in-session selection is only kept across config changes.
  */
 public class home extends Fragment {
 
-    private static final String PREFS_NAME = "DRACS_Prefs";
-    private static final String KEY_SELECTED_DPA = "selected_dpa_office";
     private static final String STATE_SELECTED_DPA = "state_selected_dpa";
     private static final long DETAIL_FADE_MS = 220L;
+    /** Pixels with every channel >= this are treated as the map's white background. */
+    private static final int WHITE_KEY_THRESHOLD = 238;
+
+    /** Cached transparent-background map; the asset ships with a baked white background. */
+    private static Bitmap transparentMapBitmap;
 
     private TextView dpaDetailName;
     private TextView dpaDetailAddress;
@@ -51,10 +58,12 @@ public class home extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        // Fresh start → always default to the regional DRA (El Jadida).
+        // Config change (rotation) → restore the office the user was viewing.
         if (savedInstanceState != null) {
             selectedOffice = DpaOffice.fromKey(savedInstanceState.getString(STATE_SELECTED_DPA));
         } else {
-            selectedOffice = resolveInitialDpa();
+            selectedOffice = DpaOffice.DEFAULT;
         }
     }
 
@@ -81,7 +90,56 @@ public class home extends Fragment {
         jeClick.setOnClickListener(v -> navigateTo(R.id.action_home_to_JE));
 
         bindDpaMap(view);
+        applyTransparentMap(view);
         selectDpa(selectedOffice, false);
+    }
+
+    /**
+     * The map asset ({@code ic_cart}) has a solid white background baked in, which shows as a
+     * light box on the dark card. Key out the near-white pixels once so the card background
+     * (light or dark) shows through and the map matches the current theme.
+     */
+    private void applyTransparentMap(@NonNull View root) {
+        ImageView mapView = root.findViewById(R.id.cart);
+        if (mapView == null) {
+            return;
+        }
+        if (transparentMapBitmap == null || transparentMapBitmap.isRecycled()) {
+            transparentMapBitmap = buildTransparentMap(getResources());
+        }
+        if (transparentMapBitmap != null) {
+            mapView.setImageBitmap(transparentMapBitmap);
+        }
+    }
+
+    @Nullable
+    private static Bitmap buildTransparentMap(@NonNull Resources res) {
+        BitmapFactory.Options opts = new BitmapFactory.Options();
+        opts.inPreferredConfig = Bitmap.Config.ARGB_8888;
+        Bitmap src = BitmapFactory.decodeResource(res, R.mipmap.ic_cart, opts);
+        if (src == null) {
+            return null;
+        }
+        Bitmap out = src.copy(Bitmap.Config.ARGB_8888, true);
+        src.recycle();
+        if (out == null) {
+            return null;
+        }
+        int w = out.getWidth();
+        int h = out.getHeight();
+        int[] pixels = new int[w * h];
+        out.getPixels(pixels, 0, w, 0, 0, w, h);
+        for (int i = 0; i < pixels.length; i++) {
+            int color = pixels[i];
+            int r = (color >> 16) & 0xFF;
+            int g = (color >> 8) & 0xFF;
+            int b = color & 0xFF;
+            if (r >= WHITE_KEY_THRESHOLD && g >= WHITE_KEY_THRESHOLD && b >= WHITE_KEY_THRESHOLD) {
+                pixels[i] = 0x00000000;
+            }
+        }
+        out.setPixels(pixels, 0, w, 0, 0, w, h);
+        return out;
     }
 
     @Override
@@ -126,29 +184,11 @@ public class home extends Fragment {
         dpaMapsButton.setOnClickListener(v -> openOfficeInMaps(selectedOffice));
     }
 
-    @NonNull
-    private DpaOffice resolveInitialDpa() {
-        Context context = getContext();
-        if (context == null) {
-            return DpaOffice.DEFAULT;
-        }
-        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
-        String savedKey = prefs.getString(KEY_SELECTED_DPA, null);
-        if (!TextUtils.isEmpty(savedKey)) {
-            return DpaOffice.fromKey(savedKey);
-        }
-        return DpaOffice.DEFAULT;
-    }
-
     private void selectDpa(@NonNull DpaOffice office, boolean animate) {
         if (!isAdded()) {
             return;
         }
         selectedOffice = office;
-        requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-                .edit()
-                .putString(KEY_SELECTED_DPA, office.name())
-                .apply();
 
         View root = getView();
         if (root == null) {
@@ -168,7 +208,9 @@ public class home extends Fragment {
                 continue;
             }
             boolean selected = office == selectedOffice;
-            pin.setImageResource(selected ? R.drawable.map_pin_blue : R.drawable.map_pin);
+            // DRA siège (regional HQ) stays blue to remain distinct; others turn blue when selected.
+            boolean useBlue = selected || office == DpaOffice.DRA_SIEGE;
+            pin.setImageResource(useBlue ? R.drawable.map_pin_blue : R.drawable.map_pin);
             pin.setSelected(selected);
             pin.setAlpha(selected ? 1f : 0.95f);
             pin.setScaleX(selected ? 1.12f : 1f);

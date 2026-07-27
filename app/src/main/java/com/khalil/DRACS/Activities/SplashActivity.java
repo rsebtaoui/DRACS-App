@@ -18,6 +18,8 @@ import com.khalil.DRACS.Utils.LocaleHelper;
 import com.khalil.DRACS.Utils.ThemeHelper;
 
 public class SplashActivity extends AppCompatActivity {
+    /** Toggle the onboarding/start screen. Disabled for now — app opens straight to the dashboard. */
+    private static final boolean ONBOARDING_ENABLED = false;
     private static final long DATA_FETCH_TIMEOUT = 2000;
     private static final String PREFS_NAME = "DRACS_Prefs";
     private static final String KEY_HAS_PERSISTENT_DATA = "has_persistent_data";
@@ -50,13 +52,7 @@ public class SplashActivity extends AppCompatActivity {
 
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
-        setContentView(R.layout.activity_splash);
-
-        MaterialButton startButton = findViewById(R.id.splash_start_button);
-        startButton.setOnClickListener(v -> startMainActivity());
-
-        handler = new Handler(Looper.getMainLooper());
-
+        // Warm the cache on first run regardless of the onboarding screen.
         boolean hasPersistentData = prefs.getBoolean(KEY_HAS_PERSISTENT_DATA, false);
         if (!hasPersistentData) {
             dataPreFetcher = new DataPreFetcher(this);
@@ -66,10 +62,23 @@ public class SplashActivity extends AppCompatActivity {
                     prefs.edit().putBoolean(KEY_HAS_PERSISTENT_DATA, true).apply();
                 }
             });
-            handler.postDelayed(() -> isDataFetchComplete = true, DATA_FETCH_TIMEOUT);
         } else {
             isDataFetchComplete = true;
         }
+
+        if (!ONBOARDING_ENABLED) {
+            // Onboarding disabled: skip the start screen and open the dashboard directly.
+            startMainActivity();
+            return;
+        }
+
+        setContentView(R.layout.activity_splash);
+
+        MaterialButton startButton = findViewById(R.id.splash_start_button);
+        startButton.setOnClickListener(v -> startMainActivity());
+
+        handler = new Handler(Looper.getMainLooper());
+        handler.postDelayed(() -> isDataFetchComplete = true, DATA_FETCH_TIMEOUT);
     }
 
     private void startMainActivity() {
