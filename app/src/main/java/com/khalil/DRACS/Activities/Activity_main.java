@@ -229,9 +229,9 @@ public class Activity_main extends AppCompatActivity {
                     return;
                 }
                 lastBackPressedAt = now;
-                exitHintToast = Toast.makeText(
-                        Activity_main.this, R.string.press_back_again_to_exit, Toast.LENGTH_SHORT);
-                exitHintToast.show();
+                //exitHintToast = Toast.makeText(
+                        //Activity_main.this, R.string.press_back_again_to_exit, Toast.LENGTH_SHORT);
+                //exitHintToast.show();
             }
         };
         getOnBackPressedDispatcher().addCallback(this, doubleBackToExitCallback);

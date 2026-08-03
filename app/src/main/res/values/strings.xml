@@ -119,4 +119,8 @@
     <string name="dpa_berrechid_address">5، شارع محمد الخامس، حي اليسر، برشيد</string>
     <string name="dpa_berrechid_phone" translatable="false">0522030603</string>
     <string name="dpa_berrechid_pin_desc">دبوس المديرية الإقليمية للفلاحةل برشيد</string>
+    <string name="dpa_sidi_bennour_pin_desc">دبوس المديرية الإقليمية للفلاحة بالسيدي بنور</string>
+    <string name="dpa_ormvad_el_jadida_address">شارع السويس، الجديدة</string>
+    <string name="dpa_ormvad_el_jadida_name">المكتب الجهوي للاستثمار الفلاحي لدكالة بالجديدة.</string>
+    <string name="dpa_mohammedia_pin_desc">remove it\n</string>
 </resources>

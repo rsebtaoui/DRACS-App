@@ -97,18 +97,46 @@
                         app:layout_constraintTop_toTopOf="@id/cart">
 
                         <androidx.constraintlayout.widget.Guideline
-                            android:id="@+id/guide_el_jadida_v"
+                            android:id="@+id/guide_ormvad_el_jadida_v"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:layout_constraintGuide_percent="0.35" />
+                            app:layout_constraintGuide_percent="0.12" />
 
                         <androidx.constraintlayout.widget.Guideline
-                            android:id="@+id/guide_el_jadida_h"
+                            android:id="@+id/guide_ormvad_el_jadida_h"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            app:layout_constraintGuide_percent="0.55" />
+                            app:layout_constraintGuide_percent="0.60" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_dra_el_jadida_v"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.38" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_dra_el_jadida_h"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.35" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_dpa_el_jadida_v"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.32" />
+
+                        <androidx.constraintlayout.widget.Guideline
+                            android:id="@+id/guide_dpa_el_jadida_h"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            app:layout_constraintGuide_percent="0.51" />
 
                         <androidx.constraintlayout.widget.Guideline
                             android:id="@+id/guide_sidi_bennour_v"
@@ -193,10 +221,38 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            app:layout_constraintGuide_percent="0.25" />
+                            app:layout_constraintGuide_begin="79dp" />
 
                         <ImageButton
-                            android:id="@+id/pin_el_jadida"
+                            android:id="@+id/pin_dra_el_jadida"
+                            android:layout_width="@dimen/pin_size_large"
+                            android:layout_height="@dimen/pin_size_large"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/dpa_el_jadida_pin_desc"
+                            android:padding="@dimen/pin_icon_padding_large"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/map_pin_blue"
+                            app:layout_constraintBottom_toBottomOf="@id/guide_dra_el_jadida_h"
+                            app:layout_constraintEnd_toEndOf="@id/guide_dra_el_jadida_v"
+                            app:layout_constraintStart_toStartOf="@id/guide_dra_el_jadida_v"
+                            app:layout_constraintTop_toTopOf="@id/guide_dra_el_jadida_h" />
+
+                        <ImageButton
+                            android:id="@+id/pin_ORMVAD_el_jadida"
+                            android:layout_width="@dimen/pin_size_large"
+                            android:layout_height="@dimen/pin_size_large"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:contentDescription="@string/dpa_el_jadida_pin_desc"
+                            android:padding="@dimen/pin_icon_padding_large"
+                            android:scaleType="fitCenter"
+                            android:src="@drawable/map_pin_green"
+                            app:layout_constraintBottom_toBottomOf="@id/guide_ormvad_el_jadida_h"
+                            app:layout_constraintEnd_toEndOf="@id/guide_ormvad_el_jadida_v"
+                            app:layout_constraintStart_toStartOf="@id/guide_ormvad_el_jadida_v"
+                            app:layout_constraintTop_toTopOf="@id/guide_ormvad_el_jadida_h" />
+
+                        <ImageButton
+                            android:id="@+id/pin_DPA_el_jadida"
                             android:layout_width="@dimen/touch_target"
                             android:layout_height="@dimen/touch_target"
                             android:background="?attr/selectableItemBackgroundBorderless"
@@ -204,10 +260,10 @@
                             android:padding="@dimen/pin_icon_padding"
                             android:scaleType="fitCenter"
                             android:src="@drawable/map_pin"
-                            app:layout_constraintBottom_toBottomOf="@id/guide_el_jadida_h"
-                            app:layout_constraintEnd_toEndOf="@id/guide_el_jadida_v"
-                            app:layout_constraintStart_toStartOf="@id/guide_el_jadida_v"
-                            app:layout_constraintTop_toTopOf="@id/guide_el_jadida_h" />
+                            app:layout_constraintBottom_toBottomOf="@id/guide_dpa_el_jadida_h"
+                            app:layout_constraintEnd_toEndOf="@id/guide_dpa_el_jadida_v"
+                            app:layout_constraintStart_toStartOf="@id/guide_dpa_el_jadida_v"
+                            app:layout_constraintTop_toTopOf="@id/guide_dpa_el_jadida_h" />
 
                         <ImageButton
                             android:id="@+id/pin_sidi_bennour"
@@ -220,8 +276,10 @@
                             android:src="@drawable/map_pin"
                             app:layout_constraintBottom_toBottomOf="@id/guide_sidi_bennour_h"
                             app:layout_constraintEnd_toEndOf="@id/guide_sidi_bennour_v"
+                            app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="@id/guide_sidi_bennour_v"
-                            app:layout_constraintTop_toTopOf="@id/guide_sidi_bennour_h" />
+                            app:layout_constraintTop_toTopOf="@id/guide_sidi_bennour_h"
+                            app:layout_constraintVertical_bias="1.0" />
 
                         <ImageButton
                             android:id="@+id/pin_settat"

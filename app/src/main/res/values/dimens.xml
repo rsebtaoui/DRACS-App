@@ -33,7 +33,11 @@
     <dimen name="card_elevation_medium">2dp</dimen>
     <dimen name="bottom_nav_elevation">8dp</dimen>
     <dimen name="stroke_hairline">1dp</dimen>
+
+    <!-- Pin sizes: Blue/Green (Large) vs Red (Standard) -->
+    <dimen name="pin_size_large">44dp</dimen>
     <dimen name="pin_icon_padding">12dp</dimen>
+    <dimen name="pin_icon_padding_large">6dp</dimen>
     <dimen name="address_margin_top">2dp</dimen>
 
     <!-- Settings action buttons (clear cache / feedback) -->

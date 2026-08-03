@@ -13,7 +13,7 @@ import com.khalil.DRACS.R;
 public enum DpaOffice {
     /** Regional Direction siège — pinned in El Jadida. */
     DRA_SIEGE(
-            R.id.pin_dra_siege,
+            R.id.pin_dra_el_jadida,
             R.string.dra_siege_name,
             R.string.dra_siege_address,
             R.string.dra_siege_phone,
@@ -22,12 +22,21 @@ public enum DpaOffice {
             "DRA+Siege+El+Jadida"
     ),
     EL_JADIDA(
-            R.id.pin_el_jadida,
+            R.id.pin_DPA_el_jadida,
             R.string.dpa_el_jadida_name,
             R.string.dpa_el_jadida_address,
             R.string.dpa_el_jadida_phone,
             33.2481510,
             -8.5023600,
+            null
+    ),
+    ORMVAD_EL_JADIDA(
+            R.id.pin_ORMVAD_el_jadida,
+            R.string.dpa_ormvad_el_jadida_name,
+            R.string.dpa_ormvad_el_jadida_address,
+            R.string.dpa_el_jadida_phone,
+            33.250485,
+            -8.500169,
             null
     ),
     SETTAT(
