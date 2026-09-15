@@ -42,7 +42,7 @@
     <fragment
         android:id="@+id/PS"
         android:name="com.khalil.DRACS.Fragments.PS"
-        android:label="الحماية الاجتماعية"
+        android:label="@string/الحماية_الإجتماعية"
         tools:layout="@layout/fragment_content_page" >
         <action
             android:id="@+id/action_PS_to_home"

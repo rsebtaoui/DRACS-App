@@ -12,7 +12,7 @@
     <string name="صندوق_التنمية_الفلاحية">صندوق التنمية الفلاحية</string>
     <string name="cart_image">عربة التسوق</string>
     <string name="السجل_الوطني_الفلاحي">السجل الوطني الفلاحي</string>
-    <string name="الحماية_الإجتماعية">الحماية الإجتماعية</string>
+    <string name="الحماية_الإجتماعية">الحماية الاجتماعية للمزارعين</string>
     <string name="التكوين_المهني">التكوين المهني</string>
     <string name="مرحبا_بكم"> مرحبا بكم في التطبيق الرسمي للهاتف المحمول للمديرية الجهوية للفلاحة لجهة الدار البيضاء سطات.</string>
     <string name="تم_إنجاز_هذا_التطبيق"> تم إنجاز هذا التطبيق لتوفير المعلومات الخاصة بالخدمات المقدمة من طرف هاته المديرية. هدفنا هو تبسيط البحث والوصول إلى المعلومات والخدمات الهامة.</string>
@@ -67,7 +67,7 @@
     <string name="service_fp_subtitle">مسارات التكوين المهني</string>
     <string name="service_fda_subtitle">دعم صندوق التنمية الفلاحية</string>
     <string name="cd_service_rna">فتح السجل الوطني الفلاحي</string>
-    <string name="cd_service_ps">فتح الحماية الاجتماعية</string>
+    <string name="cd_service_ps">فتح الحماية الاجتماعية للمزارعين</string>
     <string name="cd_service_je">فتح المقاولين الشباب</string>
     <string name="cd_service_fp">فتح التكوين المهني</string>
     <string name="cd_service_fda">فتح صندوق التنمية الفلاحية</string>
@@ -89,7 +89,7 @@
     <string name="dpa_maps_unavailable">تعذر استخراج الموقع حاليا، حاول لاحقا!</string>
     <string name="dra_primary_route">المديرية الجهوية — مقر الجديدة</string>
 
-    <string name="dra_siege_name">المديرية الجهوية للفلاحة — مقر الجديدة</string>
+    <string name="dra_siege_name">المديرية الجهوية للفلاحة</string>
     <string name="dra_siege_address">زنقة القاهرة ، الجديدة</string>
     <string name="dra_siege_phone" translatable="false">0523394020</string>
     <string name="dra_siege_pin_desc">دبوس المقر الجهوي للفلاحة بالجديدة</string>

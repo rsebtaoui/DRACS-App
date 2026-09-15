@@ -1,12 +1,8 @@
 package com.khalil.DRACS.Fragments;
 
-import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,7 +24,6 @@ import com.khalil.DRACS.Utils.ThemeHelper;
 import com.khalil.DRACS.Activities.Activity_main;
 
 public class settings extends Fragment {
-    private static final String TAG = "SettingsFragment";
     private static final String PREFS_NAME = "DRACS_Prefs";
     private static final String KEY_LARGE_FONT = "large_font";
 
@@ -37,7 +32,6 @@ public class settings extends Fragment {
     private MaterialButton btnThemeDark;
     private SwitchMaterial largeFontSwitch;
     private MaterialButton clearCacheButton;
-    private MaterialButton btnSendFeedback;
     private TextView appVersionText;
     private Context context;
     private boolean bindingUi;
@@ -55,7 +49,6 @@ public class settings extends Fragment {
         btnThemeDark = view.findViewById(R.id.btn_theme_dark);
         largeFontSwitch = view.findViewById(R.id.large_font_switch);
         clearCacheButton = view.findViewById(R.id.clear_cache_button);
-        btnSendFeedback = view.findViewById(R.id.btn_send_feedback);
         appVersionText = view.findViewById(R.id.app_version_text);
 
         SharedPreferences prefs = requireActivity().getSharedPreferences(PREFS_NAME, 0);
@@ -95,20 +88,6 @@ public class settings extends Fragment {
             dataPreFetcher.clearCache();
             prefs.edit().putBoolean("has_persistent_data", false).apply();
             Toast.makeText(context, R.string.settings_cache_cleared, Toast.LENGTH_SHORT).show();
-        });
-
-        btnSendFeedback.setOnClickListener(v -> {
-            Intent intent = new Intent(Intent.ACTION_SENDTO);
-            intent.setData(Uri.parse("mailto:" + getString(R.string.kamily_khalil_ucd_ma)));
-            intent.putExtra(Intent.EXTRA_SUBJECT, getString(R.string.settings_feedback_subject));
-            try {
-                startActivity(Intent.createChooser(intent, getString(R.string.settings_send_feedback)));
-            } catch (ActivityNotFoundException e) {
-                Toast.makeText(context, R.string.settings_no_email_app, Toast.LENGTH_SHORT).show();
-            } catch (Exception e) {
-                Log.e(TAG, "Failed to open feedback email", e);
-                Toast.makeText(context, R.string.settings_no_email_app, Toast.LENGTH_SHORT).show();
-            }
         });
 
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),

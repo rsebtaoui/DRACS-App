@@ -198,12 +198,16 @@ public class Activity_main extends AppCompatActivity {
                 } else if (itemId == R.id.visit_website) {
                     visitWebsite();
                     return true;
+                } else if (itemId == R.id.about_app) {
+                    navController.navigate(R.id.about);
+                    return true;
                 } else if (itemId == R.id.exite) {
                     exitApp();
                     return true;
                 }
                 return false;
             });
+
 
             popup.show();
         });
@@ -247,10 +251,12 @@ public class Activity_main extends AppCompatActivity {
             if (destination.getId() == R.id.home) {
                 dracsicon.clearColorFilter();
                 dracsicon.setImageResource(R.mipmap.ic_dra_3);
-                dracsicon.setOnClickListener(v -> navController.navigate(R.id.about));
+                dracsicon.setOnClickListener(null);
+                dracsicon.setClickable(false);
             } else {
                 dracsicon.setImageResource(R.drawable.ic_back);
                 dracsicon.setColorFilter(ContextCompat.getColor(this, R.color.primary_foreground));
+                dracsicon.setClickable(true);
                 dracsicon.setOnClickListener(v -> navController.navigate(R.id.home));
             }
         });

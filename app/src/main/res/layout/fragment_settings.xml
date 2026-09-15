@@ -258,30 +258,5 @@
             app:iconSize="@dimen/settings_action_icon"
             app:iconTint="@color/white" />
 
-        <com.google.android.material.button.MaterialButton
-            android:id="@+id/btn_send_feedback"
-            style="@style/Widget.Material3.Button.OutlinedButton"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/spacing_sm"
-            android:insetTop="0dp"
-            android:insetBottom="0dp"
-            android:minHeight="@dimen/settings_action_height"
-            android:paddingStart="@dimen/spacing_lg"
-            android:paddingEnd="@dimen/spacing_lg"
-            android:text="@string/settings_send_feedback"
-            android:textAllCaps="false"
-            android:textColor="@color/settings_accent"
-            android:textSize="@dimen/text_body"
-            android:textStyle="bold"
-            app:cornerRadius="@dimen/radius_xl"
-            app:icon="@drawable/ic_feedback"
-            app:iconGravity="textStart"
-            app:iconPadding="@dimen/spacing_sm"
-            app:iconSize="@dimen/settings_action_icon"
-            app:iconTint="@color/settings_accent"
-            app:strokeColor="@color/settings_accent"
-            app:strokeWidth="2dp" />
-
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>

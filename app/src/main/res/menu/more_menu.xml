@@ -21,8 +21,15 @@
         app:iconTint="?attr/colorOnPrimary"/>
 
     <item
+        android:id="@+id/about_app"
+        android:icon="@drawable/ic_info"
+        android:title="@string/about"
+        app:iconTint="?attr/colorOnPrimary"/>
+
+    <item
         android:id="@+id/exite"
         android:icon="@drawable/exit_left"
         android:title="@string/خروج"
         app:iconTint="?attr/colorOnPrimary"/>
-</menu> 
+</menu>
+ 
