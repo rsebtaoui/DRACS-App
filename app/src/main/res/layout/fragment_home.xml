@@ -139,20 +139,6 @@
                             app:layout_constraintGuide_percent="0.51" />
 
                         <androidx.constraintlayout.widget.Guideline
-                            android:id="@+id/guide_sidi_bennour_v"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            app:layout_constraintGuide_percent="0.28" />
-
-                        <androidx.constraintlayout.widget.Guideline
-                            android:id="@+id/guide_sidi_bennour_h"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            app:layout_constraintGuide_percent="0.75" />
-
-                        <androidx.constraintlayout.widget.Guideline
                             android:id="@+id/guide_settat_v"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -199,36 +185,21 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
-                            app:layout_constraintGuide_percent="0.61" />
+                            app:layout_constraintGuide_percent="0.63" />
 
                         <androidx.constraintlayout.widget.Guideline
                             android:id="@+id/guide_casablanca_h"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:orientation="horizontal"
-                            app:layout_constraintGuide_percent="0.36" />
-
-                        <!-- Mohammedia: NE of Casablanca on the coast (between Casa & Benslimane) -->
-                        <androidx.constraintlayout.widget.Guideline
-                            android:id="@+id/guide_mohammedia_v"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            app:layout_constraintGuide_percent="0.65" />
-
-                        <androidx.constraintlayout.widget.Guideline
-                            android:id="@+id/guide_mohammedia_h"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            app:layout_constraintGuide_begin="79dp" />
+                            app:layout_constraintGuide_percent="0.26" />
 
                         <ImageButton
                             android:id="@+id/pin_dra_el_jadida"
                             android:layout_width="@dimen/pin_size_large"
                             android:layout_height="@dimen/pin_size_large"
                             android:background="?attr/selectableItemBackgroundBorderless"
-                            android:contentDescription="@string/dpa_el_jadida_pin_desc"
+                            android:contentDescription="@string/dra_siege_pin_desc"
                             android:padding="@dimen/pin_icon_padding_large"
                             android:scaleType="fitCenter"
                             android:src="@drawable/map_pin_blue"
@@ -242,7 +213,7 @@
                             android:layout_width="@dimen/pin_size_large"
                             android:layout_height="@dimen/pin_size_large"
                             android:background="?attr/selectableItemBackgroundBorderless"
-                            android:contentDescription="@string/dpa_el_jadida_pin_desc"
+                            android:contentDescription="@string/dpa_ormvad_el_jadida_pin_desc"
                             android:padding="@dimen/pin_icon_padding_large"
                             android:scaleType="fitCenter"
                             android:src="@drawable/map_pin_green"
@@ -264,22 +235,6 @@
                             app:layout_constraintEnd_toEndOf="@id/guide_dpa_el_jadida_v"
                             app:layout_constraintStart_toStartOf="@id/guide_dpa_el_jadida_v"
                             app:layout_constraintTop_toTopOf="@id/guide_dpa_el_jadida_h" />
-
-                        <ImageButton
-                            android:id="@+id/pin_sidi_bennour"
-                            android:layout_width="@dimen/touch_target"
-                            android:layout_height="@dimen/touch_target"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:contentDescription="@string/dpa_sidi_bennour_pin_desc"
-                            android:padding="@dimen/pin_icon_padding"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/map_pin"
-                            app:layout_constraintBottom_toBottomOf="@id/guide_sidi_bennour_h"
-                            app:layout_constraintEnd_toEndOf="@id/guide_sidi_bennour_v"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="@id/guide_sidi_bennour_v"
-                            app:layout_constraintTop_toTopOf="@id/guide_sidi_bennour_h"
-                            app:layout_constraintVertical_bias="1.0" />
 
                         <ImageButton
                             android:id="@+id/pin_settat"
@@ -336,20 +291,6 @@
                             app:layout_constraintEnd_toEndOf="@id/guide_casablanca_v"
                             app:layout_constraintStart_toStartOf="@id/guide_casablanca_v"
                             app:layout_constraintTop_toTopOf="@id/guide_casablanca_h" />
-
-                        <ImageButton
-                            android:id="@+id/pin_mohammedia"
-                            android:layout_width="@dimen/touch_target"
-                            android:layout_height="@dimen/touch_target"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:contentDescription="@string/dpa_mohammedia_pin_desc"
-                            android:padding="@dimen/pin_icon_padding"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/map_pin"
-                            app:layout_constraintBottom_toBottomOf="@id/guide_mohammedia_h"
-                            app:layout_constraintEnd_toEndOf="@id/guide_mohammedia_v"
-                            app:layout_constraintStart_toStartOf="@id/guide_mohammedia_v"
-                            app:layout_constraintTop_toTopOf="@id/guide_mohammedia_h" />
                     </androidx.constraintlayout.widget.ConstraintLayout>
                 </androidx.constraintlayout.widget.ConstraintLayout>
 

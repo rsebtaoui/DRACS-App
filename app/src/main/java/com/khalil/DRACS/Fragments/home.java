@@ -208,11 +208,22 @@ public class home extends Fragment {
                 continue;
             }
             boolean selected = office == selectedOffice;
-            // DRA siège (regional HQ) stays blue to remain distinct; others turn blue when selected.
-            boolean useBlue = selected || office == DpaOffice.DRA_SIEGE;
-            pin.setImageResource(useBlue ? R.drawable.map_pin_blue : R.drawable.map_pin);
+            // Fixed-color offices keep their marker even when selected:
+            //  - DRA siège  → always green
+            //  - ORMVAD     → always maroon
+            // Regular DPAs are red, turning blue while selected.
+            int pinRes;
+            if (office == DpaOffice.DRA_SIEGE) {
+                pinRes = R.drawable.map_pin_green;
+            } else if (office == DpaOffice.ORMVAD_EL_JADIDA) {
+                pinRes = R.drawable.map_pin_marron;
+            } else {
+                pinRes = selected ? R.drawable.map_pin_blue : R.drawable.map_pin;
+            }
+            pin.setImageResource(pinRes);
             pin.setSelected(selected);
             pin.setAlpha(selected ? 1f : 0.95f);
+            // DRA/ORMVAD are already larger via the layout; selection adds a subtle bump.
             pin.setScaleX(selected ? 1.12f : 1f);
             pin.setScaleY(selected ? 1.12f : 1f);
         }

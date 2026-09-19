@@ -34,10 +34,10 @@
     <dimen name="bottom_nav_elevation">8dp</dimen>
     <dimen name="stroke_hairline">1dp</dimen>
 
-    <!-- Pin sizes: Blue/Green (Large) vs Red (Standard) -->
-    <dimen name="pin_size_large">44dp</dimen>
+    <!-- Pin sizes: DRA (green) / ORMVAD (maroon) are larger than the standard red DPA pins -->
+    <dimen name="pin_size_large">60dp</dimen>
     <dimen name="pin_icon_padding">12dp</dimen>
-    <dimen name="pin_icon_padding_large">6dp</dimen>
+    <dimen name="pin_icon_padding_large">12dp</dimen>
     <dimen name="address_margin_top">2dp</dimen>
 
     <!-- Settings action buttons (clear cache / feedback) -->

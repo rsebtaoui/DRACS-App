@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,6 +40,7 @@ import com.khalil.DRACS.R;
 import com.khalil.DRACS.Repository.ContentRepository;
 import com.khalil.DRACS.Utils.DataPreFetcher;
 import com.khalil.DRACS.Utils.ConnectionUtils;
+import com.khalil.DRACS.Utils.FontScaleHelper;
 import com.khalil.DRACS.Utils.LocaleHelper;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -48,7 +48,6 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics;
 public class Activity_main extends AppCompatActivity {
 
     private static final String PREFS_NAME = "DRACS_Prefs";
-    private static final String KEY_LARGE_FONT = "large_font";
     private static final String KEY_LAST_NAV_ITEM = "last_nav_item";
     /** Window (ms) within which a second back press on Home exits the app. */
     private static final long BACK_EXIT_INTERVAL_MS = 2000L;
@@ -76,12 +75,8 @@ public class Activity_main extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        SharedPreferences prefs = newBase.getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
-        float fontScale = prefs.getBoolean(KEY_LARGE_FONT, false) ? 1.15f : 1.0f;
         Context arabicBase = LocaleHelper.wrapArabic(newBase);
-        Configuration config = new Configuration(arabicBase.getResources().getConfiguration());
-        config.fontScale = fontScale;
-        super.attachBaseContext(arabicBase.createConfigurationContext(config));
+        super.attachBaseContext(FontScaleHelper.applyFontScale(arabicBase));
     }
 
     public DataPreFetcher getDataPreFetcher() {
@@ -198,12 +193,16 @@ public class Activity_main extends AppCompatActivity {
                 } else if (itemId == R.id.visit_website) {
                     visitWebsite();
                     return true;
+                } else if (itemId == R.id.about_app) {
+                    navController.navigate(R.id.about);
+                    return true;
                 } else if (itemId == R.id.exite) {
                     exitApp();
                     return true;
                 }
                 return false;
             });
+
 
             popup.show();
         });
@@ -247,10 +246,12 @@ public class Activity_main extends AppCompatActivity {
             if (destination.getId() == R.id.home) {
                 dracsicon.clearColorFilter();
                 dracsicon.setImageResource(R.mipmap.ic_dra_3);
-                dracsicon.setOnClickListener(v -> navController.navigate(R.id.about));
+                dracsicon.setOnClickListener(null);
+                dracsicon.setClickable(false);
             } else {
                 dracsicon.setImageResource(R.drawable.ic_back);
                 dracsicon.setColorFilter(ContextCompat.getColor(this, R.color.primary_foreground));
+                dracsicon.setClickable(true);
                 dracsicon.setOnClickListener(v -> navController.navigate(R.id.home));
             }
         });

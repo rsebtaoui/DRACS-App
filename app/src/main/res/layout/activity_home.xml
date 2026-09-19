@@ -58,28 +58,10 @@
             android:textColor="@color/primary_foreground"
             android:textSize="@dimen/text_headline_3"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/toolbar_subtitle"
-            app:layout_constraintEnd_toStartOf="@+id/search_icon"
-            app:layout_constraintStart_toEndOf="@+id/dracs"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_chainStyle="packed" />
-
-        <TextView
-            android:id="@+id/toolbar_subtitle"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/spacing_sm"
-            android:layout_marginEnd="@dimen/spacing_sm"
-            android:ellipsize="end"
-            android:gravity="center"
-            android:maxLines="2"
-            android:text="@string/toolbar_subtitle_region"
-            android:textColor="@color/primary_50"
-            android:textSize="@dimen/text_tiny"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/search_icon"
             app:layout_constraintStart_toEndOf="@+id/dracs"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+            app:layout_constraintTop_toTopOf="parent" />
 
         <ImageView
             android:id="@+id/search_icon"

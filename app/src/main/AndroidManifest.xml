@@ -6,6 +6,38 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 
+    <!-- Android 11+ (API 30) package visibility: declare the intents we resolve so
+         resolveActivity()/setPackage() can find maps, browser, dialer and email apps.
+         Without this, direction/call buttons always report "no app available". -->
+    <queries>
+        <!-- Maps: geo: URIs -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="geo" />
+        </intent>
+        <!-- Web fallback: https/http -->
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="https" />
+        </intent>
+        <intent>
+            <action android:name="android.intent.action.VIEW" />
+            <data android:scheme="http" />
+        </intent>
+        <!-- Dialer: tel: URIs -->
+        <intent>
+            <action android:name="android.intent.action.DIAL" />
+            <data android:scheme="tel" />
+        </intent>
+        <!-- Email: mailto: (settings feedback) -->
+        <intent>
+            <action android:name="android.intent.action.SENDTO" />
+            <data android:scheme="mailto" />
+        </intent>
+        <!-- Explicit: Google Maps app (used via setPackage) -->
+        <package android:name="com.google.android.apps.maps" />
+    </queries>
+
     <application
         android:name=".DRACSApplication"
         android:allowBackup="true"
