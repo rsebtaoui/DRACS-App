@@ -15,22 +15,23 @@ import androidx.navigation.Navigation;
 import androidx.activity.OnBackPressedCallback;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.android.material.switchmaterial.SwitchMaterial;
 import com.khalil.DRACS.BuildConfig;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.DataPreFetcher;
+import com.khalil.DRACS.Utils.FontScaleHelper;
 import com.khalil.DRACS.Utils.LocaleHelper;
 import com.khalil.DRACS.Utils.ThemeHelper;
 import com.khalil.DRACS.Activities.Activity_main;
 
 public class settings extends Fragment {
     private static final String PREFS_NAME = "DRACS_Prefs";
-    private static final String KEY_LARGE_FONT = "large_font";
 
     private MaterialButton btnThemeAuto;
     private MaterialButton btnThemeLight;
     private MaterialButton btnThemeDark;
-    private SwitchMaterial largeFontSwitch;
+    private TextView btnFontSmall;
+    private TextView btnFontMedium;
+    private TextView btnFontLarge;
     private MaterialButton clearCacheButton;
     private TextView appVersionText;
     private Context context;
@@ -47,7 +48,9 @@ public class settings extends Fragment {
         btnThemeAuto = view.findViewById(R.id.btn_theme_auto);
         btnThemeLight = view.findViewById(R.id.btn_theme_light);
         btnThemeDark = view.findViewById(R.id.btn_theme_dark);
-        largeFontSwitch = view.findViewById(R.id.large_font_switch);
+        btnFontSmall = view.findViewById(R.id.btn_font_small);
+        btnFontMedium = view.findViewById(R.id.btn_font_medium);
+        btnFontLarge = view.findViewById(R.id.btn_font_large);
         clearCacheButton = view.findViewById(R.id.clear_cache_button);
         appVersionText = view.findViewById(R.id.app_version_text);
 
@@ -57,24 +60,16 @@ public class settings extends Fragment {
 
         bindingUi = true;
         updateThemeButtons(ThemeHelper.getThemeMode(context));
-        largeFontSwitch.setChecked(prefs.getBoolean(KEY_LARGE_FONT, false));
+        updateFontButtons(FontScaleHelper.getScaleMode(context));
         bindingUi = false;
 
         btnThemeAuto.setOnClickListener(v -> selectTheme(ThemeHelper.MODE_SYSTEM));
         btnThemeLight.setOnClickListener(v -> selectTheme(ThemeHelper.MODE_LIGHT));
         btnThemeDark.setOnClickListener(v -> selectTheme(ThemeHelper.MODE_DARK));
 
-        largeFontSwitch.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            if (bindingUi || !isAdded()) {
-                return;
-            }
-            prefs.edit().putBoolean(KEY_LARGE_FONT, isChecked).apply();
-            requireActivity().getWindow().getDecorView().post(() -> {
-                if (isAdded()) {
-                    requireActivity().recreate();
-                }
-            });
-        });
+        btnFontSmall.setOnClickListener(v -> selectFontScale(FontScaleHelper.SCALE_SMALL));
+        btnFontMedium.setOnClickListener(v -> selectFontScale(FontScaleHelper.SCALE_MEDIUM));
+        btnFontLarge.setOnClickListener(v -> selectFontScale(FontScaleHelper.SCALE_LARGE));
 
         clearCacheButton.setOnClickListener(v -> {
             if (!(requireActivity() instanceof Activity_main)) {
@@ -113,15 +108,46 @@ public class settings extends Fragment {
         updateThemeButtons(themeMode);
     }
 
+    private void selectFontScale(String scaleMode) {
+        if (bindingUi || !isAdded()) {
+            return;
+        }
+        if (scaleMode.equals(FontScaleHelper.getScaleMode(context))) {
+            updateFontButtons(scaleMode);
+            return;
+        }
+        FontScaleHelper.setScaleMode(requireContext(), scaleMode);
+        updateFontButtons(scaleMode);
+        // Recreate so attachBaseContext re-applies Configuration.fontScale app-wide.
+        requireActivity().getWindow().getDecorView().post(() -> {
+            if (isAdded()) {
+                requireActivity().recreate();
+            }
+        });
+    }
+
     private void updateThemeButtons(String themeMode) {
         styleThemeButton(btnThemeAuto, ThemeHelper.MODE_SYSTEM.equals(themeMode));
         styleThemeButton(btnThemeLight, ThemeHelper.MODE_LIGHT.equals(themeMode));
         styleThemeButton(btnThemeDark, ThemeHelper.MODE_DARK.equals(themeMode));
     }
 
+    private void updateFontButtons(String scaleMode) {
+        styleFontButton(btnFontSmall, FontScaleHelper.SCALE_SMALL.equals(scaleMode));
+        styleFontButton(btnFontMedium, FontScaleHelper.SCALE_MEDIUM.equals(scaleMode));
+        styleFontButton(btnFontLarge, FontScaleHelper.SCALE_LARGE.equals(scaleMode));
+    }
+
     private void styleThemeButton(MaterialButton button, boolean selected) {
         button.setBackgroundResource(selected ? R.drawable.bg_lang_selected : R.drawable.bg_lang_unselected);
         button.setTextColor(ContextCompat.getColor(context,
                 selected ? R.color.white : R.color.foreground));
+    }
+
+    private void styleFontButton(TextView button, boolean selected) {
+        button.setBackgroundResource(selected ? R.drawable.bg_lang_selected : R.drawable.bg_lang_unselected);
+        button.setTextColor(ContextCompat.getColor(context,
+                selected ? R.color.white : R.color.foreground));
+        button.setSelected(selected);
     }
 }

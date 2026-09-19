@@ -34,7 +34,7 @@ public enum DpaOffice {
             R.id.pin_ORMVAD_el_jadida,
             R.string.dpa_ormvad_el_jadida_name,
             R.string.dpa_ormvad_el_jadida_address,
-            R.string.dpa_el_jadida_phone,
+            R.string.dpa_ormvad_el_jadida_phone,
             33.250485,
             -8.500169,
             null
@@ -128,6 +128,9 @@ public enum DpaOffice {
         // Migrate removed offices from earlier builds.
         if ("CASABLANCA_MOHAMMEDIA".equals(key) || "MOHAMMEDIA".equals(key)) {
             return CASABLANCA;
+        }
+        if ("SIDI_BENNOUR".equals(key)) {
+            return EL_JADIDA;
         }
         try {
             return DpaOffice.valueOf(key);

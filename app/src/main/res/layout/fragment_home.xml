@@ -139,20 +139,6 @@
                             app:layout_constraintGuide_percent="0.51" />
 
                         <androidx.constraintlayout.widget.Guideline
-                            android:id="@+id/guide_sidi_bennour_v"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            app:layout_constraintGuide_percent="0.28" />
-
-                        <androidx.constraintlayout.widget.Guideline
-                            android:id="@+id/guide_sidi_bennour_h"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            app:layout_constraintGuide_percent="0.75" />
-
-                        <androidx.constraintlayout.widget.Guideline
                             android:id="@+id/guide_settat_v"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -249,22 +235,6 @@
                             app:layout_constraintEnd_toEndOf="@id/guide_dpa_el_jadida_v"
                             app:layout_constraintStart_toStartOf="@id/guide_dpa_el_jadida_v"
                             app:layout_constraintTop_toTopOf="@id/guide_dpa_el_jadida_h" />
-
-                        <ImageButton
-                            android:id="@+id/pin_sidi_bennour"
-                            android:layout_width="@dimen/touch_target"
-                            android:layout_height="@dimen/touch_target"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:contentDescription="@string/dpa_sidi_bennour_pin_desc"
-                            android:padding="@dimen/pin_icon_padding"
-                            android:scaleType="fitCenter"
-                            android:src="@drawable/map_pin"
-                            app:layout_constraintBottom_toBottomOf="@id/guide_sidi_bennour_h"
-                            app:layout_constraintEnd_toEndOf="@id/guide_sidi_bennour_v"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="@id/guide_sidi_bennour_v"
-                            app:layout_constraintTop_toTopOf="@id/guide_sidi_bennour_h"
-                            app:layout_constraintVertical_bias="1.0" />
 
                         <ImageButton
                             android:id="@+id/pin_settat"

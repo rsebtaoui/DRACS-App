@@ -14,6 +14,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.material.button.MaterialButton;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.DataPreFetcher;
+import com.khalil.DRACS.Utils.FontScaleHelper;
 import com.khalil.DRACS.Utils.LocaleHelper;
 import com.khalil.DRACS.Utils.ThemeHelper;
 
@@ -31,7 +32,8 @@ public class SplashActivity extends AppCompatActivity {
 
     @Override
     protected void attachBaseContext(Context newBase) {
-        super.attachBaseContext(LocaleHelper.wrapArabic(newBase));
+        Context arabicBase = LocaleHelper.wrapArabic(newBase);
+        super.attachBaseContext(FontScaleHelper.applyFontScale(arabicBase));
     }
 
     @Override
