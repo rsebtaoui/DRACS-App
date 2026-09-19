@@ -39,40 +39,41 @@ jobs:
 
       - name: Ensure google-services.json exists
         run: |
-          if [ ! -f app/google-services.json ]; then
-            mkdir -p app
-            cat << 'EOF' > app/google-services.json
-            {
-              "project_info": {
-                "project_number": "000000000000",
-                "project_id": "local-ci-project",
-                "storage_bucket": "local-ci-project.appspot.com"
-              },
-              "client": [
-                {
-                  "client_info": {
-                    "mobilesdk_app_id": "1:000000000000:android:0000000000000000",
-                    "android_client_info": {
-                      "package_name": "com.khalil.DRACS"
-                    }
-                  },
-                  "oauth_client": [],
-                  "api_key": [
-                    {
-                      "current_key": "AIzaSyDUMMYKEYFORCI"
-                    }
-                  ],
-                  "services": {
-                    "appinvite_service": {
-                      "other_platform_oauth_client": []
-                    }
+          if [ -f app/google-services.json ]; then
+            exit 0
+          fi
+          mkdir -p app
+          cat > app/google-services.json <<'EOF'
+          {
+            "project_info": {
+              "project_number": "000000000000",
+              "project_id": "local-ci-project",
+              "storage_bucket": "local-ci-project.appspot.com"
+            },
+            "client": [
+              {
+                "client_info": {
+                  "mobilesdk_app_id": "1:000000000000:android:0000000000000000",
+                  "android_client_info": {
+                    "package_name": "com.khalil.DRACS"
+                  }
+                },
+                "oauth_client": [],
+                "api_key": [
+                  {
+                    "current_key": "AIzaSyDUMMYKEYFORCI"
+                  }
+                ],
+                "services": {
+                  "appinvite_service": {
+                    "other_platform_oauth_client": []
                   }
                 }
-              ],
-              "configuration_version": "1"
-            }
-            EOF
-          fi
+              }
+            ],
+            "configuration_version": "1"
+          }
+          EOF
 
       - name: Build debug APK
         run: ./gradlew --no-daemon assembleDebug
