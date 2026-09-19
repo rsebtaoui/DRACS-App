@@ -37,43 +37,24 @@ jobs:
       - name: Grant execute permission for gradlew
         run: chmod +x gradlew
 
-      - name: Ensure google-services.json exists
+      # Secret must be the base64 encoding of app/google-services.json
+      # (same format produced by encode-google-services.ps1).
+      - name: Write google-services.json from secret
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
         run: |
-          if [ -f app/google-services.json ]; then
-            exit 0
+          if [ -z "$GOOGLE_SERVICES_JSON" ]; then
+            echo "::error::Secret GOOGLE_SERVICES_JSON is empty or not set. Add the base64-encoded google-services.json (see encode-google-services.ps1)."
+            exit 1
           fi
           mkdir -p app
-          cat > app/google-services.json <<'EOF'
-          {
-            "project_info": {
-              "project_number": "000000000000",
-              "project_id": "local-ci-project",
-              "storage_bucket": "local-ci-project.appspot.com"
-            },
-            "client": [
-              {
-                "client_info": {
-                  "mobilesdk_app_id": "1:000000000000:android:0000000000000000",
-                  "android_client_info": {
-                    "package_name": "com.khalil.DRACS"
-                  }
-                },
-                "oauth_client": [],
-                "api_key": [
-                  {
-                    "current_key": "AIzaSyDUMMYKEYFORCI"
-                  }
-                ],
-                "services": {
-                  "appinvite_service": {
-                    "other_platform_oauth_client": []
-                  }
-                }
-              }
-            ],
-            "configuration_version": "1"
-          }
-          EOF
+          echo "$GOOGLE_SERVICES_JSON" | base64 --decode > app/google-services.json
+          if [ ! -s app/google-services.json ]; then
+            echo "::error::Failed to decode GOOGLE_SERVICES_JSON into app/google-services.json (empty output)."
+            exit 1
+          fi
+          python3 -c "import json; json.load(open('app/google-services.json'))" \
+            || { echo "::error::Decoded google-services.json is not valid JSON."; exit 1; }
 
       - name: Build debug APK
         run: ./gradlew --no-daemon assembleDebug
