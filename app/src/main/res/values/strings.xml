@@ -100,7 +100,7 @@
     <string name="dra_siege_pin_desc">دبوس المقر الجهوي للفلاحة بالجديدة</string>
     <string name="dra_siege_geo_label" translatable="false">DRA+Siege+El+Jadida</string>
 
-    <string name="dpa_el_jadida_name">المديرية الإقليمية للجديدة</string>
+    <string name="dpa_el_jadida_name">المديرية الإقليمية للفلاحة للجديدة</string>
     <string name="dpa_el_jadida_address">شارع الجيش الملكي ، الجديدة</string>
     <string name="dpa_el_jadida_phone" translatable="false">0522336858</string>
     <string name="dpa_el_jadida_pin_desc">دبوس المديرية الإقليمية للجديدة</string>
@@ -110,7 +110,7 @@
     <string name="dpa_settat_phone" translatable="false">0523400507</string>
     <string name="dpa_settat_pin_desc">دبوس المديرية الإقليمية للفلاحة لسطات</string>
 
-    <string name="dpa_casablanca_name">الإدارة الإقليمية للدار البيضاء</string>
+    <string name="dpa_casablanca_name">المديرية الإقليمية للفلاحة للدار البيضاء</string>
     <string name="dpa_casablanca_address">زنقة أفينسن،الصخور السوداء  الدار البيضاء </string>
     <string name="dpa_casablanca_phone" translatable="false">0522278871</string>
     <string name="dpa_casablanca_pin_desc">دبوس الإدارة الإقليمية للدار البيضاء</string>
