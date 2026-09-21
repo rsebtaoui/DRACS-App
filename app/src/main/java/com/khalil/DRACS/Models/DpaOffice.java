@@ -53,8 +53,8 @@ public enum DpaOffice {
             R.string.dpa_casablanca_name,
             R.string.dpa_casablanca_address,
             R.string.dpa_casablanca_phone,
-            33.5835140,
-            -7.6108030,
+            33.594446184529104,
+            -7.6009792288523546,
             null
     ),
     BENSLIMANE(
