@@ -30,7 +30,7 @@ public class DRACSApplication extends Application {
                 .build();
         FirebaseFirestore.getInstance().setFirestoreSettings(settings);
 
-        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(true);
+        FirebaseCrashlytics.getInstance().setCrashlyticsCollectionEnabled(!BuildConfig.DEBUG);
         FirebaseCrashlytics.getInstance().setCustomKey("app_version", BuildConfig.VERSION_NAME);
         FirebaseCrashlytics.getInstance().setCustomKey("build_type", BuildConfig.BUILD_TYPE);
         FirebaseCrashlytics.getInstance().setCustomKey(

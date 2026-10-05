@@ -76,22 +76,25 @@ android {
             useLegacyPackaging = false
         }
     }
+
+    bundle {
+        language {
+            enableSplit = false
+        }
+    }
 }
 
 dependencies {
     // Firebase
     implementation(platform("com.google.firebase:firebase-bom:33.13.0"))
-    implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-firestore-ktx")
-    implementation("com.google.firebase:firebase-auth-ktx")
-    
+
     // Firebase Crashlytics
     implementation("com.google.firebase:firebase-crashlytics")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
-    
+
     // Google Play Services - using the latest stable versions
     implementation("com.google.android.gms:play-services-base:18.7.0")
-    implementation("com.google.android.gms:play-services-auth:21.3.0")
     implementation("com.google.android.gms:play-services-tasks:18.3.0")
     implementation("com.google.android.gms:play-services-basement:18.7.0")
     // Gson for JSON parsing

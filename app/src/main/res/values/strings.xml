@@ -62,7 +62,7 @@
     <string name="favorites_empty_subtitle">اضغط على أيقونة الإشارة المرجعية داخل أي قسم لإضافته هنا</string>
     <string name="favorites_count_format">%1$d عنصر محفوظ</string>
     <string name="regional_map_label">المديريات الإقليمية للفلاحة جهة الدار البيضاء - سطات</string>
-    <string name="click_on_local">اختر موقعك على الخريطة</string>
+    <string name="click_on_local">اختر المديرية الإقليمية على الخريطة</string>
     <string name="dashboard_welcome">بوابتكم الرقمية للمعلومات و الإجراءات  الفلاحية</string>
     <string name="dashboard_tap_hint">اضغط على أي خدمة لمزيد من التفاصيل</string>
     <string name="toolbar_subtitle_region">الدار البيضاء - سطات</string>
