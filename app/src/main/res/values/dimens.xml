@@ -40,6 +40,8 @@
     <dimen name="pin_icon_padding_large">12dp</dimen>
     <dimen name="address_margin_top">2dp</dimen>
 
+    <!-- Settings choice buttons: theme auto/light/dark and clear cache -->
+    <dimen name="settings_choice_height">44dp</dimen>
     <!-- Settings action buttons (clear cache / feedback) -->
     <dimen name="settings_action_height">56dp</dimen>
     <dimen name="settings_action_icon">22dp</dimen>

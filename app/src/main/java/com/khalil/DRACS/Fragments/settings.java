@@ -1,13 +1,11 @@
 package com.khalil.DRACS.Fragments;
 
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
@@ -15,25 +13,18 @@ import androidx.navigation.Navigation;
 import androidx.activity.OnBackPressedCallback;
 
 import com.google.android.material.button.MaterialButton;
-import com.khalil.DRACS.BuildConfig;
 import com.khalil.DRACS.R;
-import com.khalil.DRACS.Utils.DataPreFetcher;
 import com.khalil.DRACS.Utils.FontScaleHelper;
 import com.khalil.DRACS.Utils.LocaleHelper;
 import com.khalil.DRACS.Utils.ThemeHelper;
-import com.khalil.DRACS.Activities.Activity_main;
 
 public class settings extends Fragment {
-    private static final String PREFS_NAME = "DRACS_Prefs";
-
     private MaterialButton btnThemeAuto;
     private MaterialButton btnThemeLight;
     private MaterialButton btnThemeDark;
     private TextView btnFontSmall;
     private TextView btnFontMedium;
     private TextView btnFontLarge;
-    private MaterialButton clearCacheButton;
-    private TextView appVersionText;
     private Context context;
     private boolean bindingUi;
 
@@ -51,12 +42,6 @@ public class settings extends Fragment {
         btnFontSmall = view.findViewById(R.id.btn_font_small);
         btnFontMedium = view.findViewById(R.id.btn_font_medium);
         btnFontLarge = view.findViewById(R.id.btn_font_large);
-        clearCacheButton = view.findViewById(R.id.clear_cache_button);
-        appVersionText = view.findViewById(R.id.app_version_text);
-
-        SharedPreferences prefs = requireActivity().getSharedPreferences(PREFS_NAME, 0);
-
-        appVersionText.setText(getString(R.string.settings_version_format, BuildConfig.VERSION_NAME));
 
         bindingUi = true;
         updateThemeButtons(ThemeHelper.getThemeMode(context));
@@ -70,20 +55,6 @@ public class settings extends Fragment {
         btnFontSmall.setOnClickListener(v -> selectFontScale(FontScaleHelper.SCALE_SMALL));
         btnFontMedium.setOnClickListener(v -> selectFontScale(FontScaleHelper.SCALE_MEDIUM));
         btnFontLarge.setOnClickListener(v -> selectFontScale(FontScaleHelper.SCALE_LARGE));
-
-        clearCacheButton.setOnClickListener(v -> {
-            if (!(requireActivity() instanceof Activity_main)) {
-                return;
-            }
-            DataPreFetcher dataPreFetcher = ((Activity_main) requireActivity()).getDataPreFetcher();
-            if (dataPreFetcher == null) {
-                Toast.makeText(context, R.string.settings_cache_cleared, Toast.LENGTH_SHORT).show();
-                return;
-            }
-            dataPreFetcher.clearCache();
-            prefs.edit().putBoolean("has_persistent_data", false).apply();
-            Toast.makeText(context, R.string.settings_cache_cleared, Toast.LENGTH_SHORT).show();
-        });
 
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(),
                 new OnBackPressedCallback(true) {
