@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -41,6 +42,7 @@ import com.khalil.DRACS.Repository.ContentRepository;
 import com.khalil.DRACS.Utils.DataPreFetcher;
 import com.khalil.DRACS.Utils.ConnectionUtils;
 import com.khalil.DRACS.Utils.FontScaleHelper;
+import com.khalil.DRACS.Utils.InsetsUtils;
 import com.khalil.DRACS.Utils.LocaleHelper;
 
 import com.google.firebase.crashlytics.FirebaseCrashlytics;
@@ -56,6 +58,8 @@ public class Activity_main extends AppCompatActivity {
     NavController navController;
     ImageView dracsicon;
     ImageView info;
+    private View navHostContainer;
+    private int systemBarBottomInset;
     private AppUpdateManager appUpdateManager;
     private DataPreFetcher dataPreFetcher;
     private ContentRepository contentRepository;
@@ -130,6 +134,10 @@ public class Activity_main extends AppCompatActivity {
         
         setContentView(R.layout.activity_home);
 
+        bottomNav = findViewById(R.id.bottom_nav);
+        navHostContainer = findViewById(R.id.navHostFragment);
+        applyWindowInsets();
+
         // Initialize AppUpdateManager with package name verification
         try {
             String packageName = getPackageName();
@@ -152,7 +160,6 @@ public class Activity_main extends AppCompatActivity {
             throw new IllegalStateException("NavHostFragment not found for R.id.navHostFragment");
         }
         navController = navHostFragment.getNavController();
-        bottomNav = findViewById(R.id.bottom_nav);
         dracsicon = findViewById(R.id.dracs);
         ImageView moreIcon = findViewById(R.id.notif_icon);
         ImageView searchIcon = findViewById(R.id.search_icon);
@@ -429,14 +436,51 @@ public class Activity_main extends AppCompatActivity {
 
     public void hideBottomAppBar() {
         if (bottomNav != null) {
-            runOnUiThread(() -> bottomNav.setVisibility(View.GONE));
+            runOnUiThread(() -> {
+                bottomNav.setVisibility(View.GONE);
+                updateNavHostBottomInset();
+            });
         }
     }
 
     public void showBottomAppBar() {
         if (bottomNav != null) {
-            runOnUiThread(() -> bottomNav.setVisibility(View.VISIBLE));
+            runOnUiThread(() -> {
+                bottomNav.setVisibility(View.VISIBLE);
+                updateNavHostBottomInset();
+            });
         }
+    }
+
+    private void applyWindowInsets() {
+        InsetsUtils.enableEdgeToEdge(getWindow());
+
+        // The header uses the dark green primary by day and a light green at night; the bottom
+        // nav follows the card color, so the two bars need opposite icon contrast.
+        boolean night = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                == Configuration.UI_MODE_NIGHT_YES;
+        InsetsUtils.applyBarAppearance(getWindow(), night, !night);
+
+        InsetsUtils.padTopAndSides(findViewById(R.id.header_bar));
+        InsetsUtils.padBottomAndSides(bottomNav, bottomInset -> {
+            systemBarBottomInset = bottomInset;
+            updateNavHostBottomInset();
+        });
+    }
+
+    /** Content pages hide the bottom nav, so the nav host takes over the gesture bar inset. */
+    private void updateNavHostBottomInset() {
+        if (navHostContainer == null) {
+            return;
+        }
+        int bottom = (bottomNav != null && bottomNav.getVisibility() == View.VISIBLE)
+                ? 0
+                : systemBarBottomInset;
+        navHostContainer.setPadding(
+                navHostContainer.getPaddingLeft(),
+                navHostContainer.getPaddingTop(),
+                navHostContainer.getPaddingRight(),
+                bottom);
     }
 
     private void syncBottomBarWithFragment(int fragmentId) {

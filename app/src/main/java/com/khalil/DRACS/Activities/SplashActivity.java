@@ -3,11 +3,11 @@ package com.khalil.DRACS.Activities;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.Window;
-import android.view.WindowManager;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -15,6 +15,7 @@ import com.google.android.material.button.MaterialButton;
 import com.khalil.DRACS.R;
 import com.khalil.DRACS.Utils.DataPreFetcher;
 import com.khalil.DRACS.Utils.FontScaleHelper;
+import com.khalil.DRACS.Utils.InsetsUtils;
 import com.khalil.DRACS.Utils.LocaleHelper;
 import com.khalil.DRACS.Utils.ThemeHelper;
 
@@ -49,8 +50,12 @@ public class SplashActivity extends AppCompatActivity {
         ThemeHelper.applySavedTheme(this);
 
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        InsetsUtils.enableEdgeToEdge(getWindow());
+        // The splash fills the screen with the primary color: dark green by day, light green at night.
+        boolean night = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
+                == Configuration.UI_MODE_NIGHT_YES;
+        InsetsUtils.applyBarAppearance(getWindow(), night, night);
 
         SharedPreferences prefs = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
@@ -75,6 +80,7 @@ public class SplashActivity extends AppCompatActivity {
         }
 
         setContentView(R.layout.activity_splash);
+        InsetsUtils.padAllBars(findViewById(R.id.splash_root));
 
         MaterialButton startButton = findViewById(R.id.splash_start_button);
         startButton.setOnClickListener(v -> startMainActivity());

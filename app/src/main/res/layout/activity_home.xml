@@ -13,10 +13,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/background"
-    android:fitsSystemWindows="true"
     tools:context=".Activities.Activity_main">
 
-    <!-- Top app bar: height grows with font scale; stays clear of status bar via fitsSystemWindows -->
+    <!-- Top app bar: height grows with font scale; status bar inset is added in Activity_main -->
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/header_bar"
         android:layout_width="0dp"
