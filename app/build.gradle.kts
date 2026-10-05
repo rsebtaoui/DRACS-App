@@ -7,7 +7,7 @@ plugins {
 
 android {
     namespace = "com.khalil.DRACS"
-    compileSdk = 35
+    compileSdk = 36
 
     buildFeatures {
         //noinspection DataBindingWithoutKapt
@@ -18,7 +18,7 @@ android {
     defaultConfig {
         applicationId = "com.khalil.DRACS"
         minSdk = 23
-        targetSdk = 35
+        targetSdk = 36
         versionCode = 8
         versionName = "1.3"
 
