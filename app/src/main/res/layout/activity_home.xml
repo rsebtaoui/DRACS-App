@@ -20,7 +20,7 @@
         android:id="@+id/header_bar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/primary"
+        android:background="@color/primary_dark"
         android:minHeight="@dimen/header_min_height"
         android:paddingStart="@dimen/spacing_sm"
         android:paddingTop="@dimen/spacing_xs"
@@ -54,7 +54,7 @@
             android:gravity="center"
             android:maxLines="2"
             android:text="@string/home_icon"
-            android:textColor="@color/primary_foreground"
+            android:textColor="@color/white"
             android:textSize="@dimen/text_headline_3"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"
@@ -76,7 +76,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/notif_icon"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/primary_foreground" />
+            app:tint="@color/white" />
 
         <ImageView
             android:id="@+id/notif_icon"
@@ -91,7 +91,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/primary_foreground" />
+            app:tint="@color/white" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.fragment.app.FragmentContainerView

@@ -222,12 +222,27 @@ public class SearchFragment extends Fragment {
         if (text == null || query == null) return "";
         int index = text.toLowerCase().indexOf(query.toLowerCase());
         if (index == -1) return text;
-        
-        // Show 20 characters before and after the match
+
+        // Show ~20 characters before and after the match
         int start = Math.max(0, index - 20);
         int end = Math.min(text.length(), index + query.length() + 20);
-        
-        return text.substring(start, end);
+
+        // Snap start back to a word boundary so Arabic isn't clipped mid-glyph
+        if (start > 0) {
+            int boundary = start;
+            while (boundary > 0 && !Character.isWhitespace(text.charAt(boundary - 1))) {
+                boundary--;
+            }
+            if (boundary <= index) {
+                start = boundary;
+            }
+        }
+
+        String snippet = text.substring(start, end).trim();
+        if (start > 0) {
+            snippet = "…" + snippet;
+        }
+        return snippet;
     }
 
     private Class<?> getTargetFragment(String pageId) {

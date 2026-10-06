@@ -257,7 +257,7 @@ public class Activity_main extends AppCompatActivity {
                 dracsicon.setClickable(false);
             } else {
                 dracsicon.setImageResource(R.drawable.ic_back);
-                dracsicon.setColorFilter(ContextCompat.getColor(this, R.color.primary_foreground));
+                dracsicon.setColorFilter(ContextCompat.getColor(this, R.color.white));
                 dracsicon.setClickable(true);
                 dracsicon.setOnClickListener(v -> navController.navigate(R.id.home));
             }
@@ -455,11 +455,11 @@ public class Activity_main extends AppCompatActivity {
     private void applyWindowInsets() {
         InsetsUtils.enableEdgeToEdge(getWindow());
 
-        // The header uses the dark green primary by day and a light green at night; the bottom
-        // nav follows the card color, so the two bars need opposite icon contrast.
+        // Header is a dark green surface in both themes — keep status icons light.
+        // Bottom nav follows the card color (light by day, dark at night).
         boolean night = (getResources().getConfiguration().uiMode & Configuration.UI_MODE_NIGHT_MASK)
                 == Configuration.UI_MODE_NIGHT_YES;
-        InsetsUtils.applyBarAppearance(getWindow(), night, !night);
+        InsetsUtils.applyBarAppearance(getWindow(), false, !night);
 
         InsetsUtils.padTopAndSides(findViewById(R.id.header_bar));
         InsetsUtils.padBottomAndSides(bottomNav, bottomInset -> {
