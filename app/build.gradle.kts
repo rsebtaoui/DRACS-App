@@ -19,8 +19,8 @@ android {
         applicationId = "com.khalil.DRACS"
         minSdk = 23
         targetSdk = 36
-        versionCode = 8
-        versionName = "1.3"
+        versionCode = 12
+        versionName = "1.6"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
